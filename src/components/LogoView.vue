@@ -1,4 +1,26 @@
 <script setup lang="ts">
+  import { ref, onMounted, onUnmounted } from 'vue';
+
+  const asciiColour = ref<string>('black');
+
+  const colours: string[] = ['red', 'green', 'blue', 'purple', 'orange'];
+  let colourIndex = 0;
+  let intervalId: number | undefined;
+
+  const changeColour = (): void => {
+    asciiColour.value = colours[colourIndex]!;
+    colourIndex = (colourIndex + 1) % colours.length
+  };
+
+  onMounted (() => {
+    intervalId = window.setInterval(changeColour, 1000)
+  })
+
+  onUnmounted(() => {
+    if (intervalId !== undefined) {
+      clearInterval(intervalId);
+    }
+  });
 
 </script>
 
@@ -35,7 +57,7 @@
              \/ K
 
     </pre>
-    <pre class="character" id="b1">
+    <pre class="character" id="b1" :style="{ color: asciiColour }">
        _
       | |
       | |__
@@ -43,7 +65,7 @@
       | |_) |
       |_.__/
     </pre>
-    <pre class="character" id="l">
+    <pre class="character" id="l" :style="{ color: asciiColour }">
        _
       | |
       | |
@@ -51,7 +73,7 @@
       | |
       |_|
     </pre>
-    <pre class="character" id="a1">
+    <pre class="character" id="a1" :style="{ color: asciiColour }">
 
 
 
@@ -60,7 +82,7 @@
     | (_| |
      \__,_|
     </pre>
-    <pre class="character" id="c1">
+    <pre class="character" id="c1" :style="{ color: asciiColour }">
 
 
 
@@ -69,7 +91,7 @@
      | (__
       \___|
     </pre>
-    <pre class="character" id="k1">
+    <pre class="character" id="k1" :style="{ color: asciiColour }">
        _
       | |
       | | __
@@ -77,7 +99,7 @@
       |   <
       |_|\_\
     </pre>
-    <pre class="character" id="j">
+    <pre class="character" id="j" :style="{ color: asciiColour }">
          _
         (_)
          _
@@ -87,7 +109,7 @@
        _/ |
       |__/
     </pre>
-    <pre class="character" id="a2">
+    <pre class="character" id="a2" :style="{ color: asciiColour }">
 
 
 
@@ -96,7 +118,7 @@
     | (_| |
      \__,_|
     </pre>
-    <pre class="character" id="c2">
+    <pre class="character" id="c2" :style="{ color: asciiColour }">
 
 
 
@@ -105,7 +127,7 @@
      | (__
       \___|
     </pre>
-    <pre class="character" id="k2">
+    <pre class="character" id="k2" :style="{ color: asciiColour }">
        _
       | |
       | | __
@@ -147,6 +169,6 @@
   #c2 { left: 36.5rem; }
   #k2 { left: 40rem; color: }
   #card1 { top: -0.75rem; }
-  #card2 { top: 0; color: red; }
-  #card3 { top: 0.2rem; color: red; }
+  #card2 { top: -1rem; color: red; }
+  #card3 { top: -0.7rem; color: red; }
 </style>
