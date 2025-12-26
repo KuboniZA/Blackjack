@@ -8,10 +8,10 @@
     .------.
     |      |
     |      .-----.
-    |     |K /\  |
-    |     | /  \ |
-    `-----| \  / |
-          |  \/ K|
+    |     |      |
+    |     |      |
+    `-----|      |
+          |      |
           `------'
     </pre>
     <pre class="cards" id="card2">
@@ -22,6 +22,16 @@
        \/
 
 
+
+    </pre>
+    <pre class="cards" id="card3">
+
+
+
+           K /\
+            /  \
+            \  /
+             \/ K
 
     </pre>
     <pre class="character" id="b1">
@@ -125,15 +135,16 @@
     font-weight: bold;
   }
   .cards {position: absolute; left: 2rem; }
-  #b1 { left: 12rem; color: purple; }
+  #b1 { left: 12rem; }
   #l { left: 16rem; }
   #a1 { left: 19rem; }
   #c1 { left: 22.5rem; }
-  #k1 { left: 25.75rem; color: purple;}
+  #k1 { left: 25.75rem; }
   #j { left: 29rem; top: 0.5rem; }
   #a2 { left: 33rem; }
   #c2 { left: 36.5rem; }
-  #k2 { left: 40rem; color: purple;}
+  #k2 { left: 40rem; color: }
   #card1 { top: -0.75rem; }
   #card2 { top: 0; color: red; }
+  #card3 { top: 0.2rem; color: red; }
 </style>
