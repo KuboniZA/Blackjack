@@ -2,14 +2,35 @@
   import { ref, onMounted, onUnmounted } from 'vue';
 
   const asciiColour = ref<string>('black');
+  const asciiColour1 = ref<string>('black');
+  const asciiColour2 = ref<string>('black');
+  const asciiColour3 = ref<string>('black');
+  const asciiColour4 = ref<string>('black');
 
-  const colours: string[] = ['red', 'green', 'blue', 'purple', 'orange'];
+  const colours: string[] = ['red', 'green', 'blue', 'purple', 'orange', 'black'];
+  const colours1: string[] = ['green', 'blue', 'purple', 'orange', 'black', 'red'];
+  const colours2: string[] = ['blue', 'purple', 'orange', 'black', 'red', 'green'];
+  const colours3: string[] = ['purple', 'orange', 'black', 'red', 'green', 'blue'];
+  const colours4: string[] = ['orange', 'black', 'red', 'green', 'blue', 'purple'];
+
   let colourIndex = 0;
   let intervalId: number | undefined;
 
   const changeColour = (): void => {
     asciiColour.value = colours[colourIndex]!;
     colourIndex = (colourIndex + 1) % colours.length
+
+    asciiColour1.value = colours1[colourIndex]!;
+    colourIndex = (colourIndex + 1) % colours1.length
+
+    asciiColour2.value = colours2[colourIndex]!;
+    colourIndex = (colourIndex + 1) % colours2.length
+
+    asciiColour3.value = colours3[colourIndex]!;
+    colourIndex = (colourIndex + 1) % colours3.length
+
+    asciiColour4.value = colours4[colourIndex]!;
+    colourIndex = (colourIndex + 1) % colours4.length
   };
 
   onMounted (() => {
@@ -65,7 +86,7 @@
       | |_) |
       |_.__/
     </pre>
-    <pre class="character" id="l" :style="{ color: asciiColour }">
+    <pre class="character" id="l" :style="{ color: asciiColour1 }">
        _
       | |
       | |
@@ -73,7 +94,7 @@
       | |
       |_|
     </pre>
-    <pre class="character" id="a1" :style="{ color: asciiColour }">
+    <pre class="character" id="a1" :style="{ color: asciiColour2 }">
 
 
 
@@ -82,7 +103,7 @@
     | (_| |
      \__,_|
     </pre>
-    <pre class="character" id="c1" :style="{ color: asciiColour }">
+    <pre class="character" id="c1" :style="{ color: asciiColour3 }">
 
 
 
@@ -91,7 +112,7 @@
      | (__
       \___|
     </pre>
-    <pre class="character" id="k1" :style="{ color: asciiColour }">
+    <pre class="character" id="k1" :style="{ color: asciiColour4 }">
        _
       | |
       | | __
@@ -99,7 +120,7 @@
       |   <
       |_|\_\
     </pre>
-    <pre class="character" id="j" :style="{ color: asciiColour }">
+    <pre class="character" id="j" :style="{ color: asciiColour3 }">
          _
         (_)
          _
@@ -109,7 +130,7 @@
        _/ |
       |__/
     </pre>
-    <pre class="character" id="a2" :style="{ color: asciiColour }">
+    <pre class="character" id="a2" :style="{ color: asciiColour2 }">
 
 
 
@@ -118,7 +139,7 @@
     | (_| |
      \__,_|
     </pre>
-    <pre class="character" id="c2" :style="{ color: asciiColour }">
+    <pre class="character" id="c2" :style="{ color: asciiColour1 }">
 
 
 
