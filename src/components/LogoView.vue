@@ -122,17 +122,18 @@
     align-items: center;
     padding: 0;
     position: absolute;
+    font-weight: bold;
   }
   .cards {position: absolute; left: 2rem; }
-  #b1 { left: 12rem; }
+  #b1 { left: 12rem; color: purple; }
   #l { left: 16rem; }
   #a1 { left: 19rem; }
   #c1 { left: 22.5rem; }
-  #k1 { left: 25.75rem; }
+  #k1 { left: 25.75rem; color: purple;}
   #j { left: 29rem; top: 0.5rem; }
   #a2 { left: 33rem; }
   #c2 { left: 36.5rem; }
-  #k2 { left: 40rem; }
+  #k2 { left: 40rem; color: purple;}
   #card1 { top: -0.75rem; }
   #card2 { top: 0; color: red; }
 </style>
