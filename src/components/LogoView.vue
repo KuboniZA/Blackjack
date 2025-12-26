@@ -3,6 +3,7 @@
 </script>
 
 <template>
+  <div class="main-container" />
   <div class="logo-container">
     <pre class="cards" id="card1">
     .------.
@@ -116,6 +117,7 @@
 </template>
 
 <style scoped>
+  .main-container { height: 10rem; width: 100%; background-color: darkgrey; position: absolute; left: 0; top: 0; box-shadow: 0 5px 12px 0.3px black;}
   .logo-container {
     height: 9rem;
     width: 50%;
