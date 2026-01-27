@@ -5,18 +5,18 @@ greeting =  input("Would you like tp play Blackjack? Type 'y' or 'n':\n")
 class GameEngine:
 
     def __init__(self):
-        self.heart_ranks = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-        self.diamond_ranks = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-        self.spade_ranks = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-        self.club_ranks = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+        self.suits = ["hearts", "diamonds", "spades", "clubs"]
+        self.heart_ranks = ["ace", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "jack", "queen", "king"]
+        self.diamond_ranks = ["ace", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "jack", "queen", "king"]
+        self.spade_ranks = ["ace", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "jack","queen", "king"]
+        self.club_ranks = ["ace", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "jack","queen", "king"]
 
     def new_game_state(self):
-        suits = ["hearts", "diamonds", "spades", "clubs"]
         user_cards = []
 
         for card in range(2):
             while True:
-                card_suit = random.choice(suits)
+                card_suit = random.choice(self.suits)
 
                 if card_suit == "hearts" and len(self.heart_ranks) > 0:
                     rank = random.choice(self.heart_ranks)
@@ -125,9 +125,9 @@ class GameEngine:
     #     print("Thank you for visiting Kuboni Blackjack. Please refresh to start again.")
 
 # game_engine = GameEngine()
-#
+
 # deck = game_engine.check_deck()
 # player_cards = game_engine.new_game_state()
-#
+
 # print(player_cards)
 # print(deck)
