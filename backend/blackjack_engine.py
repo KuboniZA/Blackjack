@@ -1,6 +1,6 @@
 import random
 
-greeting = input("Would you like tp play Blackjack? Type 'y' or 'n':\n")
+# greeting = input("Would you like tp play Blackjack? Type 'y' or 'n':\n")
 
 
 class GameEngine:
@@ -69,6 +69,7 @@ class GameEngine:
 
     def new_game_state(self):
         user_cards = []
+        computer_card = []
 
         for card in range(2):
             while True:
@@ -96,7 +97,31 @@ class GameEngine:
 
             user_cards.append((card_suit, rank))
 
-        return user_cards
+        for card in range(2):
+            while True:
+                card_suit = random.choice(self.suits)
+
+                if card_suit == "hearts" and len(self.heart_ranks) > 0:
+                    rank = random.choice(self.heart_ranks)
+                    self.heart_ranks.remove(rank)
+                    break
+
+                elif card_suit == "diamonds" and len(self.diamond_ranks) > 0:
+                    rank = random.choice(self.diamond_ranks)
+                    self.diamond_ranks.remove(rank)
+                    break
+
+                elif card_suit == "spades" and len(self.spade_ranks) > 0:
+                    rank = random.choice(self.spade_ranks)
+                    self.spade_ranks.remove(rank)
+                    break
+
+                elif card_suit == "clubs" and len(self.club_ranks) > 0:
+                    rank = random.choice(self.club_ranks)
+                    self.club_ranks.remove(rank)
+                    break
+            computer_card.append((card_suit, rank))
+        return user_cards, computer_card
 
     def check_deck(self):
         return {
