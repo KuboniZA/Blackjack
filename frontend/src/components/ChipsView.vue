@@ -4,7 +4,7 @@
   <div class="chips-container">
     <div class="container-mask" />
 
-    <div id="rand1">
+    <div id="rand1" class="chips shimmer">
       <div class="horizontal-line" />
       <div class="vertical-line" />
       <div class="left-leaning-line" />
@@ -14,7 +14,7 @@
       </div>
     </div>
 
-    <div id="rand5">
+    <div id="rand5" class="chips shimmer">
       <div class="horizontal-line" />
       <div class="vertical-line" />
       <div class="left-leaning-line" />
@@ -24,7 +24,7 @@
       </div>
     </div>
 
-    <div id="rand10">
+    <div id="rand10" class="chips shimmer">
       <div class="horizontal-line" />
       <div class="vertical-line" />
       <div class="left-leaning-line" />
@@ -34,7 +34,7 @@
       </div>
     </div>
 
-    <div id="rand25">
+    <div id="rand25" class="chips shimmer">
       <div class="horizontal-line" />
       <div class="vertical-line" />
       <div class="left-leaning-line" />
@@ -44,7 +44,7 @@
       </div>
     </div>
 
-    <div id="rand50">
+    <div id="rand50" class="chips shimmer">
       <div class="horizontal-line" />
       <div class="vertical-line" />
       <div class="left-leaning-line" />
@@ -54,7 +54,7 @@
       </div>
     </div>
 
-    <div id="rand100">
+    <div id="rand100" class="chips shimmer">
       <div class="horizontal-line" />
       <div class="vertical-line" />
       <div class="left-leaning-line" />
@@ -64,7 +64,7 @@
       </div>
     </div>
 
-    <div id="rand500">
+    <div id="rand500" class="chips shimmer">
       <div class="horizontal-line" />
       <div class="vertical-line" />
       <div class="left-leaning-line" />
@@ -74,7 +74,7 @@
       </div>
     </div>
 
-    <div id="rand1000">
+    <div id="rand1000" class="chips shimmer">
       <div class="horizontal-line" />
       <div class="vertical-line" />
       <div class="left-leaning-line" />
@@ -84,7 +84,7 @@
       </div>
     </div>
 
-    <div id="rand10000">
+    <div id="rand10000" class="chips shimmer">
       <div class="horizontal-line length10k" />
       <div class="vertical-line vlength10k" />
       <div class="left-leaning-line" />
@@ -94,7 +94,17 @@
       </div>
     </div>
 
-    <div id="rand100000">
+    <div id="rand50000" class="chips shimmer">
+      <div class="horizontal-line length10k" />
+      <div class="vertical-line vlength10k" />
+      <div class="left-leaning-line" />
+      <div class="right-leaning-line" />
+      <div class="inner-mask in10k">
+        <span class="chip c10k">50 000</span>
+      </div>
+    </div>
+
+    <div id="rand100000" class="chips shimmer">
       <div class="horizontal-line length10k" />
       <div class="vertical-line vlength10k" />
       <div class="left-leaning-line" />
@@ -104,7 +114,7 @@
       </div>
     </div>
 
-    <div id="rand500000">
+    <div id="rand500000" class="chips shimmer">
       <div class="horizontal-line length10k" />
       <div class="vertical-line vlength10k" />
       <div class="left-leaning-line" />
@@ -114,7 +124,7 @@
       </div>
     </div>
 
-    <div id="rand1000000">
+    <div id="rand1000000" class="chips shimmer">
       <div class="horizontal-line length1M" />
       <div class="vertical-line vlength1M" />
       <div class="left-leaning-line" />
@@ -127,15 +137,26 @@
 </template>
 
 <style scoped>
-.chips-container {
+/* .chips-container {
   position: relative;
   width: 45rem;
   height: 20rem;
   top: 38rem;
   left: 3rem;
   box-shadow: -4px 4px 8px rgba(0, 0, 0, 0.8);
-  /*border: 1px solid black;*/
+
   border-radius: 25px;
+} */
+
+.chips-container {
+  position: relative;
+  width: 45rem;
+  height: 28rem;
+  top: 30rem;
+  left: 3rem;
+  box-shadow: -4px 4px 8px rgba(0, 0, 0, 0.8);
+  border-radius: 25px;
+  background-color: #3f6447;
 }
 .container-mask {
   width: 20rem;
@@ -158,7 +179,7 @@
   position: absolute;
   left: 1.5rem;
   top: 3rem;
-  background-color: greenyellow;
+  background-color: rgb(199, 109, 52);
   box-shadow: -4px 4px 8px rgba(0, 0, 0, 0.7);
   overflow: hidden;
 }
@@ -218,7 +239,7 @@
   position: absolute;
   left: 9rem;
   top: 3rem;
-  background-color: rgb(99, 172, 250);
+  background-color: rgb(57, 96, 137);
   box-shadow: -4px 4px 8px rgba(0, 0, 0, 0.7);
   overflow: hidden;
 }
@@ -233,7 +254,7 @@
   position: absolute;
   left: 16.5rem;
   top: 3rem;
-  background-color: rgb(249, 90, 212);
+  background-color: rgb(203, 83, 175);
   box-shadow: -4px 4px 8px rgba(0, 0, 0, 0.7);
   overflow: hidden;
 }
@@ -263,7 +284,7 @@
   position: absolute;
   left: 31.5rem;
   top: 3rem;
-  background-color: rgb(175, 24, 24);
+  background-color: rgb(136, 19, 19);
   box-shadow: -4px 4px 8px rgba(0, 0, 0, 0.7);
   overflow: hidden;
 }
@@ -293,7 +314,7 @@
   position: absolute;
   left: 1.5rem;
   top: 11rem;
-  background-color: rgb(103, 3, 84);
+  background-color: rgb(104, 7, 86);
   box-shadow: -4px 4px 8px rgba(0, 0, 0, 0.7);
   overflow: hidden;
 }
@@ -308,7 +329,7 @@
   position: absolute;
   left: 9rem;
   top: 11rem;
-  background-color: rgb(50, 180, 176);
+  background-color: rgb(29, 104, 102);
   box-shadow: -4px 4px 8px rgba(0, 0, 0, 0.7);
   overflow: hidden;
 }
@@ -324,7 +345,7 @@
   position: absolute;
   left: 16.25rem;
   top: 11rem;
-  background-color: rgb(186, 184, 19);
+  background-color: rgb(121, 120, 20);
   box-shadow: -4px 4px 8px rgba(0, 0, 0, 0.7);
   overflow: hidden;
 }
@@ -341,6 +362,21 @@
 .c10k {
   font-size: 1.25rem;
 }
+#rand50000 {
+  height: 5.5rem;
+  width: 5.5rem;
+  border: 2px solid black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  position: absolute;
+  left: 23.5rem;
+  top: 11rem;
+  background-color: rgb(153, 130, 162);
+  box-shadow: -4px 4px 8px rgba(0, 0, 0, 0.7);
+  overflow: hidden;
+}
 
 #rand100000 {
   height: 5.5rem;
@@ -351,7 +387,7 @@
   justify-content: center;
   border-radius: 50%;
   position: absolute;
-  left: 23.5rem;
+  left: 30.75rem;
   top: 11rem;
   background-color: rgb(18, 98, 57);
   box-shadow: -4px 4px 8px rgba(0, 0, 0, 0.7);
@@ -369,9 +405,9 @@
   justify-content: center;
   border-radius: 50%;
   position: absolute;
-  left: 30.75rem;
+  left: 37.75rem;
   top: 11rem;
-  background-color: rgb(249, 137, 0);
+  background-color: rgb(95, 56, 7);
   box-shadow: -4px 4px 8px rgba(0, 0, 0, 0.7);
   overflow: hidden;
 }
@@ -384,9 +420,9 @@
   justify-content: center;
   border-radius: 50%;
   position: absolute;
-  left: 37.75rem;
-  top: 11rem;
-  background-color: rgb(190, 3, 252);
+  left: 1.5rem;
+  top: 19rem;
+  background-color: rgb(133, 1, 177);
   box-shadow: -4px 4px 8px rgba(0, 0, 0, 0.7);
   overflow: hidden;
 }
@@ -402,5 +438,61 @@
 }
 .c1M {
   font-size: 1rem;
+}
+
+.chips:hover {
+  cursor: pointer;
+  transform: scale(1.1);
+}
+
+/* Shimmer layer */
+.shimmer::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.35) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Run animation ONLY while hovered */
+.chips:hover.shimmer::before {
+  animation: shimmer-sweep 2.25s ease-out infinite;
+}
+
+/* Keyframes */
+@keyframes shimmer-sweep {
+  0% {
+    transform: translateX(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  50% {
+    transform: translateX(200%);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(200%);
+    opacity: 0;
+  }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .chips:hover.shimmer::before {
+    animation: none;
+  }
 }
 </style>
