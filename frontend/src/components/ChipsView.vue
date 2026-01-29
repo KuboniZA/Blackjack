@@ -252,42 +252,55 @@
 }
 #i-dash1 {
   border: 1px dashed rgb(199, 109, 52);
+  color: rgb(199, 109, 52);
 }
 #i-dash5 {
   border: 1px dashed rgb(57, 96, 137);
+  color: rgb(57, 96, 137);
 }
 #i-dash10 {
   border: 1px dashed rgb(203, 83, 175);
+  color: rgb(203, 83, 175);
 }
 #i-dash25 {
   border: 1px dashed rgb(68, 169, 61);
+  color: rgb(68, 169, 61);
 }
 #i-dash50 {
   border: 1px dashed rgb(136, 19, 19);
+  color: rgb(136, 19, 19);
 }
 #i-dash100 {
   border: 1px dashed rgb(57, 31, 189);
+  color: rgb(57, 31, 189);
 }
 #i-dash500 {
   border: 1px dashed rgb(104, 7, 86);
+  color: rgb(104, 7, 86);
 }
 #i-dash1000 {
   border: 1px dashed rgb(29, 104, 102);
+  color: rgb(29, 104, 102);
 }
 #i-dash10000 {
   border: 1px dashed rgb(121, 120, 20);
+  color: rgb(121, 120, 20);
 }
 #i-dash50000 {
   border: 1px dashed rgb(153, 130, 162);
+  color: rgb(153, 130, 162);
 }
 #i-dash100000 {
   border: 1px dashed rgb(18, 98, 57);
+  color: rgb(18, 98, 57);
 }
 #i-dash500000 {
   border: 1px dashed rgb(95, 56, 7);
+  color: rgb(95, 56, 7);
 }
 #i-dash1000000 {
   border: 1px dashed rgb(87, 2, 116);
+  color: rgb(87, 2, 116);
 }
 .chip {
   font-size: 2rem;
