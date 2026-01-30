@@ -4,7 +4,7 @@
   <div class="card-container">
     <div class="card">
       <div id="number-content">
-        <span class="number">2</span>
+        <span class="number">10</span>
         <div id="club-content-ratio">
           <span class="club-circle cr" />
           <span class="club-circle c2 c2r" />
@@ -17,7 +17,7 @@
       </div>
 
       <div id="number-content2">
-        <span class="number">2</span>
+        <span class="number">10</span>
         <div id="club-content-ratio">
           <span class="club-circle cr" />
           <span class="club-circle c2 c2r" />
@@ -118,7 +118,7 @@
   font-size: 2rem;
   font-weight: bold;
   position: absolute;
-  left: 1rem;
+  left: 0.5rem;
   top: 0.75rem;
   color: blueviolet;
 }
