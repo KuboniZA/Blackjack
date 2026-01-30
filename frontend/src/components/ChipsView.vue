@@ -2,8 +2,6 @@
 
 <template>
   <div class="chips-container">
-    <!-- <div class="container-mask" /> -->
-
     <div id="rand1" class="chips shimmer">
       <div class="horizontal-line" />
       <div class="vertical-line" />
@@ -240,16 +238,6 @@
   border: 2px solid white;
   box-shadow:
     /* 1px -1px 8px rgba(255, 255, 255, 1), */ inset 4px -4px 8px rgba(0, 0, 0, 0.4);
-}
-.container-mask {
-  width: 20rem;
-  height: 2rem;
-  position: absolute;
-  right: 0;
-  /*border: 1px solid black;*/
-  border-top-right-radius: 25px;
-  border-bottom-left-radius: 25px;
-  box-shadow: inset 4px -4px 8px rgba(0, 0, 0, 0.4);
 }
 #rand1 {
   height: 8.5rem;
