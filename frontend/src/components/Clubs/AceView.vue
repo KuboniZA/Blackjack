@@ -4,7 +4,7 @@
   <div class="card-container">
     <div class="card">
       <div id="number-content">
-        <span class="number">2</span>
+        <span class="number">A</span>
         <div id="club-content-ratio">
           <span class="club-circle cr" />
           <span class="club-circle c2 c2r" />
@@ -15,6 +15,20 @@
           <span class="triangle rtriangle rt-ratio" />
         </div>
       </div>
+
+      <div id="number-content2">
+        <span class="number">A</span>
+        <div id="club-content-ratio">
+          <span class="club-circle cr" />
+          <span class="club-circle c2 c2r" />
+          <span class="club-circle c3 c3r" />
+          <span class="vline lineR" />
+          <!-- <span class="bg-square bg-sq-R" /> -->
+          <span class="triangle ltriangle lt-ratio" />
+          <span class="triangle rtriangle rt-ratio" />
+        </div>
+      </div>
+
       <div id="club-content">
         <span class="club-circle" />
         <span class="club-circle c2" />
@@ -33,7 +47,7 @@
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  top: 60%;
+  top: 30%;
 }
 .card {
   height: 22rem;
@@ -104,7 +118,7 @@
   font-size: 2rem;
   font-weight: bold;
   position: absolute;
-  left: 1rem;
+  left: 0.85rem;
   top: 0.75rem;
   color: blueviolet;
 }
@@ -136,5 +150,11 @@
 .rt-ratio {
   top: 7.6rem;
   left: 1rem;
+}
+#number-content2 {
+  position: absolute;
+  left: 14.5rem;
+  top: 98%;
+  transform: rotate(180deg);
 }
 </style>
