@@ -234,9 +234,12 @@
   height: 40rem;
   top: 20rem;
   left: 3rem;
-  box-shadow: -4px 4px 8px rgba(0, 0, 0, 0.8);
   border-radius: 25px;
-  background-color: #3f6447;
+  background-color: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(6px);
+  border: 2px solid white;
+  box-shadow:
+    /* 1px -1px 8px rgba(255, 255, 255, 1), */ inset 4px -4px 8px rgba(0, 0, 0, 0.4);
 }
 .container-mask {
   width: 20rem;
