@@ -3,6 +3,7 @@ import ChipsView from "./components/ChipsView.vue";
 </script>
 
 <template>
+  <ChipTest />
   <ChipsView />
   <RouterView />
 </template>

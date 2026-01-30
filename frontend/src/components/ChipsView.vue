@@ -2,7 +2,7 @@
 
 <template>
   <div class="chips-container">
-    <div class="container-mask" />
+    <!-- <div class="container-mask" /> -->
 
     <div id="rand1" class="chips shimmer">
       <div class="horizontal-line" />
@@ -125,7 +125,7 @@
       <div class="right-leaning-line line-60" />
       <div id="in10k" class="inner-mask">
         <div id="i-dash10000" class="inner-mask inner-dash">
-          <span class="chip c10k">10 000</span>
+          <span class="chip c10k">10K</span>
         </div>
       </div>
     </div>
@@ -139,7 +139,7 @@
       <div class="right-leaning-line line-60" />
       <div id="in50k" class="inner-mask">
         <div id="i-dash50000" class="inner-mask inner-dash">
-          <span class="chip c10k">50 000</span>
+          <span class="chip c10k">50K</span>
         </div>
       </div>
     </div>
@@ -153,7 +153,7 @@
       <div class="right-leaning-line line-60" />
       <div id="in100k" class="inner-mask">
         <div id="i-dash100000" class="inner-mask inner-dash">
-          <span class="chip c100k">100 000</span>
+          <span class="chip c100k">100K</span>
         </div>
       </div>
     </div>
@@ -167,7 +167,7 @@
       <div class="right-leaning-line line-60" />
       <div id="in500k" class="inner-mask">
         <div id="i-dash500000" class="inner-mask inner-dash">
-          <span class="chip c100k">500 000</span>
+          <span class="chip c100k">500K</span>
         </div>
       </div>
     </div>
@@ -181,7 +181,35 @@
       <div class="right-leaning-line line-60 dlength1M" />
       <div id="in1m" class="inner-mask">
         <div id="i-dash1000000" class="inner-mask inner-dash">
-          <span class="chip c1M">1 000 000</span>
+          <span class="chip c1M">1M</span>
+        </div>
+      </div>
+    </div>
+
+    <div id="rand10M" class="chips shimmer">
+      <div class="horizontal-line length1M" />
+      <div class="vertical-line vlength1M" />
+      <div class="left-leaning-line line30 dlength1M" />
+      <div class="right-leaning-line line-30 dlength1M" />
+      <div class="left-leaning-line line60 dlength1M" />
+      <div class="right-leaning-line line-60 dlength1M" />
+      <div id="in10m" class="inner-mask">
+        <div id="i-dash10M" class="inner-mask inner-dash">
+          <span class="chip c1M">10M</span>
+        </div>
+      </div>
+    </div>
+
+    <div id="rand100M" class="chips shimmer">
+      <div class="horizontal-line length1M" />
+      <div class="vertical-line vlength1M" />
+      <div class="left-leaning-line line30 dlength1M" />
+      <div class="right-leaning-line line-30 dlength1M" />
+      <div class="left-leaning-line line60 dlength1M" />
+      <div class="right-leaning-line line-60 dlength1M" />
+      <div id="in100m" class="inner-mask">
+        <div id="i-dash100M" class="inner-mask inner-dash">
+          <span class="chip c1M">100M</span>
         </div>
       </div>
     </div>
@@ -301,6 +329,14 @@
 #i-dash1000000 {
   border: 1px dashed rgb(87, 2, 116);
   color: rgb(87, 2, 116);
+}
+#i-dash10M {
+  border: 1px dashed rgb(21, 3, 93);
+  color: rgb(21, 3, 93);
+}
+#i-dash100M {
+  border: 1px dashed rgb(166, 189, 18);
+  color: rgb(166, 189, 18);
 }
 .chip {
   font-size: 2rem;
@@ -456,10 +492,6 @@
   box-shadow: -4px 4px 8px rgba(0, 0, 0, 0.7);
   overflow: hidden;
 }
-
-.c10k {
-  font-size: 1.75rem;
-}
 #rand50000 {
   height: 8.5rem;
   width: 8.5rem;
@@ -483,14 +515,11 @@
   justify-content: center;
   border-radius: 50%;
   position: absolute;
-  left: 13rem;
+  left: 1.5rem;
   top: 28rem;
   background-color: rgb(18, 98, 57);
   box-shadow: -4px 4px 8px rgba(0, 0, 0, 0.7);
   overflow: hidden;
-}
-.c100k {
-  font-size: 1.5rem;
 }
 #rand500000 {
   height: 8.5rem;
@@ -500,7 +529,7 @@
   justify-content: center;
   border-radius: 50%;
   position: absolute;
-  left: 24rem;
+  left: 13rem;
   top: 28rem;
   background-color: rgb(95, 56, 7);
   box-shadow: -4px 4px 8px rgba(0, 0, 0, 0.7);
@@ -515,9 +544,39 @@
   justify-content: center;
   border-radius: 50%;
   position: absolute;
-  left: 36.25rem;
+  left: 24rem;
   top: 28rem;
   background-color: rgb(133, 1, 177);
+  box-shadow: -4px 4px 8px rgba(0, 0, 0, 0.7);
+  overflow: hidden;
+}
+#rand10M {
+  height: 8.5rem;
+  width: 8.5rem;
+  /* border: 2px solid black; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  position: absolute;
+  left: 36.25rem;
+  top: 28rem;
+  background-color: rgb(21, 3, 93);
+  box-shadow: -4px 4px 8px rgba(0, 0, 0, 0.7);
+  overflow: hidden;
+}
+#rand100M {
+  height: 8.5rem;
+  width: 8.5rem;
+  /* border: 2px solid black; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  position: absolute;
+  left: 48rem;
+  top: 28rem;
+  background-color: rgb(166, 189, 18);
   box-shadow: -4px 4px 8px rgba(0, 0, 0, 0.7);
   overflow: hidden;
 }
@@ -560,10 +619,11 @@
 #in1m {
   border: 0.5rem solid rgb(87, 2, 116);
 }
-
-.c1M {
-  font-size: 1.25rem;
-  color: rgb(87, 2, 116);
+#in10m {
+  border: 0.5rem solid rgb(14, 2, 62);
+}
+#in100m {
+  border: 0.5rem solid rgb(128, 146, 13);
 }
 
 .chips:hover {
