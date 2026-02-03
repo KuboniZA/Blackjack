@@ -4,7 +4,7 @@
   <div class="card-container">
     <div class="card">
       <div id="number-content">
-        <span class="number">A</span>
+        <span class="number">K</span>
         <div id="diamond-content-ratio">
           <span class="diamond cr" />
         </div>
@@ -14,7 +14,7 @@
       </div>
 
       <div id="number-content2">
-        <span class="number">A</span>
+        <span class="number">K</span>
         <div id="diamond-content-ratio">
           <span class="diamond cr" />
         </div>

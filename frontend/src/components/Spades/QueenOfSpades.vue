@@ -4,7 +4,7 @@
   <div class="card-container">
     <div class="card">
       <div id="number-content">
-        <span class="number">A</span>
+        <span class="number">Q</span>
         <div id="diamond-content-ratio">
           <span class="diamond cr" />
         </div>
@@ -14,7 +14,7 @@
       </div>
 
       <div id="number-content2">
-        <span class="number">A</span>
+        <span class="number">Q</span>
         <div id="diamond-content-ratio">
           <span class="diamond cr" />
         </div>
@@ -81,7 +81,7 @@
   transform: scale(0.25);
   position: relative;
   left: 1.2rem;
-  top: 2.2rem;
+  top: 2.4rem;
 }
 .cr {
   top: 3rem;
@@ -122,16 +122,16 @@
 .lineR {
   transform: scale(0.22);
   top: 2.4rem;
-  left: 1.3rem;
+  left: 1.5rem;
 }
 .lt-ratio {
   transform: scale(0.25);
-  top: 3.5rem;
+  top: 3.7rem;
   left: 0.27rem;
 }
 .rt-ratio {
   transform: scale(0.25);
-  top: 3.5rem;
+  top: 3.7rem;
   left: 0.77rem;
 }
 </style>

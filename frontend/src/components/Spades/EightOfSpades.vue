@@ -4,7 +4,7 @@
   <div class="card-container">
     <div class="card">
       <div id="number-content">
-        <span class="number">A</span>
+        <span class="number">8</span>
         <div id="diamond-content-ratio">
           <span class="diamond cr" />
         </div>
@@ -14,7 +14,7 @@
       </div>
 
       <div id="number-content2">
-        <span class="number">A</span>
+        <span class="number">8</span>
         <div id="diamond-content-ratio">
           <span class="diamond cr" />
         </div>
@@ -73,7 +73,7 @@
   font-size: 2rem;
   font-weight: bold;
   position: absolute;
-  left: 0.8rem;
+  left: 1.05rem;
   top: 0.75rem;
   color: blueviolet;
 }

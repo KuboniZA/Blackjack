@@ -8,7 +8,7 @@ import TableView from "./components/TableView.vue";
 
 <template>
   <TableView />
-<AceOfSpades
+  <AceOfSpades />
   <!-- <ChipsView /> -->
   <!-- <TestView /> -->
   <RouterView />
