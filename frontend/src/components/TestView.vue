@@ -19,6 +19,13 @@
   background-color: rgba(0, 0, 255, 0.489);
   backdrop-filter: blur(3px);
   /* clip-path: shape(from 0% 100%, curve to 100% 0% with 90% 90%, line to 100% 100%, close); */
-  clip-path: shape(from 0% 0%, curve to 100% 100% with 10% 90%, line to 0% 100%, close);
+  clip-path: shape(
+    from 50% 0%,
+    curve to 100% 50% with 60% 40%,
+    curve to 50% 100% with 60% 60%,
+    curve to 0% 50% with 40% 60%,
+    curve to 50% 0% with 40% 40%,
+    close
+  );
 }
 </style>

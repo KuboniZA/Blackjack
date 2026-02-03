@@ -33,7 +33,7 @@
     grid-template-rows: 2 (1fr);
   }
   .text {
-    background: linear-gradient(to right, rgb(247, 210, 2), rgb(1, 202, 182));
+    background: linear-gradient(to right, rgb(1, 202, 182), rgb(247, 210, 2));
     background-clip: text;
     color: transparent;
     justify-content: center;
@@ -42,10 +42,11 @@
     transform: translateX(-50%);
   }
   #row1 {
-    top: 30%;
+    top: 35%;
   }
   #row2 {
-    top: 50%;
+    top: 45%;
+    padding-top: 2rem;
   }
 }
 </style>
