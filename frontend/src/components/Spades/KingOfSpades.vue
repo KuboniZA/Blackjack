@@ -8,7 +8,7 @@
         <div id="diamond-content-ratio">
           <span class="diamond cr" />
         </div>
-        <span class="vline" />
+        <!-- <span class="vline" /> -->
         <span class="triangle ltriangle" />
         <span class="triangle rtriangle" />
       </div>
@@ -18,7 +18,7 @@
         <div id="diamond-content-ratio">
           <span class="diamond cr" />
         </div>
-        <span class="vline lineR" />
+        <!-- <span class="vline lineR" /> -->
         <span class="triangle ltriangle lt-ratio" />
         <span class="triangle rtriangle rt-ratio" />
       </div>
@@ -26,7 +26,7 @@
       <div id="diamond-content">
         <span class="diamond" />
       </div>
-      <span class="vline lineR" />
+      <!-- <span class="vline lineR" /> -->
       <span class="triangle ltriangle lt-ratio" />
       <span class="triangle rtriangle rt-ratio" />
     </div>
@@ -53,7 +53,7 @@
 .diamond {
   height: 6rem;
   width: 6rem;
-  background-color: blueviolet;
+  background: linear-gradient(to top right, blue, white);
   position: absolute;
   top: 0%;
   left: 50%;
@@ -75,7 +75,9 @@
   position: absolute;
   left: 0.8rem;
   top: 0.75rem;
-  color: blueviolet;
+  color: transparent;
+  background: linear-gradient(to top right, white, blue);
+  background-clip: text;
 }
 #diamond-content-ratio {
   transform: scale(0.25);
@@ -98,7 +100,7 @@
 .triangle {
   width: 2rem;
   height: 2rem;
-  background-color: blueviolet;
+  background: linear-gradient(to top right, blue, white);
   position: absolute;
   top: 55%;
   left: 36.75%;
