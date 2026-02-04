@@ -44,7 +44,7 @@
 .diamond {
   height: 6.5rem;
   width: 6.5rem;
-  background: linear-gradient(to top right, blue, red);
+  background: linear-gradient(to top right, yellow, red);
   position: absolute;
   top: 0%;
   left: 50%;
@@ -76,7 +76,7 @@
   left: 0.85rem;
   top: 0.75rem;
   color: transparent;
-  background: linear-gradient(to top right, blue, red);
+  background: linear-gradient(to top right, yellow, red);
   background-clip: text;
 }
 #diamond-content-ratio {
