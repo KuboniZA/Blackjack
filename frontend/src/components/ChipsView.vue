@@ -1,8 +1,26 @@
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+defineProps({
+  rand1: Boolean,
+  rand5: Boolean,
+  rand10: Boolean,
+  rand25: Boolean,
+  rand50: Boolean,
+  rand100: Boolean,
+  rand500: Boolean,
+  rand1k: Boolean,
+  rand10k: Boolean,
+  rand50k: Boolean,
+  rand100k: Boolean,
+  rand500k: Boolean,
+  rand1m: Boolean,
+  rand10m: Boolean,
+  rand100m: Boolean,
+});
+</script>
 
 <template>
   <div class="chips-container">
-    <div id="rand1" class="chips shimmer">
+    <div id="rand1" class="chips shimmer" v-if="rand1">
       <div class="horizontal-line" />
       <div class="vertical-line" />
       <div class="left-leaning-line line30" />
@@ -16,7 +34,7 @@
       </div>
     </div>
 
-    <div id="rand5" class="chips shimmer">
+    <div id="rand5" class="chips shimmer" v-if="rand5">
       <div class="horizontal-line" />
       <div class="vertical-line" />
       <div class="left-leaning-line line30" />
@@ -30,7 +48,7 @@
       </div>
     </div>
 
-    <div id="rand10" class="chips shimmer">
+    <div id="rand10" class="chips shimmer" v-if="rand10">
       <div class="horizontal-line" />
       <div class="vertical-line" />
       <div class="left-leaning-line line30" />
@@ -44,7 +62,7 @@
       </div>
     </div>
 
-    <div id="rand25" class="chips shimmer">
+    <div id="rand25" class="chips shimmer" v-if="rand25">
       <div class="horizontal-line" />
       <div class="vertical-line" />
       <div class="left-leaning-line line30" />
@@ -58,7 +76,7 @@
       </div>
     </div>
 
-    <div id="rand50" class="chips shimmer">
+    <div id="rand50" class="chips shimmer" v-if="rand50">
       <div class="horizontal-line" />
       <div class="vertical-line" />
       <div class="left-leaning-line line30" />
@@ -72,7 +90,7 @@
       </div>
     </div>
 
-    <div id="rand100" class="chips shimmer">
+    <div id="rand100" class="chips shimmer" v-if="rand100">
       <div class="horizontal-line" />
       <div class="vertical-line" />
       <div class="left-leaning-line line30" />
@@ -86,7 +104,7 @@
       </div>
     </div>
 
-    <div id="rand500" class="chips shimmer">
+    <div id="rand500" class="chips shimmer" v-if="rand500">
       <div class="horizontal-line" />
       <div class="vertical-line" />
       <div class="left-leaning-line line30" />
@@ -100,7 +118,7 @@
       </div>
     </div>
 
-    <div id="rand1000" class="chips shimmer">
+    <div id="rand1000" class="chips shimmer" v-if="rand1k">
       <div class="horizontal-line" />
       <div class="vertical-line" />
       <div class="left-leaning-line line30" />
@@ -114,7 +132,7 @@
       </div>
     </div>
 
-    <div id="rand10000" class="chips shimmer">
+    <div id="rand10000" class="chips shimmer" v-if="rand10k">
       <div class="horizontal-line length10k" />
       <div class="vertical-line vlength10k" />
       <div class="left-leaning-line line30" />
@@ -128,7 +146,7 @@
       </div>
     </div>
 
-    <div id="rand50000" class="chips shimmer">
+    <div id="rand50000" class="chips shimmer" v-if="rand50k">
       <div class="horizontal-line length10k" />
       <div class="vertical-line vlength10k" />
       <div class="left-leaning-line line30" />
@@ -142,7 +160,7 @@
       </div>
     </div>
 
-    <div id="rand100000" class="chips shimmer">
+    <div id="rand100000" class="chips shimmer" v-if="rand100k">
       <div class="horizontal-line length10k" />
       <div class="vertical-line vlength10k" />
       <div class="left-leaning-line line30" />
@@ -156,7 +174,7 @@
       </div>
     </div>
 
-    <div id="rand500000" class="chips shimmer">
+    <div id="rand500000" class="chips shimmer" v-if="rand500k">
       <div class="horizontal-line length10k" />
       <div class="vertical-line vlength10k" />
       <div class="left-leaning-line line30" />
@@ -170,7 +188,7 @@
       </div>
     </div>
 
-    <div id="rand1000000" class="chips shimmer">
+    <div id="rand1000000" class="chips shimmer" v-if="rand1m">
       <div class="horizontal-line length1M" />
       <div class="vertical-line vlength1M" />
       <div class="left-leaning-line line30 dlength1M" />
@@ -184,7 +202,7 @@
       </div>
     </div>
 
-    <div id="rand10M" class="chips shimmer">
+    <div id="rand10M" class="chips shimmer" v-if="rand10m">
       <div class="horizontal-line length1M" />
       <div class="vertical-line vlength1M" />
       <div class="left-leaning-line line30 dlength1M" />
@@ -198,7 +216,7 @@
       </div>
     </div>
 
-    <div id="rand100M" class="chips shimmer">
+    <div id="rand100M" class="chips shimmer" v-if="rand100m">
       <div class="horizontal-line length1M" />
       <div class="vertical-line vlength1M" />
       <div class="left-leaning-line line30 dlength1M" />
@@ -214,19 +232,19 @@
   </div>
 </template>
 
-<style scoped>
-/* .chips-container {
+<style>
+.chips-container {
   position: relative;
-  width: 45rem;
+  /* width: 45rem;
   height: 20rem;
   top: 38rem;
   left: 3rem;
   box-shadow: -4px 4px 8px rgba(0, 0, 0, 0.8);
 
-  border-radius: 25px;
-} */
+  border-radius: 25px; */
+}
 
-.chips-container {
+/* .chips-container {
   position: relative;
   width: 60rem;
   height: 40rem;
@@ -237,8 +255,8 @@
   backdrop-filter: blur(6px);
   border: 2px solid white;
   box-shadow:
-    /* 1px -1px 8px rgba(255, 255, 255, 1), */ inset 4px -4px 8px rgba(0, 0, 0, 0.4);
-}
+     1px -1px 8px rgba(255, 255, 255, 1), inset 4px -4px 8px rgba(0, 0, 0, 0.4);
+} */
 #rand1 {
   height: 8.5rem;
   width: 8.5rem;

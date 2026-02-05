@@ -1,6 +1,10 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 import GameModes from "./GameModes/GameModes.vue";
+import AceOfSpades from "./Spades/AceOfSpades.vue";
+import QueenOfHearts from "./Hearts/QueenOfHearts.vue";
+import ChipsView from "./ChipsView.vue";
+
 const showWelcome = ref(true);
 const showMenu = ref(false);
 
@@ -12,6 +16,19 @@ const hideWelcomeShowMenu = () => {
 
 <template>
   <GameModes :isVisible="showMenu" />
+  <div class="card-scale z-index">
+    <AceOfSpades :spade1="showWelcome" id="ace" />
+  </div>
+  <div class="card-scale">
+    <QueenOfHearts :heartQ="showWelcome" id="queen" />
+  </div>
+  <div class="chips">
+    <ChipsView :rand500="showWelcome" id="chip500" />
+    <ChipsView :rand25="showWelcome" id="chip25" />
+    <ChipsView :rand1m="showWelcome" id="chip1m" />
+    <ChipsView :rand5="showWelcome" id="chip5" />
+  </div>
+
   <div class="welcome-container" v-if="showWelcome">
     <h1>Welcome to</h1>
     <button id="play-btn" @click="hideWelcomeShowMenu">Play</button>
@@ -87,5 +104,47 @@ h1 {
   100% {
     background-position: 200% 50%;
   }
+}
+#ace {
+  left: 10%;
+  top: 43%;
+  transform: rotate(-30deg);
+}
+#queen {
+  left: 75%;
+  top: 20%;
+  transform: rotate(30deg);
+}
+.card-scale {
+  position: absolute;
+  width: 100dvw;
+  height: 100dvh;
+  transform: scale(0.8);
+}
+.z-index {
+  z-index: -1001;
+}
+.chips {
+  width: 100dvw;
+  height: 100dvh;
+  position: absolute;
+}
+#chip500 {
+  left: 15%;
+  top: 4%;
+}
+#chip25 {
+  left: 35%;
+  top: 64%;
+}
+#chip1m {
+  left: 67%;
+  top: -13%;
+  z-index: -1001;
+}
+#chip5 {
+  left: -5%;
+  top: 49%;
+  z-index: -1001;
 }
 </style>

@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { ref } from "vue";
-const heartQ = ref(false);
+defineProps({
+  heartQ: Boolean,
+});
 </script>
 
 <template>
@@ -31,7 +32,7 @@ const heartQ = ref(false);
 .card-container {
   position: absolute;
   left: 51%;
-  transform: translateX(-50%);
+  transform: translateX(-50%) scale(0.8);
   top: 30%;
 }
 .card {
