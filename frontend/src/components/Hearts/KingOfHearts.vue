@@ -1,7 +1,10 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { ref } from "vue";
+const heartK = ref(false);
+</script>
 
 <template>
-  <div class="card-container">
+  <div class="card-container" v-if="heartK">
     <div class="card">
       <div id="number-content">
         <span class="number">K</span>

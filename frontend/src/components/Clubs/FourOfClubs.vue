@@ -1,7 +1,10 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { ref } from "vue";
+const club4 = ref(false);
+</script>
 
 <template>
-  <div class="card-container">
+  <div class="card-container" v-if="club4">
     <div class="card">
       <div id="number-content">
         <span class="number">4</span>
