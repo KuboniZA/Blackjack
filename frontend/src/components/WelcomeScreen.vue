@@ -1,14 +1,20 @@
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import { ref } from "vue";
+import GameModes from "./GameModes/GameModes.vue";
+const showWelcome = ref(true);
+const showMenu = ref(false);
+
+const hideWelcomeShowMenu = () => {
+  showWelcome.value = false;
+  showMenu.value = true;
+};
+</script>
 
 <template>
-  <div class="welcome-container">
+  <GameModes :isVisible="showMenu" />
+  <div class="welcome-container" v-if="showWelcome">
     <h1>Welcome to</h1>
-    <button id="play-btn">Play</button>
-    <div id="game-mode-container">
-      <button class="game-mode-btn">Low Roller</button>
-      <button class="game-mode-btn">Mid Roller</button>
-      <button class="game-mode-btn">High Roller</button>
-    </div>
+    <button id="play-btn" @click="hideWelcomeShowMenu">Play</button>
   </div>
 </template>
 
@@ -81,25 +87,5 @@ h1 {
   100% {
     background-position: 200% 50%;
   }
-}
-.game-mode-btn {
-  display: block;
-  width: 14rem;
-  height: 3rem;
-  font-size: 1.5rem;
-  background-color: transparent;
-}
-#game-mode-container {
-  width: fit-content;
-  position: relative;
-  left: 50%;
-  transform: translateX(-50%);
-  top: 85%;
-  background: linear-gradient(to right, rgb(247, 210, 2), rgb(1, 202, 182));
-}
-.game-mode-btn:hover {
-  transform: scale(1.05);
-  background: linear-gradient(to right, rgb(184, 157, 1), rgb(1, 145, 131));
-  cursor: pointer;
 }
 </style>
