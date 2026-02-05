@@ -23,10 +23,30 @@ const hideWelcomeShowMenu = () => {
     <QueenOfHearts :heartQ="showWelcome" id="queen" />
   </div>
   <div class="chips">
-    <ChipsView :rand500="showWelcome" id="chip500" />
-    <ChipsView :rand25="showWelcome" id="chip25" />
-    <ChipsView :rand1m="showWelcome" id="chip1m" />
-    <ChipsView :rand5="showWelcome" id="chip5" />
+    <ChipsView
+      :rand500="showWelcome"
+      id="chip500"
+      class="welcome-chips"
+      :class="{ shimmer: showWelcome }"
+    />
+    <ChipsView
+      :rand25="showWelcome"
+      id="chip25"
+      class="welcome-chips"
+      :class="{ shimmer: showWelcome }"
+    />
+    <ChipsView
+      :rand1m="showWelcome"
+      id="chip1m"
+      class="welcome-chips"
+      :class="{ shimmer: showWelcome }"
+    />
+    <ChipsView
+      :rand5="showWelcome"
+      id="chip5"
+      class="welcome-chips"
+      :class="{ shimmer: showWelcome }"
+    />
   </div>
 
   <div class="welcome-container" v-if="showWelcome">

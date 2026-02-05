@@ -637,10 +637,9 @@ defineProps({
 
 .chips:hover {
   cursor: pointer;
-  transform: scale(1.1);
+  /* transform: scale(1.1); */
 }
 
-/* Shimmer layer */
 .shimmer::before {
   content: "";
   position: absolute;
@@ -660,12 +659,10 @@ defineProps({
   pointer-events: none;
 }
 
-/* Run animation ONLY while hovered */
-.chips:hover.shimmer::before {
-  animation: shimmer-sweep 2.25s ease-out infinite;
+.chips.shimmer::before {
+  animation: shimmer-sweep 3s ease-out infinite;
 }
 
-/* Keyframes */
 @keyframes shimmer-sweep {
   0% {
     transform: translateX(0);
