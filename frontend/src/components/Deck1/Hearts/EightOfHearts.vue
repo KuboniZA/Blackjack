@@ -1,21 +1,21 @@
 <script setup lang="ts">
 defineProps({
-  heartQ: Boolean,
+  heart8: Boolean,
 });
 </script>
 
 <template>
-  <div class="card-container" v-if="heartQ">
+  <div class="card-container" v-if="heart8">
     <div class="card">
       <div id="number-content">
-        <span class="number">Q</span>
+        <span class="number">8</span>
         <div id="diamond-content-ratio">
           <span class="diamond cr" />
         </div>
       </div>
 
       <div id="number-content2">
-        <span class="number">Q</span>
+        <span class="number">8</span>
         <div id="diamond-content-ratio">
           <span class="diamond cr" />
         </div>
@@ -32,7 +32,7 @@ defineProps({
 .card-container {
   position: absolute;
   left: 51%;
-  transform: translateX(-50%) scale(0.8);
+  transform: translateX(-50%);
   top: 30%;
 }
 .card {
@@ -48,7 +48,7 @@ defineProps({
 .diamond {
   height: 6.5rem;
   width: 6.5rem;
-  background: linear-gradient(to top right, red, yellow);
+  background-color: red;
   position: absolute;
   top: 0%;
   left: 50%;
@@ -71,15 +71,13 @@ defineProps({
   position: absolute;
   left: 0.85rem;
   top: 0.75rem;
-  color: transparent;
-  background: linear-gradient(to top right, red, yellow);
-  background-clip: text;
+  color: red;
 }
 #diamond-content-ratio {
   transform: scale(0.3);
   position: relative;
-  left: 1.3rem;
-  top: 2.4rem;
+  left: 1rem;
+  top: 2.2rem;
 }
 .cr {
   top: 3rem;

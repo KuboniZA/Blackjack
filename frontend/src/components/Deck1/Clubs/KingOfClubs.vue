@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { ref } from "vue";
-const clubK = ref(false);
+defineProps({
+  clubK: Boolean,
+});
 </script>
 
 <template>

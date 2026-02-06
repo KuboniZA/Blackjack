@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { ref } from "vue";
-const spade10 = ref(false);
+defineProps({
+  spade10: Boolean,
+});
 </script>
 
 <template>

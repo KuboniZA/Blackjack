@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { ref } from "vue";
-const heart7 = ref(false);
+defineProps({
+  heart7: Boolean,
+});
 </script>
 
 <template>

@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { ref } from "vue";
-const diamond1 = ref(false);
+defineProps({
+  diamond1: Boolean,
+});
 </script>
 
 <template>
