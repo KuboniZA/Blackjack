@@ -7,9 +7,10 @@ defineProps({
 <template>
   <div id="game-mode-modal" v-if="isVisible">
     <div id="game-mode-container">
-      <button class="game-mode-btn shimmer">Low Roller</button>
-      <button class="game-mode-btn shimmer">Mid Roller</button>
-      <button class="game-mode-btn shimmer">High Roller</button>
+      <button class="game-mode-btn GM">Low Roller</button>
+      <button class="game-mode-btn GM">Mid Roller</button>
+      <button class="game-mode-btn GM">High Roller</button>
+      <button id="back-btn">Back</button>
     </div>
   </div>
 </template>
@@ -21,6 +22,7 @@ defineProps({
   position: fixed;
   background-color: rgba(255, 255, 255, 0.258);
   backdrop-filter: blur(4px);
+  z-index: 10;
 }
 .game-mode-btn {
   display: block;
@@ -45,14 +47,34 @@ defineProps({
   left: 50%;
   transform: translateX(-50%) translateY(-50%);
   top: 50%;
+  z-index: 20;
+}
+#back-btn {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 108%;
+  width: 12rem;
+  height: 4rem;
+  border-radius: 1000px;
+  font-size: 1.2rem;
+  background-color: transparent;
+  border: 2px solid white;
+  background: linear-gradient(to bottom right, rgba(255, 0, 0, 0.486), rgba(0, 0, 255, 0.48));
+  color: white;
 }
 .game-mode-btn:hover {
   transform: scale(1.05);
   background: linear-gradient(to bottom right, rgba(255, 0, 0, 0.771), rgba(0, 0, 255, 0.717));
   cursor: pointer;
 }
+#back-btn:hover {
+  transform: scale(1.05) translate(-50%);
+  background: linear-gradient(to bottom right, rgba(0, 0, 255, 0.717), rgba(255, 0, 0, 0.771));
+  cursor: pointer;
+}
 /* Shimmer layer */
-.shimmer::before {
+.shimmerGM::before {
   content: "";
   position: absolute;
   top: 0;
@@ -71,7 +93,7 @@ defineProps({
   pointer-events: none;
 }
 /* Run animation ONLY while hovered */
-.game-mode-btn:hover.shimmer::before {
+.game-mode-btn:hover.shimmerGM::before {
   animation: shimmer-sweep 2.25s ease-out infinite;
 }
 
@@ -96,7 +118,7 @@ defineProps({
 
 /* Accessibility */
 @media (prefers-reduced-motion: reduce) {
-  .game-mode-btn:hover.shimmer::before {
+  .game-mode-btn:hover.shimmerGM::before {
     animation: none;
   }
 }

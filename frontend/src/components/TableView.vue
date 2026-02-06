@@ -25,6 +25,7 @@
 .text {
   font-size: clamp(5rem, 11vw + 1rem, 18rem);
   padding: 1.75rem;
+  /* text-shadow: 0 4px 8px rgba(0, 0, 0, 0.6); */
 }
 
 @media screen and (width <= 900px) {
@@ -40,6 +41,7 @@
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
+    /* text-shadow: -4px 4px 8px rgba(0, 0, 0, 0.7); */
   }
   #row1 {
     top: 35%;
