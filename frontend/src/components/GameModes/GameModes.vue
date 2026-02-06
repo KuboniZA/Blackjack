@@ -7,9 +7,14 @@ defineProps({
 <template>
   <div id="game-mode-modal" v-if="isVisible">
     <div id="game-mode-container">
-      <button class="game-mode-btn GM">Low Roller</button>
-      <button class="game-mode-btn GM">Mid Roller</button>
-      <button class="game-mode-btn GM">High Roller</button>
+      <button class="game-mode-btn GM">1 Deck</button>
+      <button class="game-mode-btn GM">2 Decks</button>
+      <button class="game-mode-btn GM">3 Decks</button>
+      <button class="game-mode-btn GM">4 Decks</button>
+      <button class="game-mode-btn GM">5 Decks</button>
+      <button class="game-mode-btn GM">6 Decks</button>
+      <button class="game-mode-btn GM">7 Decks</button>
+      <button class="game-mode-btn GM">8 Decks</button>
       <button id="back-btn">Back</button>
     </div>
   </div>
@@ -25,7 +30,6 @@ defineProps({
   z-index: 10;
 }
 .game-mode-btn {
-  display: block;
   width: 30rem;
   height: 7rem;
   font-size: 1.5rem;
@@ -43,17 +47,23 @@ defineProps({
 }
 #game-mode-container {
   width: fit-content;
-  position: relative;
-  left: 50%;
-  transform: translateX(-50%) translateY(-50%);
-  top: 50%;
+  height: fit-content;
+  position: absolute;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(5, 1fr);
+  column-gap: 3rem;
+  row-gap: 1rem;
   z-index: 20;
+  left: 50%;
+  top: 50%;
+  transform: translateX(-50%) translateY(-50%);
 }
 #back-btn {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  top: 108%;
+  position: relative;
+  grid-column: span 2;
+  justify-self: center;
+  top: 15%;
   width: 12rem;
   height: 4rem;
   border-radius: 1000px;
@@ -69,7 +79,7 @@ defineProps({
   cursor: pointer;
 }
 #back-btn:hover {
-  transform: scale(1.05) translate(-50%);
+  transform: scale(1.05);
   background: linear-gradient(to bottom right, rgba(0, 0, 255, 0.717), rgba(255, 0, 0, 0.771));
   cursor: pointer;
 }

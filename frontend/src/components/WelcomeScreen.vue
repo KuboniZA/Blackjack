@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 import GameModes from "./GameModes/GameModes.vue";
-import AceOfSpades from "./Spades/AceOfSpades.vue";
-import QueenOfHearts from "./Hearts/QueenOfHearts.vue";
+import AceOfSpades from "./Deck1/Spades/AceOfSpades.vue";
+import QueenOfHearts from "./Deck1/Hearts/QueenOfHearts.vue";
 import ChipsView from "./ChipsView.vue";
 
 const showWelcome = ref(true);
