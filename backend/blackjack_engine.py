@@ -68,7 +68,6 @@ class GameEngine:
 
     def new_game_state(self):
         user_cards = []
-        computer_card = []
 
         for card in range(2):
             while True:
@@ -96,6 +95,11 @@ class GameEngine:
 
             user_cards.append((card_suit, rank))
 
+        return user_cards
+    
+    def ai_new_game(self):
+        computer_card = []
+
         for card in range(2):
             while True:
                 card_suit = random.choice(self.suits)
@@ -120,15 +124,13 @@ class GameEngine:
                     self.club_ranks.remove(rank)
                     break
             computer_card.append((card_suit, rank))
-
-        return user_cards, computer_card
+        
+        return computer_card
 
     def check_deck(self):
+        card_count = len(self.heart_ranks) + len(self.diamond_ranks) + len(self.spade_ranks) +len(self.club_ranks)
         return {
-            "hearts": self.heart_ranks,
-            "diamonds": self.diamond_ranks,
-            "spades": self.spade_ranks,
-            "clubs": self.club_ranks,
+            "card_count": card_count
         }
 
     def chip_counter(self):
@@ -203,7 +205,8 @@ class GameEngine:
 
 game_engine = GameEngine()
 
-user_cards, computer_card = game_engine.new_game_state()
+user_cards = game_engine.new_game_state()
+computer_card = game_engine.ai_new_game()
 
 deck = game_engine.check_deck()
 
