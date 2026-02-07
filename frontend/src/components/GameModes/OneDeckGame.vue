@@ -30,7 +30,7 @@ import SevenOfHearts from "../Deck1/Hearts/SevenOfHearts.vue";
 import SevenOfSpades from "../Deck1/Spades/SevenOfSpades.vue";
 import EightOfClubs from "../Deck1/Clubs/EightOfClubs.vue";
 import EightOfDiamonds from "../Deck1/Diamonds/EightOfDiamonds.vue";
-import EightOFHearts from "../Deck1/Hearts/EightOFHearts.vue";
+import EightOfHearts from "../Deck1/Hearts/EightOfHearts.vue";
 import EightOfSpades from "../Deck1/Spades/EightOfSpades.vue";
 import NineOfClubs from "../Deck1/Clubs/NineOfClubs.vue";
 import NineOfDiamonds from "../Deck1/Diamonds/NineOfDiamonds.vue";
@@ -99,7 +99,7 @@ onMounted(() => {
     <SevenOfSpades />
     <EightOfClubs />
     <EightOfDiamonds />
-    <EightOFHearts />
+    <EightOfHearts />
     <EightOfSpades />
     <NineOfClubs />
     <NineOfDiamonds />
@@ -123,32 +123,28 @@ onMounted(() => {
     <KingOfSpades />
   </div>
 
-  <div>
+  <div id="cards-remaining-container">
     <p id="cards-remaining">
       <span id="remaining-text">Cards remaining: </span
       ><span id="cards-rem-number">{{ cards_left }}</span>
     </p>
+    <button id="reset">Reset Game</button>
   </div>
 </template>
 
 <style scoped>
 #cards-remaining {
-  position: absolute;
-  top: 8%;
-  left: 80dvw;
   background: linear-gradient(to right, blue, red);
   font-size: 2rem;
   color: white;
-  display: flex;
+  position: relative;
   justify-content: center;
   border-radius: 25px;
   height: 3.5rem;
   width: 20rem;
-  place-items: center;
-  justify-content: center;
-  gap: 1rem;
   z-index: -2;
   border: 2px solid white;
+  margin: 0;
 }
 #cards-rem-number {
   background-color: transparent;
@@ -160,7 +156,11 @@ onMounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  position: relative;
+  position: absolute;
+  justify-self: right;
+  left: 82%;
+  top: 15%;
+  grid-row: 1;
 }
 #cards-rem-number::after {
   content: "";
@@ -171,5 +171,50 @@ onMounted(() => {
   background-color: transparent;
   background: linear-gradient(to bottom right, white, grey);
   z-index: -1;
+  grid-column: 2;
+  grid-row: 1;
+}
+#reset {
+  color: white;
+  position: relative;
+  z-index: -3;
+  font-size: 1.5rem;
+  background-color: transparent;
+  background: linear-gradient(to right, blue, red);
+  border-style: solid;
+  border-width: 0px 2px 2px 2px;
+  border-color: white;
+  padding: 0.5rem;
+  border-bottom-left-radius: 25px;
+  border-bottom-right-radius: 25px;
+  grid-column: 1 / -1;
+  grid-row: 2;
+  justify-self: center;
+  margin-top: 0;
+}
+#cards-remaining-container {
+  position: relative;
+  /* border: 1px solid red; */
+  height: fit-content;
+  width: fit-content;
+  display: grid;
+  grid-template-columns: max-content max-content;
+  grid-template-rows: auto auto;
+  align-items: center;
+  left: 80%;
+  top: 5rem;
+  z-index: -5;
+}
+#remaining-text {
+  width: fit-content;
+  height: fit-content;
+  position: absolute;
+  top: 15%;
+  left: 5%;
+}
+#reset:hover {
+  background: linear-gradient(to right, rgb(1, 1, 215), rgb(202, 1, 1));
+  transform: scale(1.02);
+  cursor: pointer;
 }
 </style>
