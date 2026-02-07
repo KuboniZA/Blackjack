@@ -62,6 +62,13 @@ const newGame = async () => {
   cards_left.value = data.cards_remaining.card_count;
 };
 
+const resetGame = async () => {
+  const response = await fetch("http://127.0.0.1:8000/reset-game");
+  const data = await response.json();
+  console.log(data);
+  cards_left.value = data.cards_remaining.card_count;
+};
+
 onMounted(() => {
   newGame();
 });
@@ -128,7 +135,7 @@ onMounted(() => {
       <span id="remaining-text">Cards remaining: </span
       ><span id="cards-rem-number">{{ cards_left }}</span>
     </p>
-    <button id="reset">Reset Game</button>
+    <button id="reset" @click="resetGame">Reset Game</button>
   </div>
 </template>
 

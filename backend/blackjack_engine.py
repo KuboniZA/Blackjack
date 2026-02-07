@@ -132,6 +132,68 @@ class GameEngine:
         return {
             "card_count": card_count
         }
+    
+    def reset_game(self):
+        self.heart_ranks = [
+            "ace",
+            "two",
+            "three",
+            "four",
+            "five",
+            "six",
+            "seven",
+            "eight",
+            "nine",
+            "ten",
+            "jack",
+            "queen",
+            "king",
+        ]
+        self.diamond_ranks = [
+            "ace",
+            "two",
+            "three",
+            "four",
+            "five",
+            "six",
+            "seven",
+            "eight",
+            "nine",
+            "ten",
+            "jack",
+            "queen",
+            "king",
+        ]
+        self.spade_ranks = [
+            "ace",
+            "two",
+            "three",
+            "four",
+            "five",
+            "six",
+            "seven",
+            "eight",
+            "nine",
+            "ten",
+            "jack",
+            "queen",
+            "king",
+        ]
+        self.club_ranks = [
+            "ace",
+            "two",
+            "three",
+            "four",
+            "five",
+            "six",
+            "seven",
+            "eight",
+            "nine",
+            "ten",
+            "jack",
+            "queen",
+            "king",
+        ]
 
     def chip_counter(self):
         bank = self.budget

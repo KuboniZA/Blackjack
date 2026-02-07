@@ -28,3 +28,12 @@ def get_cards():
         "first_deal_ai": game.ai_new_game(),
         "cards_remaining": game.check_deck()
         }
+
+@app.get('/reset-game')
+def reset_game():
+    return {
+        "reset-cards": game.reset_game(),
+        "first_deal": game.new_game_state(),
+        "first_deal_ai": game.ai_new_game(),
+        "cards_remaining": game.check_deck()
+    }
