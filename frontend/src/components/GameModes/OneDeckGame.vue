@@ -75,7 +75,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div>
+  <div id="card-components">
     <AceOfClubs />
     <AceOfDiamonds />
     <AceOfHearts />
@@ -129,13 +129,23 @@ onMounted(() => {
     <KingOfHearts />
     <KingOfSpades />
   </div>
+  <div id="main-container">
+    <div id="cards-remaining-container">
+      <p id="cards-remaining">
+        <span id="remaining-text">Cards remaining: </span
+        ><span id="cards-rem-number">{{ cards_left }}</span>
+      </p>
+      <button id="reset" @click="resetGame">Reset Game</button>
+    </div>
 
-  <div id="cards-remaining-container">
-    <p id="cards-remaining">
-      <span id="remaining-text">Cards remaining: </span
-      ><span id="cards-rem-number">{{ cards_left }}</span>
-    </p>
-    <button id="reset" @click="resetGame">Reset Game</button>
+    <div class="hit-stand-container">
+      <span id="add-card">🃏</span>
+      <span>HIT</span>
+    </div>
+    <div class="hit-stand-container stand">
+      <span id="add-card">✋🏾</span>
+      <span>STAND</span>
+    </div>
   </div>
 </template>
 
@@ -184,7 +194,7 @@ onMounted(() => {
 #reset {
   color: white;
   position: relative;
-  z-index: -3;
+  z-index: 3;
   font-size: 1.5rem;
   background-color: transparent;
   background: linear-gradient(to right, blue, red);
@@ -210,7 +220,7 @@ onMounted(() => {
   align-items: center;
   left: 80%;
   top: 5rem;
-  z-index: -5;
+  z-index: 5;
 }
 #remaining-text {
   width: fit-content;
@@ -223,5 +233,44 @@ onMounted(() => {
   background: linear-gradient(to right, rgb(1, 1, 215), rgb(202, 1, 1));
   transform: scale(1.02);
   cursor: pointer;
+}
+.hit-stand-container {
+  color: white;
+  background-color: rgba(255, 255, 255, 0.542);
+  font-size: 2rem;
+  border: 2px solid white;
+  width: fit-content;
+  padding: 1rem 2rem 1rem 2rem;
+  border-radius: 25px;
+  position: relative;
+  top: 30rem;
+  left: 10%;
+  backdrop-filter: blur(5px);
+}
+#add-card {
+  border: 1px solid white;
+  padding: 0.75rem;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.455);
+  margin-right: 1rem;
+  position: relative;
+  /* justify-items: center;
+  align-items: center; */
+}
+.stand {
+  top: 25rem;
+  left: 75%;
+}
+.hit-stand-container:hover {
+  cursor: pointer;
+  transform: scale(1.02);
+}
+#main-container {
+  position: relative;
+  width: 100dvw;
+  height: 100dvh;
+}
+#card-components {
+  position: absolute;
 }
 </style>

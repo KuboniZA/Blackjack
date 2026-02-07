@@ -32,6 +32,7 @@
   .text-container {
     width: 100dvw;
     grid-template-rows: 2 (1fr);
+    z-index: -500;
   }
   .text {
     background: linear-gradient(to right, rgb(1, 202, 182), rgb(247, 210, 2));
