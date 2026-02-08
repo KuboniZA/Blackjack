@@ -67,10 +67,12 @@ const newGame = async () => {
 };
 
 const resetGame = async () => {
-  const response = await fetch("http://127.0.0.1:8000/reset-game");
+  const response = await fetch("http://127.0.0.1:8000/reset-game", { method: "POST" });
   const data = await response.json();
   console.log(data);
   cards_left.value = data.cards_remaining.card_count;
+  player_cards.value = data.first_deal;
+  ai_cards.value = data.first_deal_ai;
 };
 
 onMounted(() => {

@@ -134,6 +134,8 @@ class GameEngine:
         }
     
     def reset_game(self):
+        self.user_cards = []
+        self.computer_card = []
         self.heart_ranks = [
             "ace",
             "two",

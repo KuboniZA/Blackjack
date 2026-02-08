@@ -29,7 +29,7 @@ def get_cards():
         "cards_remaining": game.check_deck()
         }
 
-@app.get('/reset-game')
+@app.post('/reset-game')
 def reset_game():
     return {
         "reset-cards": game.reset_game(),
