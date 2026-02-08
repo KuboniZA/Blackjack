@@ -162,61 +162,6 @@ onMounted(() => {
 </script>
 
 <template>
-  <!-- <div class="card-components">
-    <AceOfClubs />
-    <AceOfDiamonds />
-    <AceOfHearts />
-    <AceOfSpades />
-    <TwoOfClubs />
-    <TwoOfDiamonds />
-    <TwoOfHearts />
-    <TwoOfSpades />
-    <ThreeOfClubs />
-    <ThreeOfDiamonds />
-    <ThreeOfHearts />
-    <ThreeOfSpades />
-    <FourOfClubs />
-    <FourOfDiamonds />
-    <FourOfHearts />
-    <FourOfSpades />
-    <FiveOfClubs />
-    <FiveOfDiamonds />
-    <FiveOfHearts />
-    <FiveOfSpades />
-    <SixOfClubs />
-    <SixOfDiamonds />
-    <SixOfHearts />
-    <SixOfSpades />
-    <SevenOfClubs />
-    <SevenOfDiamonds />
-    <SevenOfHearts />
-    <SevenOfSpades />
-    <EightOfClubs />
-    <EightOfDiamonds />
-    <EightOfHearts />
-    <EightOfSpades />
-    <NineOfClubs />
-    <NineOfDiamonds />
-    <NineOfHearts />
-    <NineOfSpades />
-    <TenOfClubs />
-    <TenOfDiamonds />
-    <TenOfHearts />
-    <TenOfSpades />
-    <JackOfClubs />
-    <JackOfDiamonds />
-    <JackOfHearts />
-    <JackOfSpades />
-    <QueenOfClubs />
-    <QueenOfDiamonds />
-    <QueenOfHearts />
-    <QueenOfSpades />
-    <KingOfClubs />
-    <KingOfDiamonds />
-    <KingOfHearts />
-    <KingOfSpades />
-  </div> -->
-
   <div class="main-container">
     <div class="cards-remaining-container">
       <p class="cards-remaining">
@@ -235,15 +180,31 @@ onMounted(() => {
       <span>STAND</span>
     </div>
     <div class="cards-container">
-      <component class="player-cards" v-if="player_card1" :is="getCardComponent(player_card1)" />
-      <component class="player-cards" v-if="player_card2" :is="getCardComponent(player_card2)" />
-      <!-- <span>{{ player_card1 }}</span>
-      <span>{{ player_card2 }}</span> -->
+      <component
+        id="p-card1"
+        class="player-cards cards"
+        v-if="player_card1"
+        :is="getCardComponent(player_card1)"
+      />
+      <component
+        id="p-card2"
+        class="player-cards cards"
+        v-if="player_card2"
+        :is="getCardComponent(player_card2)"
+      />
 
-      <component class="ai-cards" v-if="ai_card1" :is="getCardComponent(ai_card1)" />
-      <component class="ai-cards" v-if="ai_card2" :is="getCardComponent(ai_card2)" />
-      <!-- <span class="card1">{{ ai_card1 }}</span>
-      <span class="card2">{{ ai_card2 }}</span> -->
+      <component
+        id="ai-card1"
+        class="ai-cards cards"
+        v-if="ai_card1"
+        :is="getCardComponent(ai_card1)"
+      />
+      <component
+        id="ai-card2"
+        class="ai-cards cards"
+        v-if="ai_card2"
+        :is="getCardComponent(ai_card2)"
+      />
     </div>
   </div>
 </template>
@@ -381,11 +342,10 @@ onMounted(() => {
 .cards-container {
   position: absolute;
   color: white;
-  border: 1px solid red;
   width: 54rem;
   height: 60rem;
   left: 25%;
-  top: 10%;
+  top: 0;
   grid-template-columns: repeat(2, 1fr);
   display: grid;
   row-gap: 3rem;
@@ -394,5 +354,25 @@ onMounted(() => {
   top: 6rem;
   height: fit-content;
   width: fit-content;
+}
+#p-card1 {
+  top: 60%;
+  left: 30%;
+  transform: scale(0.7) rotate(0deg);
+}
+#p-card2 {
+  top: 60%;
+  left: 40%;
+  transform: scale(0.7) rotate(-5deg);
+}
+#ai-card1 {
+  top: 2%;
+  left: 30%;
+  transform: scale(0.7) rotate(0deg);
+}
+#ai-card2 {
+  top: 2%;
+  left: 40%;
+  transform: scale(0.7) rotate(-5deg);
 }
 </style>
