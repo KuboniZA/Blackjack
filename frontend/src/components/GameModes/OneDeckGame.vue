@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { ref, onMounted } from "vue";
+import type { Component } from "vue";
 import AceOfClubs from "../Deck1/Clubs/AceOfClubs.vue";
 import AceOfDiamonds from "../Deck1/Diamonds/AceOfDiamonds.vue";
 import AceOfHearts from "../Deck1/Hearts/AceOfHearts.vue";
@@ -25,7 +26,7 @@ import SixOfDiamonds from "../Deck1/Diamonds/SixOfDiamonds.vue";
 import SixOfHearts from "../Deck1/Hearts/SixOfHearts.vue";
 import SixOfSpades from "../Deck1/Spades/SixOfSpades.vue";
 import SevenOfClubs from "../Deck1/Clubs/SevenOfClubs.vue";
-import SevenofDiamonds from "../Deck1/Diamonds/SevenofDiamonds.vue";
+import SevenOfDiamonds from "../Deck1/Diamonds/SevenofDiamonds.vue";
 import SevenOfHearts from "../Deck1/Hearts/SevenOfHearts.vue";
 import SevenOfSpades from "../Deck1/Spades/SevenOfSpades.vue";
 import EightOfClubs from "../Deck1/Clubs/EightOfClubs.vue";
@@ -53,9 +54,74 @@ import KingOfDiamonds from "../Deck1/Diamonds/KingOfDiamonds.vue";
 import KingOfHearts from "../Deck1/Hearts/KingOfHearts.vue";
 import KingOfSpades from "../Deck1/Spades/KingOfSpades.vue";
 
+type Card = [string, string];
 const cards_left = ref<number>(0);
-const player_cards = ref<string>("");
-const ai_cards = ref<string>("");
+const player_cards = ref<Card[]>([]);
+const ai_cards = ref<Card[]>([]);
+
+const cardComponentMap: Record<string, Component> = {
+  "clubs-ace": AceOfClubs,
+  "clubs-two": TwoOfClubs,
+  "clubs-three": ThreeOfClubs,
+  "clubs-four": FourOfClubs,
+  "clubs-five": FiveOfClubs,
+  "clubs-six": SixOfClubs,
+  "clubs-seven": SevenOfClubs,
+  "clubs-eight": EightOfClubs,
+  "clubs-nine": NineOfClubs,
+  "clubs-ten": TenOfClubs,
+  "clubs-jack": JackOfClubs,
+  "clubs-queen": QueenOfClubs,
+  "clubs-king": KingOfClubs,
+
+  "spades-ace": AceOfSpades,
+  "spades-two": TwoOfSpades,
+  "spades-three": ThreeOfSpades,
+  "spades-four": FourOfSpades,
+  "spades-five": FiveOfSpades,
+  "spades-six": SixOfSpades,
+  "spades-seven": SevenOfSpades,
+  "spades-eight": EightOfSpades,
+  "spades-nine": NineOfSpades,
+  "spades-ten": TenOfSpades,
+  "spades-jack": JackOfSpades,
+  "spades-queen": QueenOfSpades,
+  "spades-king": KingOfSpades,
+
+  "hearts-ace": AceOfHearts,
+  "hearts-two": TwoOfHearts,
+  "hearts-three": ThreeOfHearts,
+  "hearts-four": FourOfHearts,
+  "hearts-five": FiveOfHearts,
+  "hearts-six": SixOfHearts,
+  "hearts-seven": SevenOfHearts,
+  "hearts-eight": EightOfHearts,
+  "hearts-nine": NineOfHearts,
+  "hearts-ten": TenOfHearts,
+  "hearts-jack": JackOfHearts,
+  "hearts-queen": QueenOfHearts,
+  "hearts-king": KingOfHearts,
+
+  "diamonds-ace": AceOfDiamonds,
+  "diamonds-two": TwoOfDiamonds,
+  "diamonds-three": ThreeOfDiamonds,
+  "diamonds-four": FourOfDiamonds,
+  "diamonds-five": FiveOfDiamonds,
+  "diamonds-six": SixOfDiamonds,
+  "diamonds-seven": SevenOfDiamonds,
+  "diamonds-eight": EightOfDiamonds,
+  "diamonds-nine": NineOfDiamonds,
+  "diamonds-ten": TenOfDiamonds,
+  "diamonds-jack": JackOfDiamonds,
+  "diamonds-queen": QueenOfDiamonds,
+  "diamonds-king": KingOfDiamonds,
+};
+
+const getCardComponent = (card: Card): Component | null => {
+  const [suit, rank] = card;
+  console.log(cardComponentMap[`${suit}-${rank}`]);
+  return cardComponentMap[`${suit}-${rank}`] ?? null;
+};
 
 const newGame = async () => {
   const response = await fetch("http://127.0.0.1:8000/new-game");
@@ -107,7 +173,7 @@ onMounted(() => {
     <SixOfHearts />
     <SixOfSpades />
     <SevenOfClubs />
-    <SevenofDiamonds />
+    <SevenOfDiamonds />
     <SevenOfHearts />
     <SevenOfSpades />
     <EightOfClubs />
@@ -138,8 +204,8 @@ onMounted(() => {
   <div id="main-container">
     <div id="cards-remaining-container">
       <p id="cards-remaining">
-        <span id="remaining-text">Cards remaining: </span
-        ><span id="cards-rem-number">{{ cards_left }}</span>
+        <span id="remaining-text">Cards remaining: </span>
+        <span id="cards-rem-number">{{ cards_left }}</span>
       </p>
       <button id="reset" @click="resetGame">Reset Game</button>
     </div>
@@ -153,9 +219,21 @@ onMounted(() => {
       <span>STAND</span>
     </div>
     <div class="cards-container">
-      <span id="player-cards">{{ player_cards }}</span>
+      <component
+        id="player-cards"
+        v-for="(card, index) in player_cards"
+        :key="index"
+        :is="getCardComponent(card)"
+      />
+      <!-- <span>{{ player_cards }}</span> -->
 
-      <span id="ai-cards">{{ ai_cards }}</span>
+      <component
+        id="ai-cards"
+        v-for="(card, index) in ai_cards"
+        :key="index"
+        :is="getCardComponent(card)"
+      />
+      <!-- <span>{{ ai_cards }}</span> -->
     </div>
   </div>
 </template>
