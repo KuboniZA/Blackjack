@@ -5,7 +5,7 @@ defineProps({
 </script>
 
 <template>
-  <div class="card-container" v-if="spade5">
+  <div class="card-container">
     <div class="card">
       <div id="number-content">
         <span class="number">5</span>

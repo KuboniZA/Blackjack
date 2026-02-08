@@ -26,7 +26,7 @@ import SixOfDiamonds from "../Deck1/Diamonds/SixOfDiamonds.vue";
 import SixOfHearts from "../Deck1/Hearts/SixOfHearts.vue";
 import SixOfSpades from "../Deck1/Spades/SixOfSpades.vue";
 import SevenOfClubs from "../Deck1/Clubs/SevenOfClubs.vue";
-import SevenOfDiamonds from "../Deck1/Diamonds/SevenofDiamonds.vue";
+import SevenOfDiamonds from "../Deck1/Diamonds/SevenOfDiamonds.vue";
 import SevenOfHearts from "../Deck1/Hearts/SevenOfHearts.vue";
 import SevenOfSpades from "../Deck1/Spades/SevenOfSpades.vue";
 import EightOfClubs from "../Deck1/Clubs/EightOfClubs.vue";
@@ -121,11 +121,13 @@ const cardComponentMap: Record<string, Component> = {
   "diamonds-king": KingOfDiamonds,
 };
 
-const getCardComponent = (card): Component | null => {
+const getCardComponent = (card?: [string, string]) => {
+  if (!card) return null;
   const [suit, rank] = card;
   console.log(suit, rank);
   console.log(cardComponentMap[`${suit}-${rank}`]);
-  return cardComponentMap[`${suit}-${rank}`] ?? null;
+  const cardKey = cardComponentMap[`${suit}-${rank}`];
+  return cardKey;
 };
 
 const newGame = async () => {
@@ -233,35 +235,15 @@ onMounted(() => {
       <span>STAND</span>
     </div>
     <div class="cards-container">
-      <!-- <component
-        class="player-cards"
-        v-for="(card, index) in player_card1"
-        :key="`player-${index}`"
-        :is="getCardComponent(card)"
-      />
-      <component
-        class="player-cards"
-        v-for="(card, index) in player_card2"
-        :key="`player-${index}`"
-        :is="getCardComponent(card)"
-      /> -->
-      <span>{{ player_card1 }}</span>
-      <span>{{ player_card2 }}</span>
+      <component class="player-cards" v-if="player_card1" :is="getCardComponent(player_card1)" />
+      <component class="player-cards" v-if="player_card2" :is="getCardComponent(player_card2)" />
+      <!-- <span>{{ player_card1 }}</span>
+      <span>{{ player_card2 }}</span> -->
 
-      <!-- <component
-        class="ai-cards"
-        v-for="(card, index) in ai_card1"
-        :key="`ai-${index}`"
-        :is="getCardComponent(card)"
-      />
-      <component
-        class="ai-cards"
-        v-for="(card, index) in ai_card2"
-        :key="`ai-${index}`"
-        :is="getCardComponent(card)"
-      /> -->
-      <span class="card1">{{ ai_card1 }}</span>
-      <span class="card2">{{ ai_card2 }}</span>
+      <component class="ai-cards" v-if="ai_card1" :is="getCardComponent(ai_card1)" />
+      <component class="ai-cards" v-if="ai_card2" :is="getCardComponent(ai_card2)" />
+      <!-- <span class="card1">{{ ai_card1 }}</span>
+      <span class="card2">{{ ai_card2 }}</span> -->
     </div>
   </div>
 </template>
@@ -410,5 +392,7 @@ onMounted(() => {
 }
 .player-cards {
   top: 6rem;
+  height: fit-content;
+  width: fit-content;
 }
 </style>
