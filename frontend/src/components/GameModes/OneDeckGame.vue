@@ -54,10 +54,14 @@ import KingOfDiamonds from "../Deck1/Diamonds/KingOfDiamonds.vue";
 import KingOfHearts from "../Deck1/Hearts/KingOfHearts.vue";
 import KingOfSpades from "../Deck1/Spades/KingOfSpades.vue";
 
-type Card = [string, string];
+// type Card = [string, string];
 const cards_left = ref<number>(0);
-const player_cards = ref<Card[]>([]);
-const ai_cards = ref<Card[]>([]);
+// const player_cards = ref<Card[]>([]);
+const player_card1 = ref<[string, string]>();
+const player_card2 = ref<[string, string]>();
+const ai_card1 = ref<[string, string]>();
+const ai_card2 = ref<[string, string]>();
+// const ai_cards = ref<Card[]>([]);
 
 const cardComponentMap: Record<string, Component> = {
   "clubs-ace": AceOfClubs,
@@ -117,8 +121,9 @@ const cardComponentMap: Record<string, Component> = {
   "diamonds-king": KingOfDiamonds,
 };
 
-const getCardComponent = (card: Card): Component | null => {
+const getCardComponent = (card): Component | null => {
   const [suit, rank] = card;
+  console.log(suit, rank);
   console.log(cardComponentMap[`${suit}-${rank}`]);
   return cardComponentMap[`${suit}-${rank}`] ?? null;
 };
@@ -126,19 +131,27 @@ const getCardComponent = (card: Card): Component | null => {
 const newGame = async () => {
   const response = await fetch("http://127.0.0.1:8000/new-game");
   const data = await response.json();
-  console.log(data);
+  // console.log(data);
   cards_left.value = data.cards_remaining.card_count;
-  player_cards.value = data.first_deal;
-  ai_cards.value = data.first_deal_ai;
+  // player_cards.value = data.first_deal;
+  // ai_cards.value = data.first_deal_ai;
+  player_card1.value = data.first_deal[0];
+  player_card2.value = data.first_deal[1];
+  ai_card1.value = data.first_deal_ai[0];
+  ai_card2.value = data.first_deal_ai[1];
 };
 
 const resetGame = async () => {
   const response = await fetch("http://127.0.0.1:8000/reset-game", { method: "POST" });
   const data = await response.json();
-  console.log(data);
+  // console.log(data);
   cards_left.value = data.cards_remaining.card_count;
-  player_cards.value = data.first_deal;
-  ai_cards.value = data.first_deal_ai;
+  // player_cards.value = data.first_deal;
+  // ai_cards.value = data.first_deal_ai;
+  player_card1.value = data.first_deal[0];
+  player_card2.value = data.first_deal[1];
+  ai_card1.value = data.first_deal_ai[0];
+  ai_card2.value = data.first_deal_ai[1];
 };
 
 onMounted(() => {
@@ -147,7 +160,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div id="card-components">
+  <!-- <div class="card-components">
     <AceOfClubs />
     <AceOfDiamonds />
     <AceOfHearts />
@@ -200,46 +213,61 @@ onMounted(() => {
     <KingOfDiamonds />
     <KingOfHearts />
     <KingOfSpades />
-  </div>
-  <div id="main-container">
-    <div id="cards-remaining-container">
-      <p id="cards-remaining">
-        <span id="remaining-text">Cards remaining: </span>
-        <span id="cards-rem-number">{{ cards_left }}</span>
+  </div> -->
+
+  <div class="main-container">
+    <div class="cards-remaining-container">
+      <p class="cards-remaining">
+        <span class="remaining-text">Cards remaining: </span>
+        <span class="cards-rem-number">{{ cards_left }}</span>
       </p>
-      <button id="reset" @click="resetGame">Reset Game</button>
+      <button class="reset" @click="resetGame">Reset Game</button>
     </div>
 
     <div class="hit-stand-container">
-      <span id="add-card">🃏</span>
+      <span class="add-card">🃏</span>
       <span>HIT</span>
     </div>
     <div class="hit-stand-container stand">
-      <span id="add-card">✋🏾</span>
+      <span class="add-card">✋🏾</span>
       <span>STAND</span>
     </div>
     <div class="cards-container">
-      <component
-        id="player-cards"
-        v-for="(card, index) in player_cards"
-        :key="index"
+      <!-- <component
+        class="player-cards"
+        v-for="(card, index) in player_card1"
+        :key="`player-${index}`"
         :is="getCardComponent(card)"
       />
-      <!-- <span>{{ player_cards }}</span> -->
+      <component
+        class="player-cards"
+        v-for="(card, index) in player_card2"
+        :key="`player-${index}`"
+        :is="getCardComponent(card)"
+      /> -->
+      <span>{{ player_card1 }}</span>
+      <span>{{ player_card2 }}</span>
 
-      <component
-        id="ai-cards"
-        v-for="(card, index) in ai_cards"
-        :key="index"
+      <!-- <component
+        class="ai-cards"
+        v-for="(card, index) in ai_card1"
+        :key="`ai-${index}`"
         :is="getCardComponent(card)"
       />
-      <!-- <span>{{ ai_cards }}</span> -->
+      <component
+        class="ai-cards"
+        v-for="(card, index) in ai_card2"
+        :key="`ai-${index}`"
+        :is="getCardComponent(card)"
+      /> -->
+      <span class="card1">{{ ai_card1 }}</span>
+      <span class="card2">{{ ai_card2 }}</span>
     </div>
   </div>
 </template>
 
 <style scoped>
-#cards-remaining {
+.cards-remaining {
   background: linear-gradient(to right, blue, red);
   font-size: 2rem;
   color: white;
@@ -252,7 +280,7 @@ onMounted(() => {
   border: 2px solid white;
   margin: 0;
 }
-#cards-rem-number {
+.cards-rem-number {
   background-color: transparent;
   background: linear-gradient(to bottom right, red, blue);
   border-radius: 50%;
@@ -268,7 +296,7 @@ onMounted(() => {
   top: 15%;
   grid-row: 1;
 }
-#cards-rem-number::after {
+.cards-rem-number::after {
   content: "";
   width: 2.75rem;
   height: 2.75rem;
@@ -280,7 +308,7 @@ onMounted(() => {
   grid-column: 2;
   grid-row: 1;
 }
-#reset {
+.reset {
   color: white;
   position: relative;
   z-index: 3;
@@ -298,7 +326,7 @@ onMounted(() => {
   justify-self: center;
   margin-top: 0;
 }
-#cards-remaining-container {
+.cards-remaining-container {
   position: relative;
   /* border: 1px solid red; */
   height: fit-content;
@@ -311,14 +339,14 @@ onMounted(() => {
   top: 5rem;
   z-index: 5;
 }
-#remaining-text {
+.remaining-text {
   width: fit-content;
   height: fit-content;
   position: absolute;
   top: 15%;
   left: 5%;
 }
-#reset:hover {
+.reset:hover {
   background: linear-gradient(to right, rgb(1, 1, 215), rgb(202, 1, 1));
   transform: scale(1.02);
   cursor: pointer;
@@ -336,7 +364,7 @@ onMounted(() => {
   left: 10%;
   backdrop-filter: blur(5px);
 }
-#add-card {
+.add-card {
   border: 1px solid white;
   padding: 0.75rem;
   border-radius: 50%;
@@ -355,12 +383,12 @@ onMounted(() => {
   transform: scale(1.02);
   background-color: rgba(128, 128, 128, 0.492);
 }
-#main-container {
+.main-container {
   position: relative;
   width: 100dvw;
   height: 100dvh;
 }
-#card-components {
+.card-components {
   position: absolute;
 }
 .hit-stand-container:active {
@@ -372,13 +400,15 @@ onMounted(() => {
   position: absolute;
   color: white;
   border: 1px solid red;
-  width: fit-content;
+  width: 54rem;
+  height: 60rem;
   left: 25%;
-  top: 12.5cqb;
+  top: 10%;
+  grid-template-columns: repeat(2, 1fr);
   display: grid;
-  row-gap: 30rem;
+  row-gap: 3rem;
 }
-#player-cards {
+.player-cards {
   top: 6rem;
 }
 </style>
