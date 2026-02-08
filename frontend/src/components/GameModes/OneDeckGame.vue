@@ -54,12 +54,16 @@ import KingOfHearts from "../Deck1/Hearts/KingOfHearts.vue";
 import KingOfSpades from "../Deck1/Spades/KingOfSpades.vue";
 
 const cards_left = ref<number>(0);
+const player_cards = ref<string>("");
+const ai_cards = ref<string>("");
 
 const newGame = async () => {
   const response = await fetch("http://127.0.0.1:8000/new-game");
   const data = await response.json();
   console.log(data);
   cards_left.value = data.cards_remaining.card_count;
+  player_cards.value = data.first_deal;
+  ai_cards.value = data.first_deal_ai;
 };
 
 const resetGame = async () => {
@@ -145,6 +149,11 @@ onMounted(() => {
     <div class="hit-stand-container stand">
       <span id="add-card">✋🏾</span>
       <span>STAND</span>
+    </div>
+    <div class="cards-container">
+      <span id="player-cards">{{ player_cards }}</span>
+
+      <span id="ai-cards">{{ ai_cards }}</span>
     </div>
   </div>
 </template>
@@ -264,6 +273,7 @@ onMounted(() => {
 .hit-stand-container:hover {
   cursor: pointer;
   transform: scale(1.02);
+  background-color: rgba(128, 128, 128, 0.492);
 }
 #main-container {
   position: relative;
@@ -272,5 +282,23 @@ onMounted(() => {
 }
 #card-components {
   position: absolute;
+}
+.hit-stand-container:active {
+  cursor: pointer;
+  transform: scale(1.02);
+  background-color: rgba(255, 255, 255, 0.627);
+}
+.cards-container {
+  position: absolute;
+  color: white;
+  border: 1px solid red;
+  width: fit-content;
+  left: 25%;
+  top: 12.5cqb;
+  display: grid;
+  row-gap: 30rem;
+}
+#player-cards {
+  top: 6rem;
 }
 </style>

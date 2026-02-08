@@ -4,6 +4,8 @@ import random
 class GameEngine:
     def __init__(self):
         self.suits = ["hearts", "diamonds", "spades", "clubs"]
+        self.user_cards = []
+        self.computer_card = []
         self.heart_ranks = [
             "ace",
             "two",
@@ -67,7 +69,6 @@ class GameEngine:
         self.budget = 1000
 
     def new_game_state(self):
-        user_cards = []
 
         for card in range(2):
             while True:
@@ -93,12 +94,11 @@ class GameEngine:
                     self.club_ranks.remove(rank)
                     break
 
-            user_cards.append((card_suit, rank))
+            self.user_cards.append((card_suit, rank))
 
-        return user_cards
+        return self.user_cards
     
     def ai_new_game(self):
-        computer_card = []
 
         for card in range(2):
             while True:
@@ -123,9 +123,9 @@ class GameEngine:
                     rank = random.choice(self.club_ranks)
                     self.club_ranks.remove(rank)
                     break
-            computer_card.append((card_suit, rank))
+            self.computer_card.append((card_suit, rank))
         
-        return computer_card
+        return self.computer_card
 
     def check_deck(self):
         card_count = len(self.heart_ranks) + len(self.diamond_ranks) + len(self.spade_ranks) +len(self.club_ranks)
@@ -199,23 +199,16 @@ class GameEngine:
         bank = self.budget
 
     # def game_loop(self):
-    #     user_cards = {}
-    #     computer_cards = []
-    #     cards = []
-
-    #     print(user_rank1)
-
-    #     user_cards[user_card1] = user_rank1
 
     #     user_card2 = random.choice(suits)
     #     user_rank2 = random.choice(ranks)
-    #     user_cards[user_card2] = user_rank2
+    #     self.user_cards[user_card2] = user_rank2
 
-    #     user_cards.append(user_card2)
+    #     self.user_cards.append(user_card2)
     #         computer_card1 = int(random.choice(cards))
     #         computer_cards.append(computer_card1)
     #         user_score = user_card1 + user_card2
-    #         print(f"Your cards are: {user_cards}, current score is: {user_score}\n"
+    #         print(f"Your cards are: {self.user_cards}, current score is: {user_score}\n"
     #             f"The computer's first card is: {computer_card1}")
     #         bust = user_score > 21
 
@@ -224,19 +217,19 @@ class GameEngine:
     #             if more_cards == "y":
     #                 user_card3 = int(random.choice(cards))
     #                 user_score += user_card3
-    #                 user_cards.append(user_card3)
+    #                 self.user_cards.append(user_card3)
     #                 if user_score > 21:
     #                     bust = True
-    #                     print(f"😫 YOU LOSE 😭: Your final hand is: {user_cards}. Your final score is: {user_score}\n"
+    #                     print(f"😫 YOU LOSE 😭: Your final hand is: {self.user_cards}. Your final score is: {user_score}\n"
     #                             f"The computer's score is: {computer_card1}")
     #                 else:
-    #                     print(f"Your cards are: {user_cards}, current score is: {user_score}\n"
+    #                     print(f"Your cards are: {self.user_cards}, current score is: {user_score}\n"
     #                             f"The computer's first card is: {computer_card1}")
     #             elif more_cards == "n":
     #                 computer_score = computer_card1
     #                 if computer_score > user_score:
     #                     bust = True
-    #                     print(f"😫 YOU LOSE 😭: Your final hand is {user_cards}. Your final score is: {user_score}\n"
+    #                     print(f"😫 YOU LOSE 😭: Your final hand is {self.user_cards}. Your final score is: {user_score}\n"
     #                         f"The computer's final hand is: {computer_cards}. The computer's final score is: {computer_card1}")
     #                 else:
     #                     computer_card2 = int(random.choice(cards))
@@ -245,18 +238,18 @@ class GameEngine:
     #                         computer_cards.append(computer_card2)
     #                     if computer_score > 21:
     #                         bust = True
-    #                         print(f"😎 YOU WIN 🥇: Your final hand is {user_cards}. Your final score is: {user_score}\n"
+    #                         print(f"😎 YOU WIN 🥇: Your final hand is {self.user_cards}. Your final score is: {user_score}\n"
     #                             f"The computer's final hand is {computer_cards}. The computer's final score is: {computer_score}")
     #                     elif computer_score > user_score and computer_score <= 21:
     #                         bust = True
-    #                         print(f"😫 YOU LOSE 😭: Your final hand is {user_cards}. Your final score is: {user_score}\n"
+    #                         print(f"😫 YOU LOSE 😭: Your final hand is {self.user_cards}. Your final score is: {user_score}\n"
     #                             f"The computer's final hand is {computer_cards}. The computer's final score is: {computer_score}")
     #                     elif computer_score == user_score:
-    #                         print(f"😕 DRAW 🫠: Your final hand is {user_cards}. Your final score is: {user_score}\n"
+    #                         print(f"😕 DRAW 🫠: Your final hand is {self.user_cards}. Your final score is: {user_score}\n"
     #                             f"The computer's final hand is {computer_cards}. The computer's final score is: {computer_score}")
     #                     else:
     #                         bust = True
-    #                         print(f"😎 YOU WIN 🥇: Your final hand is {user_cards}. Your final score is: {user_score}\n"
+    #                         print(f"😎 YOU WIN 🥇: Your final hand is {self.user_cards}. Your final score is: {user_score}\n"
     #                             f"The computer's final hand is {computer_cards}. The computer's final score is: {computer_score}")
     #         play_again = input("Would you like tp play again? Type 'y' or 'n':\n")
     #         if play_again == "y":
@@ -265,13 +258,13 @@ class GameEngine:
     #             print("Thank you for playing! ☺️")
 
 
-game_engine = GameEngine()
+# game_engine = GameEngine()
 
-user_cards = game_engine.new_game_state()
-computer_card = game_engine.ai_new_game()
+# user_cards = game_engine.new_game_state()
+# computer_card = game_engine.ai_new_game()
 
-deck = game_engine.check_deck()
+# deck = game_engine.check_deck()
 
-print(user_cards)
-print(computer_card)
-print(deck)
+# print(user_cards)
+# print(computer_card)
+# print(deck)
