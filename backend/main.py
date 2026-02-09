@@ -26,7 +26,9 @@ def get_cards():
     return {
         "first_deal": game.new_game_state(),
         "first_deal_ai": game.ai_new_game(),
-        "cards_remaining": game.check_deck()
+        "cards_remaining": game.check_deck(),
+        "player_points": game.new_game_points(),
+        "ai_points": game.new_game_points()
         }
 
 @app.post('/reset-game')

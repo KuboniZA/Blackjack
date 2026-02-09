@@ -6,6 +6,8 @@ class GameEngine:
         self.suits = ["hearts", "diamonds", "spades", "clubs"]
         self.user_cards = []
         self.computer_card = []
+        self.user_points = 0
+        self.computer_points = 0
         self.heart_ranks = [
             "ace",
             "two",
@@ -200,6 +202,42 @@ class GameEngine:
     def chip_counter(self):
         bank = self.budget
 
+    def new_game_points(self):
+        points_dictionary = {
+            "ace": 1, "two": 2, "three": 3, "four": 4, "five": 5, "six": 6, "seven": 7, "eight": 8,
+            "nine": 9, "ten": 10, "jack": 10, "queen": 10, "king": 10
+        }
+        user_points = 0
+        computer_points = 0
+        computer_first_points = 0
+        
+        user_card_value1 = self.new_game_state()[0][1]
+        user_card_value2 = self.new_game_state()[1][1]
+        ai_card_value1 = self.new_game_state()[0][1]
+        ai_card_value2 = self.new_game_state()[1][1]
+
+        for user_point1 in points_dictionary:
+            if user_card_value1 in points_dictionary:
+                user_points += points_dictionary[user_card_value1]
+                break
+        
+        for user_point2 in points_dictionary:
+            if user_card_value2 in points_dictionary:
+                user_points += points_dictionary[user_card_value2]
+                break
+
+        for computer_point1 in points_dictionary:
+            if ai_card_value1 in points_dictionary:
+                computer_first_points += points_dictionary[ai_card_value1]
+                break
+        
+        for computer_point2 in points_dictionary:
+            if ai_card_value2 in points_dictionary:
+                computer_points += points_dictionary[ai_card_value2]
+                break
+
+        return user_points, computer_points, computer_first_points
+
     # def game_loop(self):
 
     #     user_card2 = random.choice(suits)
@@ -260,13 +298,13 @@ class GameEngine:
     #             print("Thank you for playing! ☺️")
 
 
-# game_engine = GameEngine()
+game_engine = GameEngine()
 
-# user_cards = game_engine.new_game_state()
+user_points = game_engine.new_game_points()
 # computer_card = game_engine.ai_new_game()
 
 # deck = game_engine.check_deck()
 
-# print(user_cards)
+print(user_points)
 # print(computer_card)
 # print(deck)
