@@ -171,6 +171,14 @@ onMounted(() => {
       </p>
       <button class="reset" @click="resetGame">Reset Game</button>
     </div>
+    <div class="points-container">
+      <p class="points-text player-pts">
+        Player<span class="points-badge">{{ player_points }}</span>
+      </p>
+      <p class="points-text">
+        Dealer<span class="points-badge">{{ ai_points }}</span>
+      </p>
+    </div>
 
     <div class="hit-stand-container">
       <span class="add-card">🃏</span>
@@ -375,5 +383,57 @@ onMounted(() => {
   top: 2%;
   left: 40%;
   transform: scale(0.7) rotate(-5deg);
+}
+.points-container {
+  color: white;
+  position: absolute;
+  height: fit-content;
+  width: fit-content;
+  left: 60%;
+  top: 10%;
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+}
+.points-text {
+  font-size: 1.75rem;
+  position: relative;
+  border: 2px solid white;
+  padding: 0.75rem;
+  border-radius: 15px;
+  height: fit-content;
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  align-items: center;
+  margin: 0;
+  background: linear-gradient(to bottom right, blue, red);
+  z-index: -2;
+}
+.points-badge {
+  background-color: transparent;
+  background: linear-gradient(to bottom right, red, blue);
+  border-radius: 50%;
+  font-size: 1.5rem;
+  height: 2.5rem;
+  width: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  margin: 0;
+}
+.points-badge::after {
+  content: "";
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 50%;
+  position: absolute;
+  background-color: transparent;
+  background: linear-gradient(to bottom right, white, grey);
+  z-index: -1;
+  grid-column: 2;
+  grid-row: 1;
+}
+.player-pts {
+  top: 38rem;
 }
 </style>
