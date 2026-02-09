@@ -8,6 +8,7 @@ class GameEngine:
         self.computer_card = []
         self.user_points = 0
         self.computer_points = 0
+        self.computer_hidden_point = 0
         self.heart_ranks = [
             "ace",
             "two",
@@ -86,7 +87,6 @@ class GameEngine:
         }
 
     def new_game_state(self):
-        user_points = 0
         card_suit = ""
         rank = ""
 
@@ -122,19 +122,17 @@ class GameEngine:
 
         for user_point1 in self.points_dictionary:
             if user_card_value1 in self.points_dictionary:
-                user_points += self.points_dictionary[user_card_value1]
+                self.user_points += self.points_dictionary[user_card_value1]
                 break
 
         for user_point2 in self.points_dictionary:
             if user_card_value2 in self.points_dictionary:
-                user_points += self.points_dictionary[user_card_value2]
+                self.user_points += self.points_dictionary[user_card_value2]
                 break
 
-        return self.user_cards, user_points
+        return self.user_cards, self.user_points
 
     def ai_new_game(self):
-        computer_points = 0
-        computer_hidden_point = 0
         card_suit = ""
         rank = ""
 
@@ -169,15 +167,15 @@ class GameEngine:
 
         for computer_point1 in self.points_dictionary:
             if ai_card_value1 in self.points_dictionary:
-                computer_hidden_point += self.points_dictionary[ai_card_value1]
+                self.computer_hidden_point += self.points_dictionary[ai_card_value1]
                 break
 
         for computer_point2 in self.points_dictionary:
             if ai_card_value2 in self.points_dictionary:
-                computer_points += self.points_dictionary[ai_card_value2]
+                self.computer_points += self.points_dictionary[ai_card_value2]
                 break
 
-        return self.computer_card, computer_points, computer_hidden_point
+        return self.computer_card, self.computer_points, self.computer_hidden_point
 
     def check_deck(self):
         card_count = (
@@ -191,6 +189,9 @@ class GameEngine:
     def reset_game(self):
         self.user_cards = []
         self.computer_card = []
+        self.user_points = 0
+        self.computer_points = 0
+        self.computer_hidden_point = 0
         self.heart_ranks = [
             "ace",
             "two",
