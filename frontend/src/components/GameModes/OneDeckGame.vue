@@ -54,14 +54,13 @@ import KingOfDiamonds from "../Deck1/Diamonds/KingOfDiamonds.vue";
 import KingOfHearts from "../Deck1/Hearts/KingOfHearts.vue";
 import KingOfSpades from "../Deck1/Spades/KingOfSpades.vue";
 
-// type Card = [string, string];
 const cards_left = ref<number>(0);
-// const player_cards = ref<Card[]>([]);
 const player_card1 = ref<[string, string]>();
 const player_card2 = ref<[string, string]>();
 const ai_card1 = ref<[string, string]>();
 const ai_card2 = ref<[string, string]>();
-// const ai_cards = ref<Card[]>([]);
+const player_points = ref<number>(0);
+const ai_points = ref<number>(0);
 
 const cardComponentMap: Record<string, Component> = {
   "clubs-ace": AceOfClubs,
@@ -133,27 +132,29 @@ const getCardComponent = (card?: [string, string]) => {
 const newGame = async () => {
   const response = await fetch("http://127.0.0.1:8000/new-game");
   const data = await response.json();
-  // console.log(data);
   cards_left.value = data.cards_remaining.card_count;
-  // player_cards.value = data.first_deal;
-  // ai_cards.value = data.first_deal_ai;
-  player_card1.value = data.first_deal[0];
-  player_card2.value = data.first_deal[1];
-  ai_card1.value = data.first_deal_ai[0];
-  ai_card2.value = data.first_deal_ai[1];
+
+  player_card1.value = data.first_deal[0][0];
+  player_card2.value = data.first_deal[0][1];
+  player_points.value = data.first_deal[1];
+
+  ai_card1.value = data.first_deal_ai[0][0];
+  ai_card2.value = data.first_deal_ai[0][1];
+  ai_points.value = data.first_deal_ai[1];
 };
 
 const resetGame = async () => {
   const response = await fetch("http://127.0.0.1:8000/reset-game", { method: "POST" });
   const data = await response.json();
-  // console.log(data);
   cards_left.value = data.cards_remaining.card_count;
-  // player_cards.value = data.first_deal;
-  // ai_cards.value = data.first_deal_ai;
-  player_card1.value = data.first_deal[0];
-  player_card2.value = data.first_deal[1];
-  ai_card1.value = data.first_deal_ai[0];
-  ai_card2.value = data.first_deal_ai[1];
+
+  player_card1.value = data.first_deal[0][0];
+  player_card2.value = data.first_deal[0][1];
+  player_points.value = data.first_deal[1];
+
+  ai_card1.value = data.first_deal_ai[0][0];
+  ai_card2.value = data.first_deal_ai[0][1];
+  ai_points.value = data.first_deal_ai[1];
 };
 
 onMounted(() => {
