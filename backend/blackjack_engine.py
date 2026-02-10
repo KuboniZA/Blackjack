@@ -128,7 +128,14 @@ class GameEngine:
         for user_point2 in self.points_dictionary:
             if user_card_value2 in self.points_dictionary:
                 self.user_points += self.points_dictionary[user_card_value2]
-                break
+                if self.user_points == 11 and user_card_value1 == "ace":
+                    self.user_points += 10
+                    return self.user_cards, self.user_points, "BLACKJACK"
+                if self.user_points == 11 and user_card_value2 == "ace":
+                    self.user_points += 10
+                    return self.user_cards, self.user_points, "BLACKJACK"
+                else:
+                    break
 
         return self.user_cards, self.user_points
 

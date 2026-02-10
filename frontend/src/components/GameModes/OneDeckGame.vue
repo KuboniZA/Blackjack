@@ -57,6 +57,8 @@ import KingOfSpades from "../Deck1/Spades/KingOfSpades.vue";
 const cards_left = ref<number>(0);
 const player_card1 = ref<[string, string]>();
 const player_card2 = ref<[string, string]>();
+const blackjack = ref<string | null>(null);
+
 const ai_card1 = ref<[string, string]>();
 const ai_card2 = ref<[string, string]>();
 const player_points = ref<number>(0);
@@ -133,10 +135,12 @@ const newGame = async () => {
   const response = await fetch("http://127.0.0.1:8000/new-game");
   const data = await response.json();
   cards_left.value = data.cards_remaining.card_count;
+  console.log(data);
 
   player_card1.value = data.first_deal[0][0];
   player_card2.value = data.first_deal[0][1];
   player_points.value = data.first_deal[1];
+  blackjack.value = data.first_deal[2];
 
   ai_card1.value = data.first_deal_ai[0][0];
   ai_card2.value = data.first_deal_ai[0][1];
@@ -147,10 +151,12 @@ const resetGame = async () => {
   const response = await fetch("http://127.0.0.1:8000/reset-game", { method: "POST" });
   const data = await response.json();
   cards_left.value = data.cards_remaining.card_count;
+  console.log(data);
 
   player_card1.value = data.first_deal[0][0];
   player_card2.value = data.first_deal[0][1];
   player_points.value = data.first_deal[1];
+  blackjack.value = data.first_deal[2];
 
   ai_card1.value = data.first_deal_ai[0][0];
   ai_card2.value = data.first_deal_ai[0][1];
@@ -189,6 +195,7 @@ onMounted(() => {
       <span>STAND</span>
     </div>
     <div class="cards-container">
+      <span v-if="blackjack" class="blackjack">{{ blackjack }}</span>
       <component
         id="p-card1"
         class="player-cards cards"
@@ -435,5 +442,23 @@ onMounted(() => {
 }
 .player-pts {
   top: 38rem;
+}
+.blackjack {
+  color: white;
+  font-size: 2rem;
+  position: absolute;
+  width: 25rem;
+  top: 75%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 2px solid white;
+  border-radius: 15px;
+  background: linear-gradient(to bottom right, blue, red);
+  padding: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
+  transition: all 2s ease-in;
 }
 </style>
