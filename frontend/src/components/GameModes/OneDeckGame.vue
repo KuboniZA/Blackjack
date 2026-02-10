@@ -64,6 +64,8 @@ const ai_card2 = ref<[string, string]>();
 const player_points = ref<number>(0);
 const ai_points = ref<number>(0);
 
+const new_user_card = ref<[string, string]>();
+
 const cardComponentMap: Record<string, Component> = {
   "clubs-ace": AceOfClubs,
   "clubs-two": TwoOfClubs,
@@ -125,8 +127,8 @@ const cardComponentMap: Record<string, Component> = {
 const getCardComponent = (card?: [string, string]) => {
   if (!card) return null;
   const [suit, rank] = card;
-  console.log(suit, rank);
-  console.log(cardComponentMap[`${suit}-${rank}`]);
+  // console.log(suit, rank);
+  // console.log(cardComponentMap[`${suit}-${rank}`]);
   const cardKey = cardComponentMap[`${suit}-${rank}`];
   return cardKey;
 };
@@ -135,7 +137,6 @@ const newGame = async () => {
   const response = await fetch("http://127.0.0.1:8000/new-game");
   const data = await response.json();
   cards_left.value = data.cards_remaining.card_count;
-  console.log(data);
 
   player_card1.value = data.first_deal[0][0];
   player_card2.value = data.first_deal[0][1];
@@ -150,8 +151,8 @@ const newGame = async () => {
 const resetGame = async () => {
   const response = await fetch("http://127.0.0.1:8000/reset-game", { method: "POST" });
   const data = await response.json();
+  // console.log(data);
   cards_left.value = data.cards_remaining.card_count;
-  console.log(data);
 
   player_card1.value = data.first_deal[0][0];
   player_card2.value = data.first_deal[0][1];
@@ -161,6 +162,15 @@ const resetGame = async () => {
   ai_card1.value = data.first_deal_ai[0][0];
   ai_card2.value = data.first_deal_ai[0][1];
   ai_points.value = data.first_deal_ai[1];
+};
+
+const player_turn = async () => {
+  const response = await fetch("http://127.0.0.1:8000/hit", { method: "POST" });
+  const data = await response.json();
+  cards_left.value = data.cards_remaining.card_count;
+  new_user_card.value = data.card[0];
+  player_points.value = data.card[1];
+  console.log(data);
 };
 
 onMounted(() => {
@@ -186,7 +196,7 @@ onMounted(() => {
       </p>
     </div>
 
-    <div class="hit-stand-container">
+    <div @click="player_turn" class="hit-stand-container">
       <span class="add-card">🃏</span>
       <span>HIT</span>
     </div>
@@ -207,6 +217,12 @@ onMounted(() => {
         class="player-cards cards"
         v-if="player_card2"
         :is="getCardComponent(player_card2)"
+      />
+      <component
+        id="p-card3"
+        class="player-cards cards"
+        v-if="new_user_card"
+        :is="getCardComponent(new_user_card)"
       />
 
       <component
@@ -380,6 +396,11 @@ onMounted(() => {
   top: 60%;
   left: 40%;
   transform: scale(0.7) rotate(-5deg);
+}
+#p-card3 {
+  top: 60%;
+  left: 50%;
+  transform: scale(0.7) rotate(-2deg);
 }
 #ai-card1 {
   top: 2%;

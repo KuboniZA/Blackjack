@@ -286,61 +286,65 @@ class GameEngine:
 
         self.user_cards.append((card_suit, rank))
         user_cards = self.user_cards
-        new_card = user_cards[-1][1]
+        new_card = user_cards[-1]
+        new_card_pts = user_cards[-1][1]
 
         for user_point in self.points_dictionary:
-            if new_card in self.points_dictionary:
-                self.user_points += self.points_dictionary[new_card]
-                if self.user_points <= 21:
-                    break
-                else:
+            if new_card_pts in self.points_dictionary:
+                self.user_points += self.points_dictionary[new_card_pts]
+                if self.user_points > 21:
                     bust == True
                     self.ai_turn()
                     return new_card, self.user_points
+                else:
+                    break
 
         return new_card, self.user_points
     
     def ai_turn(self):
-        for card in range(2):
-            while True:
-                card_suit = random.choice(self.suits)
+        computer_points = self.computer_points + self.computer_hidden_point
+        ai_bust = computer_points > 21
+        
+        while not ai_bust:
+            card_suit = random.choice(self.suits)
 
-                if card_suit == "hearts" and len(self.heart_ranks) > 0:
-                    rank = random.choice(self.heart_ranks)
-                    self.heart_ranks.remove(rank)
-                    break
+            if card_suit == "hearts" and len(self.heart_ranks) > 0:
+                rank = random.choice(self.heart_ranks)
+                self.heart_ranks.remove(rank)
+                break
 
-                elif card_suit == "diamonds" and len(self.diamond_ranks) > 0:
-                    rank = random.choice(self.diamond_ranks)
-                    self.diamond_ranks.remove(rank)
-                    break
+            elif card_suit == "diamonds" and len(self.diamond_ranks) > 0:
+                rank = random.choice(self.diamond_ranks)
+                self.diamond_ranks.remove(rank)
+                break
 
-                elif card_suit == "spades" and len(self.spade_ranks) > 0:
-                    rank = random.choice(self.spade_ranks)
-                    self.spade_ranks.remove(rank)
-                    break
+            elif card_suit == "spades" and len(self.spade_ranks) > 0:
+                rank = random.choice(self.spade_ranks)
+                self.spade_ranks.remove(rank)
+                break
 
-                elif card_suit == "clubs" and len(self.club_ranks) > 0:
-                    rank = random.choice(self.club_ranks)
-                    self.club_ranks.remove(rank)
-                    break
-            self.computer_card.append((card_suit, rank))
+            elif card_suit == "clubs" and len(self.club_ranks) > 0:
+                rank = random.choice(self.club_ranks)
+                self.club_ranks.remove(rank)
+                break
+        self.computer_card.append((card_suit, rank))
 
         initial_ai_cards = self.computer_card
-        ai_card_value1 = initial_ai_cards[0][1]
-        ai_card_value2 = initial_ai_cards[1][1]
+        ai_card_value = initial_ai_cards[0][1]
 
         for computer_point1 in self.points_dictionary:
-            if ai_card_value1 in self.points_dictionary:
-                self.computer_hidden_point += self.points_dictionary[ai_card_value1]
-                break
+            if ai_card_value in self.points_dictionary:
+                computer_points += self.points_dictionary[ai_card_value]
+                if computer_points <= 21 and computer_points > self.user_points:
+                    ai_bust == True
+                    return self.computer_card, computer_points, "DEALER WINS!"
+                elif computer_points > 21:
+                    ai_bust == True
+                    return self.computer_card, computer_points, "YOU WIN!"
+                else:
+                    break
 
-        for computer_point2 in self.points_dictionary:
-            if ai_card_value2 in self.points_dictionary:
-                self.computer_points += self.points_dictionary[ai_card_value2]
-                break
-
-        return self.computer_card, self.computer_points, self.computer_hidden_point
+        return self.computer_card, computer_points
 
 
 game_engine = GameEngine()

@@ -39,3 +39,17 @@ def reset_game():
         "first_deal_ai": game.ai_new_game(),
         "cards_remaining": game.check_deck(),
     }
+
+@app.post("/hit")
+def get_new_card():
+    return {
+        "card": game.user_turn(),
+        "cards_remaining": game.check_deck(),
+    }
+
+@app.post("/stand")
+def ai_plays():
+    return {
+        "ai_cards": game.ai_turn(),
+        "cards_remaining": game.check_deck(),
+    }
