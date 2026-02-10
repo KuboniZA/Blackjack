@@ -64,7 +64,7 @@ const ai_card2 = ref<[string, string]>();
 const player_points = ref<number>(0);
 const ai_points = ref<number>(0);
 
-const new_user_card = ref<[string, string]>();
+const new_user_card = ref<[string, string] | null>(null);
 
 const cardComponentMap: Record<string, Component> = {
   "clubs-ace": AceOfClubs,
@@ -162,6 +162,8 @@ const resetGame = async () => {
   ai_card1.value = data.first_deal_ai[0][0];
   ai_card2.value = data.first_deal_ai[0][1];
   ai_points.value = data.first_deal_ai[1];
+
+  new_user_card.value = null;
 };
 
 const player_turn = async () => {
