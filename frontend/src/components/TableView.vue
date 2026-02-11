@@ -1,7 +1,7 @@
 <template>
   <div class="text-container">
     <h1 class="shimmer">
-      <span class="text" id="row1">HIGH</span><span class="text" id="row2">ROLLER</span>
+      <span class="text" id="row1">HIGH</span><span class="text" id="row2">ROLLERS</span>
     </h1>
   </div>
 </template>

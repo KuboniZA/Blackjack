@@ -63,6 +63,7 @@ const ai_card1 = ref<[string, string]>();
 const ai_card2 = ref<[string, string]>();
 const player_points = ref<number>(0);
 const ai_points = ref<number>(0);
+const ai_blackjack = ref<string | null>(null);
 
 const new_user_card = ref<[string, string] | null>(null);
 type PlayerCard = { id: number; card: [string, string]; revealed: boolean };
@@ -150,12 +151,13 @@ const newGame = async () => {
   ai_card1.value = data.first_deal_ai[0][0];
   ai_card2.value = data.first_deal_ai[0][1];
   ai_points.value = data.first_deal_ai[1];
+  ai_blackjack.value = data.first_deal_ai[2];
 };
 
 const resetGame = async () => {
   const response = await fetch("http://127.0.0.1:8000/reset-game", { method: "POST" });
   const data = await response.json();
-  // console.log(data);
+  console.log(data);
   cards_left.value = data.cards_remaining.card_count;
 
   player_card1.value = data.first_deal[0][0];
@@ -166,6 +168,7 @@ const resetGame = async () => {
   ai_card1.value = data.first_deal_ai[0][0];
   ai_card2.value = data.first_deal_ai[0][1];
   ai_points.value = data.first_deal_ai[1];
+  ai_blackjack.value = data.first_deal_ai[2];
 
   new_user_card.value = null;
   playerCards.value = [];
@@ -256,6 +259,7 @@ onMounted(() => {
         }"
       />
 
+      <span v-if="ai_blackjack" class="blackjack ai-blackjack">{{ ai_blackjack }}</span>
       <component
         id="ai-card1"
         class="ai-cards cards"
@@ -524,5 +528,8 @@ onMounted(() => {
   justify-content: center;
   z-index: 20;
   transition: all 2s ease-in;
+}
+.ai-blackjack {
+  top: 15%;
 }
 </style>

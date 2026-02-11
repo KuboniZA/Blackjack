@@ -148,7 +148,7 @@ class GameEngine:
                     self.user_points += 10
                     self.user_points += self.points_dictionary[user_card_value2]
                     return self.user_cards, self.user_points, "BLACKJACK"
-                elif user_card_value2 == "ace":
+                elif user_card_value2 == "ace" and user_card_value1 !="ace":
                     self.user_points += 10
                     self.user_points += self.points_dictionary[user_card_value2]
                     return self.user_cards, self.user_points
@@ -193,15 +193,51 @@ class GameEngine:
 
         for computer_point1 in self.points_dictionary:
             if ai_card_value1 in self.points_dictionary:
-                self.computer_hidden_point += self.points_dictionary[ai_card_value1]
-                break
+                if ai_card_value1 == "ace":
+                    self.computer_hidden_point += 10
+                    self.computer_hidden_point += self.points_dictionary[ai_card_value1]
+                    break
+                else:
+                    self.computer_hidden_point += self.points_dictionary[ai_card_value1]
+                    break
 
         for computer_point2 in self.points_dictionary:
             if ai_card_value2 in self.points_dictionary:
-                self.computer_points += self.points_dictionary[ai_card_value2]
-                break
+                if ai_card_value1 == "ace" and ai_card_value2 == "ten":
+                    self.computer_points += self.computer_hidden_point
+                    self.computer_points += self.points_dictionary[ai_card_value2]
+                    return self.computer_card, self.computer_points, "BLACKJACK"
+                elif ai_card_value1 == "ace" and ai_card_value2 == "jack":
+                    self.computer_points += self.computer_hidden_point
+                    self.computer_points += self.points_dictionary[ai_card_value2]
+                    return self.computer_card, self.computer_points, "BLACKJACK"
+                elif ai_card_value1 == "ace" and ai_card_value2 == "queen":
+                    self.computer_points += self.computer_hidden_point
+                    self.computer_points += self.points_dictionary[ai_card_value2]
+                    return self.computer_card, self.computer_points, "BLACKJACK"
+                elif ai_card_value1 == "ace" and ai_card_value2 == "king":
+                    self.computer_points += self.computer_hidden_point
+                    self.computer_points += self.points_dictionary[ai_card_value2]
+                    return self.computer_card, self.computer_points, "BLACKJACK"
+                # This makes sure the score does not give away the hidden card by making a visible ace equal 1.
+                elif ai_card_value1 == "ace" and ai_card_value2 == "ace":
+                    self.computer_hidden_point -= 10
+                    self.computer_points += 10
+                    self.computer_points += self.points_dictionary[ai_card_value2]
+                    return self.computer_card, self.computer_points
+                elif self.computer_hidden_point == 10 and ai_card_value2 == "ace":
+                    self.computer_points += 10
+                    self.computer_points += self.points_dictionary[ai_card_value2]
+                    return self.computer_card, self.computer_points, "BLACKJACK"
+                elif ai_card_value2 == "ace" and ai_card_value1 !="ace":
+                    self.computer_points += 10
+                    self.computer_points += self.points_dictionary[ai_card_value2]
+                    return self.computer_card, self.computer_points
+                else:
+                    self.computer_points += self.points_dictionary[ai_card_value2]
+                    break
 
-        return self.computer_card, self.computer_points, self.computer_hidden_point
+        return self.computer_card, self.computer_points, # self.computer_hidden_point
 
     def check_deck(self):
         card_count = (
