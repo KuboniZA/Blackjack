@@ -178,6 +178,7 @@ const player_turn = async () => {
     const newId = playerCards.value.length + 1;
     playerCards.value.push({ id: newId, card: new_user_card.value, revealed: true });
   }
+  console.log(data);
 };
 
 onMounted(() => {
@@ -417,12 +418,12 @@ onMounted(() => {
 } */
 #ai-card1 {
   top: 2%;
-  left: 30%;
-  transform: scale(0.7) rotate(0deg);
+  left: 10%;
+  transform: scale(0.7) rotate(-10deg);
 }
 #ai-card2 {
   top: 2%;
-  left: 40%;
+  left: 20%;
   transform: scale(0.7) rotate(-5deg);
 }
 .points-container {

@@ -294,8 +294,8 @@ class GameEngine:
                 self.user_points += self.points_dictionary[new_card_pts]
                 if self.user_points > 21:
                     bust == True
-                    self.ai_turn()
-                    return new_card, self.user_points
+                    computer_points = self.computer_points + self.computer_hidden_point
+                    return new_card, self.user_points, self.computer_card, computer_points, "DEALER WINS!"
                 else:
                     break
 
@@ -335,7 +335,10 @@ class GameEngine:
         for computer_point1 in self.points_dictionary:
             if ai_card_value in self.points_dictionary:
                 computer_points += self.points_dictionary[ai_card_value]
-                if computer_points <= 21 and computer_points > self.user_points:
+                if computer_points == 21 == self.user_points:
+                    ai_bust == True
+                    return self.computer_card, computer_points, "DRAW!"
+                elif computer_points <= 21 and computer_points > self.user_points:
                     ai_bust == True
                     return self.computer_card, computer_points, "DEALER WINS!"
                 elif computer_points > 21:
