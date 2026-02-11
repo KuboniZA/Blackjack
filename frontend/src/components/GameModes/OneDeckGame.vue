@@ -65,6 +65,8 @@ const player_points = ref<number>(0);
 const ai_points = ref<number>(0);
 
 const new_user_card = ref<[string, string] | null>(null);
+type PlayerCard = { id: number; card: [string, string]; revealed: boolean };
+const playerCards = ref<Array<PlayerCard>>([]);
 
 const cardComponentMap: Record<string, Component> = {
   "clubs-ace": AceOfClubs,
@@ -127,8 +129,6 @@ const cardComponentMap: Record<string, Component> = {
 const getCardComponent = (card?: [string, string]) => {
   if (!card) return null;
   const [suit, rank] = card;
-  // console.log(suit, rank);
-  // console.log(cardComponentMap[`${suit}-${rank}`]);
   const cardKey = cardComponentMap[`${suit}-${rank}`];
   return cardKey;
 };
@@ -164,6 +164,7 @@ const resetGame = async () => {
   ai_points.value = data.first_deal_ai[1];
 
   new_user_card.value = null;
+  playerCards.value = [];
 };
 
 const player_turn = async () => {
@@ -172,7 +173,11 @@ const player_turn = async () => {
   cards_left.value = data.cards_remaining.card_count;
   new_user_card.value = data.card[0];
   player_points.value = data.card[1];
-  console.log(data);
+
+  if (new_user_card.value != null) {
+    const newId = playerCards.value.length + 1;
+    playerCards.value.push({ id: newId, card: new_user_card.value, revealed: true });
+  }
 };
 
 onMounted(() => {
@@ -220,11 +225,17 @@ onMounted(() => {
         v-if="player_card2"
         :is="getCardComponent(player_card2)"
       />
+
       <component
-        id="p-card3"
-        class="player-cards cards"
-        v-if="new_user_card"
-        :is="getCardComponent(new_user_card)"
+        v-for="(playerCard, index) in playerCards"
+        :key="playerCard.id"
+        class="player-cards cards dynamic-player-card"
+        :is="getCardComponent(playerCard.card)"
+        :style="{
+          top: '60%',
+          left: `${30 + index * 8}%`,
+          transform: `scale(0.7) rotate(${-2 + index * -3}deg)`,
+        }"
       />
 
       <component
@@ -391,19 +402,19 @@ onMounted(() => {
 }
 #p-card1 {
   top: 60%;
-  left: 30%;
-  transform: scale(0.7) rotate(0deg);
+  left: 10%;
+  transform: scale(0.7) rotate(10deg);
 }
 #p-card2 {
   top: 60%;
-  left: 40%;
-  transform: scale(0.7) rotate(-5deg);
+  left: 20%;
+  transform: scale(0.7) rotate(5deg);
 }
-#p-card3 {
+/* #p-card3 {
   top: 60%;
-  left: 50%;
+  left: 20%;
   transform: scale(0.7) rotate(-2deg);
-}
+} */
 #ai-card1 {
   top: 2%;
   left: 30%;
