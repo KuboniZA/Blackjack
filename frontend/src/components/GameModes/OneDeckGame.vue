@@ -126,6 +126,10 @@ const cardComponentMap: Record<string, Component> = {
   "diamonds-king": KingOfDiamonds,
 };
 
+const new_ai_card = ref<[string, string] | null>(null);
+type ComputerCard = { id: number; card: [string, string]; revealed: boolean };
+const computerCards = ref<Array<ComputerCard>>([]);
+
 const getCardComponent = (card?: [string, string]) => {
   if (!card) return null;
   const [suit, rank] = card;
@@ -178,7 +182,20 @@ const player_turn = async () => {
     const newId = playerCards.value.length + 1;
     playerCards.value.push({ id: newId, card: new_user_card.value, revealed: true });
   }
+};
+
+const ai_turn = async () => {
+  const response = await fetch("http://127.0.0.1:8000/stand", { method: "POST" });
+  const data = await response.json();
   console.log(data);
+  cards_left.value = data.cards_remaining.card_count;
+  new_ai_card.value = data.ai_cards[0];
+  ai_points.value = data.ai_cards[1];
+
+  if (new_ai_card.value != null) {
+    const newId = computerCards.value.length + 1;
+    computerCards.value.push({ id: newId, card: new_ai_card.value, revealed: true });
+  }
 };
 
 onMounted(() => {
@@ -208,7 +225,7 @@ onMounted(() => {
       <span class="add-card">🃏</span>
       <span>HIT</span>
     </div>
-    <div class="hit-stand-container stand">
+    <div @click="ai_turn" class="hit-stand-container stand">
       <span class="add-card">✋🏾</span>
       <span>STAND</span>
     </div>
@@ -250,6 +267,17 @@ onMounted(() => {
         class="ai-cards cards"
         v-if="ai_card2"
         :is="getCardComponent(ai_card2)"
+      />
+      <component
+        v-for="(computerCard, index) in computerCards"
+        :key="computerCard.id"
+        class="player-cards cards dynamic-player-card"
+        :is="getCardComponent(computerCard.card)"
+        :style="{
+          top: '60%',
+          left: `${30 + index * 8}%`,
+          transform: `scale(0.7) rotate(${-2 + index * -3}deg)`,
+        }"
       />
     </div>
   </div>
@@ -366,6 +394,7 @@ onMounted(() => {
 .stand {
   top: 25rem;
   left: 75%;
+  z-index: 25;
 }
 .hit-stand-container:hover {
   cursor: pointer;

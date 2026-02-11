@@ -122,19 +122,38 @@ class GameEngine:
 
         for user_point1 in self.points_dictionary:
             if user_card_value1 in self.points_dictionary:
-                self.user_points += self.points_dictionary[user_card_value1]
-                break
+                if user_card_value1 == "ace":
+                    self.user_points += 10
+                    self.user_points += self.points_dictionary[user_card_value1]
+                    break
+                else:
+                    self.user_points += self.points_dictionary[user_card_value1]
+                    break
 
         for user_point2 in self.points_dictionary:
             if user_card_value2 in self.points_dictionary:
-                self.user_points += self.points_dictionary[user_card_value2]
-                if self.user_points == 11 and user_card_value1 == "ace":
-                    self.user_points += 10
+                if user_card_value1 == "ace" and user_card_value2 == "ten":
+                    self.user_points += self.points_dictionary[user_card_value2]
                     return self.user_cards, self.user_points, "BLACKJACK"
-                if self.user_points == 11 and user_card_value2 == "ace":
-                    self.user_points += 10
+                elif user_card_value1 == "ace" and user_card_value2 == "jack":
+                    self.user_points += self.points_dictionary[user_card_value2]
                     return self.user_cards, self.user_points, "BLACKJACK"
+                elif user_card_value1 == "ace" and user_card_value2 == "queen":
+                    self.user_points += self.points_dictionary[user_card_value2]
+                    return self.user_cards, self.user_points, "BLACKJACK"
+                elif user_card_value1 == "ace" and user_card_value2 == "king":
+                    self.user_points += self.points_dictionary[user_card_value2]
+                    return self.user_cards, self.user_points, "BLACKJACK"
+                elif self.user_points == 10 and user_card_value2 == "ace":
+                    self.user_points += 10
+                    self.user_points += self.points_dictionary[user_card_value2]
+                    return self.user_cards, self.user_points, "BLACKJACK"
+                elif user_card_value2 == "ace":
+                    self.user_points += 10
+                    self.user_points += self.points_dictionary[user_card_value2]
+                    return self.user_cards, self.user_points
                 else:
+                    self.user_points += self.points_dictionary[user_card_value2]
                     break
 
         return self.user_cards, self.user_points
@@ -293,7 +312,7 @@ class GameEngine:
             if new_card_pts in self.points_dictionary:
                 self.user_points += self.points_dictionary[new_card_pts]
                 if self.user_points > 21:
-                    bust == True
+                    bust = True
                     computer_points = self.computer_points + self.computer_hidden_point
                     return new_card, self.user_points, self.computer_card, computer_points, "DEALER WINS!"
                 else:
@@ -304,50 +323,51 @@ class GameEngine:
     def ai_turn(self):
         computer_points = self.computer_points + self.computer_hidden_point
         ai_bust = computer_points > 21
-        
-        while not ai_bust:
-            card_suit = random.choice(self.suits)
-
-            if card_suit == "hearts" and len(self.heart_ranks) > 0:
-                rank = random.choice(self.heart_ranks)
-                self.heart_ranks.remove(rank)
-                break
-
-            elif card_suit == "diamonds" and len(self.diamond_ranks) > 0:
-                rank = random.choice(self.diamond_ranks)
-                self.diamond_ranks.remove(rank)
-                break
-
-            elif card_suit == "spades" and len(self.spade_ranks) > 0:
-                rank = random.choice(self.spade_ranks)
-                self.spade_ranks.remove(rank)
-                break
-
-            elif card_suit == "clubs" and len(self.club_ranks) > 0:
-                rank = random.choice(self.club_ranks)
-                self.club_ranks.remove(rank)
-                break
-        self.computer_card.append((card_suit, rank))
-
-        initial_ai_cards = self.computer_card
-        ai_card_value = initial_ai_cards[0][1]
-
-        for computer_point1 in self.points_dictionary:
-            if ai_card_value in self.points_dictionary:
-                computer_points += self.points_dictionary[ai_card_value]
-                if computer_points == 21 == self.user_points:
-                    ai_bust == True
-                    return self.computer_card, computer_points, "DRAW!"
-                elif computer_points <= 21 and computer_points > self.user_points:
-                    ai_bust == True
+        if computer_points <= 21 and computer_points > self.user_points:
+                    ai_bust = True
                     return self.computer_card, computer_points, "DEALER WINS!"
-                elif computer_points > 21:
-                    ai_bust == True
-                    return self.computer_card, computer_points, "YOU WIN!"
-                else:
+        else:
+            while not ai_bust:
+                card_suit = random.choice(self.suits)
+
+                if card_suit == "hearts" and len(self.heart_ranks) > 0:
+                    rank = random.choice(self.heart_ranks)
+                    self.heart_ranks.remove(rank)
                     break
 
-        return self.computer_card, computer_points
+                elif card_suit == "diamonds" and len(self.diamond_ranks) > 0:
+                    rank = random.choice(self.diamond_ranks)
+                    self.diamond_ranks.remove(rank)
+                    break
+
+                elif card_suit == "spades" and len(self.spade_ranks) > 0:
+                    rank = random.choice(self.spade_ranks)
+                    self.spade_ranks.remove(rank)
+                    break
+
+                elif card_suit == "clubs" and len(self.club_ranks) > 0:
+                    rank = random.choice(self.club_ranks)
+                    self.club_ranks.remove(rank)
+                    break
+            self.computer_card.append((card_suit, rank))
+
+            ai_cards = self.computer_card
+            ai_card_value = ai_cards[0][1]
+
+            for computer_point1 in self.points_dictionary:
+                if ai_card_value in self.points_dictionary:
+                    computer_points += self.points_dictionary[ai_card_value]
+                    if computer_points == 21 == self.user_points:
+                        ai_bust = True
+                        return ai_cards, computer_points, "DRAW!"
+                    elif computer_points <= 21 and computer_points > self.user_points:
+                        ai_bust = True
+                        return ai_cards, computer_points, "DEALER WINS!"
+                    elif computer_points > 21:
+                        ai_bust = True
+                        return ai_cards, computer_points, "YOU WIN!"
+
+            # return self.computer_card, computer_points
 
 
 game_engine = GameEngine()
