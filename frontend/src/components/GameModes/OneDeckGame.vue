@@ -53,6 +53,7 @@ import KingOfClubs from "../Deck1/Clubs/KingOfClubs.vue";
 import KingOfDiamonds from "../Deck1/Diamonds/KingOfDiamonds.vue";
 import KingOfHearts from "../Deck1/Hearts/KingOfHearts.vue";
 import KingOfSpades from "../Deck1/Spades/KingOfSpades.vue";
+import HiddenCard from "../Deck1/HiddenCard.vue";
 
 const cards_left = ref<number>(0);
 const player_card1 = ref<[string, string]>();
@@ -65,6 +66,7 @@ const player_points = ref<number>(0);
 const ai_points = ref<number>(0);
 const player_turn_ai_points = ref<number | null>(null);
 const ai_blackjack = ref<string | null>(null);
+const is_ai_turn = ref<boolean>(false);
 
 const winner = ref<string | null>(null);
 const ai_turn_winner = ref<string | null>(null);
@@ -181,6 +183,7 @@ const resetGame = async () => {
   winner.value = null;
   ai_turn_winner.value = null;
   player_turn_ai_points.value = null;
+  is_ai_turn.value = false;
 };
 
 const player_turn = async () => {
@@ -201,6 +204,7 @@ const player_turn = async () => {
 const ai_turn = async () => {
   const response = await fetch("http://127.0.0.1:8000/stand", { method: "POST" });
   const data = await response.json();
+  is_ai_turn.value = true;
   cards_left.value = data.cards_remaining.card_count;
   new_ai_cards.value = data.ai_cards[0];
   const allAiCards = new_ai_cards.value;
@@ -209,11 +213,10 @@ const ai_turn = async () => {
   if (allAiCards && allAiCards.length > 2) {
     for (let index = 2; index < allAiCards.length; index++) {
       const aiCardId = computerCards.value.length + 1;
-      computerCards.value.push({ id: aiCardId, card: allAiCards[index], revealed: true });
+      computerCards.value.push({ id: aiCardId, card: allAiCards[index]!, revealed: true });
     }
   }
   ai_turn_winner.value = data.ai_cards[2];
-  console.log(data);
 };
 
 onMounted(() => {
@@ -272,7 +275,7 @@ onMounted(() => {
         :is="getCardComponent(playerCard.card)"
         :style="{
           top: '60%',
-          left: `${30 + index * 8}%`,
+          left: `${20 + index * 4}%`,
           transform: `scale(0.7) rotate(${-2 + index * -3}deg)`,
         }"
       />
@@ -284,9 +287,10 @@ onMounted(() => {
       <component
         id="ai-card1"
         class="ai-cards cards"
-        v-if="ai_card1"
+        v-if="ai_card1 && is_ai_turn"
         :is="getCardComponent(ai_card1)"
       />
+      <component id="ai-card1" class="ai-cards cards" v-if="is_ai_turn == false" :is="HiddenCard" />
       <component
         id="ai-card2"
         class="ai-cards cards"
@@ -300,8 +304,8 @@ onMounted(() => {
         :is="getCardComponent(computerCard.card)"
         :style="{
           top: '2%',
-          left: `${30 + index * 8}%`,
-          transform: `scale(0.7) rotate(${-2 + index * -3}deg)`,
+          left: `${20 + index * 5}%`,
+          transform: `scale(0.7) rotate(${-2 + index * 3}deg)`,
         }"
       />
     </div>
@@ -444,7 +448,7 @@ onMounted(() => {
   color: white;
   width: 54rem;
   height: 60rem;
-  left: 25%;
+  left: 35%;
   top: 0;
 }
 .player-cards {
@@ -464,12 +468,12 @@ onMounted(() => {
 #p-card1 {
   top: 60%;
   left: 10%;
-  transform: scale(0.7) rotate(10deg);
+  transform: scale(0.7) rotate(5deg);
 }
 #p-card2 {
   top: 60%;
-  left: 20%;
-  transform: scale(0.7) rotate(5deg);
+  left: 15%;
+  transform: scale(0.7) rotate(2.5deg);
 }
 /* #p-card3 {
   top: 60%;
@@ -479,12 +483,12 @@ onMounted(() => {
 #ai-card1 {
   top: 2%;
   left: 10%;
-  transform: scale(0.7) rotate(-10deg);
+  transform: scale(0.7) rotate(-5deg);
 }
 #ai-card2 {
   top: 2%;
-  left: 20%;
-  transform: scale(0.7) rotate(-5deg);
+  left: 15%;
+  transform: scale(0.7) rotate(-2.5deg);
 }
 .points-container {
   color: white;
@@ -553,6 +557,7 @@ onMounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
+  justify-self: center;
   z-index: 20;
   transition: all 2s ease-in;
 }
