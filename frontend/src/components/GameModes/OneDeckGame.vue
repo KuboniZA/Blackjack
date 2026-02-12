@@ -63,6 +63,7 @@ const ai_card1 = ref<[string, string]>();
 const ai_card2 = ref<[string, string]>();
 const player_points = ref<number>(0);
 const ai_points = ref<number>(0);
+const player_turn_ai_points = ref<number | null>(null);
 const ai_blackjack = ref<string | null>(null);
 
 const winner = ref<string | null>(null);
@@ -176,6 +177,7 @@ const resetGame = async () => {
   playerCards.value = [];
   winner.value = null;
   ai_turn_winner.value = null;
+  player_turn_ai_points.value = null;
 };
 
 const player_turn = async () => {
@@ -189,7 +191,7 @@ const player_turn = async () => {
     const newId = playerCards.value.length + 1;
     playerCards.value.push({ id: newId, card: new_user_card.value, revealed: true });
   }
-
+  player_turn_ai_points.value = data.card[3];
   winner.value = data.card[4];
 };
 
@@ -225,8 +227,11 @@ onMounted(() => {
       <p class="points-text player-pts">
         Player<span class="points-badge">{{ player_points }}</span>
       </p>
-      <p class="points-text">
+      <p v-if="ai_points && player_turn_ai_points == null" class="points-text">
         Dealer<span class="points-badge">{{ ai_points }}</span>
+      </p>
+      <p v-if="player_turn_ai_points" class="points-text">
+        Dealer<span class="points-badge">{{ player_turn_ai_points }}</span>
       </p>
     </div>
 
