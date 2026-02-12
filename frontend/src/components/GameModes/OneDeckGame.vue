@@ -65,6 +65,9 @@ const player_points = ref<number>(0);
 const ai_points = ref<number>(0);
 const ai_blackjack = ref<string | null>(null);
 
+const winner = ref<string | null>(null);
+const ai_turn_winner = ref<string | null>(null);
+
 const new_user_card = ref<[string, string] | null>(null);
 type PlayerCard = { id: number; card: [string, string]; revealed: boolean };
 const playerCards = ref<Array<PlayerCard>>([]);
@@ -157,7 +160,6 @@ const newGame = async () => {
 const resetGame = async () => {
   const response = await fetch("http://127.0.0.1:8000/reset-game", { method: "POST" });
   const data = await response.json();
-  console.log(data);
   cards_left.value = data.cards_remaining.card_count;
 
   player_card1.value = data.first_deal[0][0];
@@ -172,6 +174,8 @@ const resetGame = async () => {
 
   new_user_card.value = null;
   playerCards.value = [];
+  winner.value = null;
+  ai_turn_winner.value = null;
 };
 
 const player_turn = async () => {
@@ -185,12 +189,13 @@ const player_turn = async () => {
     const newId = playerCards.value.length + 1;
     playerCards.value.push({ id: newId, card: new_user_card.value, revealed: true });
   }
+
+  winner.value = data.card[4];
 };
 
 const ai_turn = async () => {
   const response = await fetch("http://127.0.0.1:8000/stand", { method: "POST" });
   const data = await response.json();
-  console.log(data);
   cards_left.value = data.cards_remaining.card_count;
   new_ai_card.value = data.ai_cards[0];
   ai_points.value = data.ai_cards[1];
@@ -199,6 +204,7 @@ const ai_turn = async () => {
     const newId = computerCards.value.length + 1;
     computerCards.value.push({ id: newId, card: new_ai_card.value, revealed: true });
   }
+  ai_turn_winner.value = data.ai_cards[2];
 };
 
 onMounted(() => {
@@ -258,6 +264,9 @@ onMounted(() => {
           transform: `scale(0.7) rotate(${-2 + index * -3}deg)`,
         }"
       />
+
+      <h1 class="winner" v-if="winner">{{ winner }}</h1>
+      <h1 class="winner" v-if="ai_turn_winner">{{ ai_turn_winner }}</h1>
 
       <span v-if="ai_blackjack" class="blackjack ai-blackjack">{{ ai_blackjack }}</span>
       <component
@@ -531,5 +540,23 @@ onMounted(() => {
 }
 .ai-blackjack {
   top: 15%;
+}
+.winner {
+  font-size: 3rem;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  width: 36rem;
+  height: fit-content;
+  padding: 1rem;
+  border: 2px solid white;
+  border-radius: 15px;
+  background: linear-gradient(to bottom right, blue, red);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 3s ease-in;
 }
 </style>
