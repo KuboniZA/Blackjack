@@ -131,7 +131,8 @@ const cardComponentMap: Record<string, Component> = {
   "diamonds-king": KingOfDiamonds,
 };
 
-const new_ai_card = ref<[string, string] | null>(null);
+const new_ai_cards = ref<[string, string] | null>(null);
+
 type ComputerCard = { id: number; card: [string, string]; revealed: boolean };
 const computerCards = ref<Array<ComputerCard>>([]);
 
@@ -175,6 +176,8 @@ const resetGame = async () => {
 
   new_user_card.value = null;
   playerCards.value = [];
+  new_ai_cards.value = null;
+  computerCards.value = [];
   winner.value = null;
   ai_turn_winner.value = null;
   player_turn_ai_points.value = null;
@@ -199,14 +202,18 @@ const ai_turn = async () => {
   const response = await fetch("http://127.0.0.1:8000/stand", { method: "POST" });
   const data = await response.json();
   cards_left.value = data.cards_remaining.card_count;
-  new_ai_card.value = data.ai_cards[0];
+  new_ai_cards.value = data.ai_cards[0];
+  const allAiCards = new_ai_cards.value;
   ai_points.value = data.ai_cards[1];
 
-  if (new_ai_card.value != null) {
-    const newId = computerCards.value.length + 1;
-    computerCards.value.push({ id: newId, card: new_ai_card.value, revealed: true });
+  if (allAiCards && allAiCards.length > 2) {
+    for (let index = 2; index < allAiCards.length; index++) {
+      const aiCardId = computerCards.value.length + 1;
+      computerCards.value.push({ id: aiCardId, card: allAiCards[index], revealed: true });
+    }
   }
   ai_turn_winner.value = data.ai_cards[2];
+  console.log(data);
 };
 
 onMounted(() => {
@@ -292,7 +299,7 @@ onMounted(() => {
         class="player-cards cards dynamic-player-card"
         :is="getCardComponent(computerCard.card)"
         :style="{
-          top: '60%',
+          top: '2%',
           left: `${30 + index * 8}%`,
           transform: `scale(0.7) rotate(${-2 + index * -3}deg)`,
         }"
@@ -439,14 +446,20 @@ onMounted(() => {
   height: 60rem;
   left: 25%;
   top: 0;
-  grid-template-columns: repeat(2, 1fr);
-  display: grid;
-  row-gap: 3rem;
 }
 .player-cards {
+  position: absolute;
   top: 6rem;
   height: fit-content;
   width: fit-content;
+}
+.ai-cards {
+  position: absolute;
+  height: fit-content;
+  width: fit-content;
+}
+.dynamic-player-card {
+  position: absolute;
 }
 #p-card1 {
   top: 60%;

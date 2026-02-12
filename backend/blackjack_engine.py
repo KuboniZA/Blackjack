@@ -369,41 +369,38 @@ class GameEngine:
                 if card_suit == "hearts" and len(self.heart_ranks) > 0:
                     rank = random.choice(self.heart_ranks)
                     self.heart_ranks.remove(rank)
-                    break
 
                 elif card_suit == "diamonds" and len(self.diamond_ranks) > 0:
                     rank = random.choice(self.diamond_ranks)
                     self.diamond_ranks.remove(rank)
-                    break
 
                 elif card_suit == "spades" and len(self.spade_ranks) > 0:
                     rank = random.choice(self.spade_ranks)
                     self.spade_ranks.remove(rank)
-                    break
 
                 elif card_suit == "clubs" and len(self.club_ranks) > 0:
                     rank = random.choice(self.club_ranks)
                     self.club_ranks.remove(rank)
-                    break
-            self.computer_card.append((card_suit, rank))
+                
+                self.computer_card.append((card_suit, rank))
+                ai_card_value = self.computer_card[-1][1]
+                result = ""
 
-            ai_cards = self.computer_card
-            ai_card_value = ai_cards[0][1]
-
-            for computer_point1 in self.points_dictionary:
                 if ai_card_value in self.points_dictionary:
                     computer_points += self.points_dictionary[ai_card_value]
                     if computer_points == 21 == self.user_points:
                         ai_bust = True
-                        return ai_cards, computer_points, "DRAW!"
+                        result = "DRAW!"
                     elif computer_points <= 21 and computer_points > self.user_points:
                         ai_bust = True
-                        return ai_cards, computer_points, "DEALER WINS!"
+                        result = "DEALER WINS!"
                     elif computer_points > 21:
                         ai_bust = True
-                        return ai_cards, computer_points, "YOU WIN!"
+                        result = "YOU WIN!"
+                    else:
+                        continue
 
-            # return self.computer_card, computer_points
+            return self.computer_card, computer_points, result
 
 
 game_engine = GameEngine()
