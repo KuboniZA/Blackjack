@@ -9,6 +9,8 @@ class GameEngine:
         self.user_points = 0
         self.computer_points = 0
         self.computer_hidden_point = 0
+        # Tracks whether we've already adjusted an ace from 11->1 for the current user turn
+        self.user_ace_adjusted = False
         self.heart_ranks = [
             "ace",
             "two",
@@ -115,6 +117,9 @@ class GameEngine:
                     break
 
             self.user_cards.append((card_suit, rank))
+
+        # start of a new hand / user turn -> reset ace-adjust flag
+        self.user_ace_adjusted = False
 
         initial_user_cards = self.user_cards
         user_card_value1 = initial_user_cards[0][1]
@@ -254,6 +259,7 @@ class GameEngine:
         self.user_points = 0
         self.computer_points = 0
         self.computer_hidden_point = 0
+        self.user_ace_adjusted = False
         self.heart_ranks = [
             "ace",
             "two",
@@ -318,7 +324,6 @@ class GameEngine:
     def chip_counter(self):
         bank = self.budget
 
-# TODO 1: Add logic to select whether ace is 1 or 11 after the initial draw.
     def user_turn(self):
         bust = self.user_points > 21
 
@@ -350,14 +355,19 @@ class GameEngine:
                 self.user_points += self.points_dictionary[new_card_pts_key]
                 #check that the user doesn't have an ace first. Note that this does permanently alter self.user_cards.
                 user_has_ace = any(rank == "ace" for suit, rank in self.user_cards[:-1])
-                if self.user_points > 21:
-                    bust = True
-                    computer_points = self.computer_points + self.computer_hidden_point
-                    return new_card, self.user_points, self.computer_card, computer_points, "DEALER WINS!"
-                elif new_card_pts_key == "ace" and not user_has_ace:
+                if new_card_pts_key == "ace" and not user_has_ace:
                     if self.user_points < 21 and (self.user_points + 10) <= 21:
                         self.user_points += 10
                         break
+                elif self.user_points > 21 and user_has_ace and not self.user_ace_adjusted:
+                    self.user_points -= 10
+                    # Only adjust an ace from 11->1 once per user turn
+                    self.user_ace_adjusted = True
+                    break
+                elif self.user_points > 21:
+                    bust = True
+                    computer_points = self.computer_points + self.computer_hidden_point
+                    return new_card, self.user_points, self.computer_card, computer_points, "DEALER WINS!"
                 else:
                     break
 
