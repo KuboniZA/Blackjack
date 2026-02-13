@@ -318,6 +318,7 @@ class GameEngine:
     def chip_counter(self):
         bank = self.budget
 
+# TODO 1: Add logic to select whether ace is 1 or 11 after the initial draw.
     def user_turn(self):
         bust = self.user_points > 21
 
@@ -342,15 +343,21 @@ class GameEngine:
         self.user_cards.append((card_suit, rank))
         user_cards = self.user_cards
         new_card = user_cards[-1]
-        new_card_pts = user_cards[-1][1]
+        new_card_pts_key = user_cards[-1][1]
 
         for user_point in self.points_dictionary:
-            if new_card_pts in self.points_dictionary:
-                self.user_points += self.points_dictionary[new_card_pts]
+            if new_card_pts_key in self.points_dictionary:
+                self.user_points += self.points_dictionary[new_card_pts_key]
+                #check that the user doesn't have an ace first. Note that this does permanently alter self.user_cards.
+                user_has_ace = any(rank == "ace" for suit, rank in self.user_cards[:-1])
                 if self.user_points > 21:
                     bust = True
                     computer_points = self.computer_points + self.computer_hidden_point
                     return new_card, self.user_points, self.computer_card, computer_points, "DEALER WINS!"
+                elif new_card_pts_key == "ace" and not user_has_ace:
+                    if self.user_points < 21 and (self.user_points + 10) <= 21:
+                        self.user_points += 10
+                        break
                 else:
                     break
 

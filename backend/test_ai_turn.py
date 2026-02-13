@@ -217,5 +217,260 @@ class TestAiTurnCardAccuracy(unittest.TestCase):
             self.assertLessEqual(len(card_strings), 13)  # Max reasonable in one turn
 
 
+class TestAceSelectionAfterInitialDraw(unittest.TestCase):
+    """Test suite for ace selection (1 or 11) when drawn after initial deal"""
+
+    def setUp(self):
+        """Initialize a fresh game engine before each test"""
+        self.game = GameEngine()
+        self.game.ai_new_game()
+        self.game.new_game_state()
+
+    def test_user_draw_ace_returns_tuple(self):
+        """Test that user_turn() returns a tuple when an ace is drawn"""
+        # Setup: keep drawing until we get an ace
+        ace_drawn = False
+        max_attempts = 50
+        attempts = 0
+        
+        while not ace_drawn and attempts < max_attempts:
+            attempts += 1
+            self.game.reset_game()
+            self.game.ai_new_game()
+            self.game.new_game_state()
+            
+            # Manually manipulate to force an ace to be drawn
+            self.game.heart_ranks = ["ace"]  # Only ace available
+            self.game.diamond_ranks = []
+            self.game.spade_ranks = []
+            self.game.club_ranks = []
+            
+            result = self.game.user_turn()
+            
+            if len(result) > 0:
+                new_card = result[0]
+                if new_card[1] == "ace":
+                    ace_drawn = True
+                    # Verify it's a tuple
+                    self.assertIsInstance(result, tuple)
+                    self.assertGreaterEqual(len(result), 2)
+
+    def test_ai_draw_ace_returns_tuple(self):
+        """Test that ai_turn() returns a tuple when an ace is drawn"""
+        # Setup: keep drawing until we get an ace
+        ace_drawn = False
+        max_attempts = 50
+        attempts = 0
+        
+        while not ace_drawn and attempts < max_attempts:
+            attempts += 1
+            self.game.reset_game()
+            self.game.ai_new_game()
+            self.game.new_game_state()
+            self.game.user_points = 15  # Ensure AI will try to draw
+            
+            # Manually manipulate to force an ace to be drawn
+            self.game.heart_ranks = ["ace"]  # Only ace available
+            self.game.diamond_ranks = []
+            self.game.spade_ranks = []
+            self.game.club_ranks = []
+            
+            result = self.game.ai_turn()
+            
+            if len(result) > 0:
+                cards = result[0]
+                # Check if the last card is an ace
+                if len(cards) > 2 and cards[-1][1] == "ace":
+                    ace_drawn = True
+                    self.assertIsInstance(result, tuple)
+                    self.assertEqual(len(result), 3)
+
+    def test_user_ace_points_updated_after_draw(self):
+        """Test that user points are updated when ace is drawn"""
+        self.game.reset_game()
+        self.game.ai_new_game()
+        self.game.new_game_state()
+        
+        initial_points = self.game.user_points
+        
+        # Force ace draw
+        self.game.heart_ranks = ["ace"]
+        self.game.diamond_ranks = []
+        self.game.spade_ranks = []
+        self.game.club_ranks = []
+        
+        result = self.game.user_turn()
+        new_card = result[0]
+        
+        if new_card[1] == "ace":
+            new_points = result[1]
+            # Points should have changed
+            self.assertNotEqual(new_points, initial_points)
+            # Ace value (1) should have been added
+            self.assertEqual(new_points, initial_points + 1)
+
+    def test_ai_ace_points_updated_after_draw(self):
+        """Test that AI points are updated when ace is drawn"""
+        self.game.reset_game()
+        self.game.ai_new_game()
+        self.game.new_game_state()
+        self.game.user_points = 15
+        
+        # Get initial AI total
+        initial_ai_total = self.game.computer_points + self.game.computer_hidden_point
+        
+        # Force ace draw
+        self.game.heart_ranks = ["ace"]
+        self.game.diamond_ranks = []
+        self.game.spade_ranks = []
+        self.game.club_ranks = []
+        
+        result = self.game.ai_turn()
+        cards = result[0]
+        new_ai_total = result[1]
+        
+        # If an ace was drawn (last card), points should be updated
+        if len(cards) > 2 and cards[-1][1] == "ace":
+            # Points should increase by at least 1
+            self.assertGreater(new_ai_total, initial_ai_total)
+
+    def test_user_ace_can_be_treated_as_1(self):
+        """Test that user ace drawn mid-game counts as 1 in initial calculation"""
+        self.game.reset_game()
+        self.game.ai_new_game()
+        self.game.new_game_state()
+        
+        # Setup: user has 10 points, will draw ace (treated as 1)
+        self.game.user_cards = [("hearts", "ten")]
+        self.game.user_points = 10
+        
+        # Force ace draw
+        self.game.heart_ranks = ["ace"]
+        self.game.diamond_ranks = []
+        self.game.spade_ranks = []
+        self.game.club_ranks = []
+        
+        result = self.game.user_turn()
+        new_card, new_points = result[0], result[1]
+        
+        if new_card[1] == "ace":
+            # Ace should be counted as 1 initially
+            self.assertEqual(new_points, 11,
+                           "Ace should initially count as 1 when user has 10")
+
+    def test_ai_ace_can_be_treated_as_1(self):
+        """Test that AI ace drawn mid-game counts as 1 in initial calculation"""
+        self.game.reset_game()
+        self.game.ai_new_game()
+        self.game.new_game_state()
+        
+        # Setup: AI has 15 total, will draw ace (treated as 1)
+        self.game.computer_points = 5
+        self.game.computer_hidden_point = 10
+        self.game.user_points = 12
+        
+        # Force ace draw
+        self.game.heart_ranks = ["ace"]
+        self.game.diamond_ranks = []
+        self.game.spade_ranks = []
+        self.game.club_ranks = []
+        
+        result = self.game.ai_turn()
+        cards, total_points = result[0], result[1]
+        
+        # If ace was drawn, it should be counted as 1
+        if len(cards) > 2 and cards[-1][1] == "ace":
+            self.assertEqual(total_points, 16,
+                           "Ace should initially count as 1 when AI total is 15")
+
+    def test_user_has_ace_identification_in_cards(self):
+        """Test that drawn ace can be identified in user's card list"""
+        self.game.reset_game()
+        self.game.ai_new_game()
+        self.game.new_game_state()
+        
+        # Force ace draw
+        self.game.heart_ranks = ["ace"]
+        self.game.diamond_ranks = []
+        self.game.spade_ranks = []
+        self.game.club_ranks = []
+        
+        result = self.game.user_turn()
+        new_card = result[0]
+        
+        if new_card[1] == "ace":
+            # Verify ace is in the cards list
+            self.assertIn(new_card, self.game.user_cards)
+            # Verify the rank is "ace"
+            self.assertEqual(new_card[1], "ace")
+
+    def test_ai_has_ace_identification_in_cards(self):
+        """Test that drawn ace can be identified in AI's card list"""
+        self.game.reset_game()
+        self.game.ai_new_game()
+        self.game.new_game_state()
+        self.game.user_points = 15
+        
+        # Force ace draw
+        self.game.heart_ranks = ["ace"]
+        self.game.diamond_ranks = []
+        self.game.spade_ranks = []
+        self.game.club_ranks = []
+        
+        result = self.game.ai_turn()
+        cards = result[0]
+        
+        # Check if last card drawn is an ace
+        if len(cards) > 2:
+            last_card = cards[-1]
+            if last_card[1] == "ace":
+                # Verify ace is in the cards list
+                self.assertIn(last_card, self.game.computer_card)
+                # Verify the rank is "ace"
+                self.assertEqual(last_card[1], "ace")
+
+    def test_user_multiple_aces_handling(self):
+        """Test user behavior when drawing multiple aces"""
+        self.game.reset_game()
+        self.game.ai_new_game()
+        self.game.new_game_state()
+        
+        # Set user to have an ace already
+        self.game.user_cards = [("hearts", "ace")]
+        self.game.user_points = 11
+        
+        # Force another ace draw
+        self.game.heart_ranks = ["ace"]
+        self.game.diamond_ranks = []
+        self.game.spade_ranks = []
+        self.game.club_ranks = []
+        
+        result = self.game.user_turn()
+        new_card, new_points = result[0], result[1]
+        
+        if new_card[1] == "ace":
+            # Should have 2 aces, points should reflect that
+            aces_count = sum(1 for card in self.game.user_cards if card[1] == "ace")
+            self.assertEqual(aces_count, 2, "Should have 2 aces in hand")
+            
+            # Points should be updated
+            self.assertGreater(new_points, self.game.user_points)
+
+    def test_ace_selection_method_exists(self):
+        """Test that methods exist for ace selection (1 or 11) implementation"""
+        # This test ensures the framework is ready for ace selection implementation
+        self.assertTrue(hasattr(self.game, 'user_turn'),
+                       "GameEngine should have user_turn method")
+        self.assertTrue(hasattr(self.game, 'ai_turn'),
+                       "GameEngine should have ai_turn method")
+        self.assertTrue(hasattr(self.game, 'points_dictionary'),
+                       "GameEngine should have points_dictionary")
+        
+        # Verify ace is in points dictionary
+        self.assertIn('ace', self.game.points_dictionary)
+        self.assertEqual(self.game.points_dictionary['ace'], 1,
+                        "Ace should have base value of 1 in dictionary")
+
+
 if __name__ == '__main__':
     unittest.main()

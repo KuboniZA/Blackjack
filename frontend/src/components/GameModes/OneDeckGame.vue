@@ -59,6 +59,7 @@ const cards_left = ref<number>(0);
 const player_card1 = ref<[string, string]>();
 const player_card2 = ref<[string, string]>();
 const blackjack = ref<string | null>(null);
+const is_player_turn = ref<boolean>(false);
 
 const ai_card1 = ref<[string, string]>();
 const ai_card2 = ref<[string, string]>();
@@ -184,12 +185,15 @@ const resetGame = async () => {
   ai_turn_winner.value = null;
   player_turn_ai_points.value = null;
   is_ai_turn.value = false;
+  is_player_turn.value = false;
 };
 
 const player_turn = async () => {
   const response = await fetch("http://127.0.0.1:8000/hit", { method: "POST" });
   const data = await response.json();
   cards_left.value = data.cards_remaining.card_count;
+  is_player_turn.value = true;
+
   new_user_card.value = data.card[0];
   player_points.value = data.card[1];
 
@@ -287,13 +291,13 @@ onMounted(() => {
       <component
         id="ai-card1"
         class="ai-cards cards"
-        v-if="(ai_card1 && is_ai_turn) || (ai_card1 && ai_blackjack)"
+        v-if="is_ai_turn || blackjack || ai_blackjack || (is_player_turn && player_points > 21)"
         :is="getCardComponent(ai_card1)"
       />
       <component
         id="ai-card1"
         class="ai-cards cards"
-        v-if="is_ai_turn == false && ai_blackjack == null"
+        v-if="is_ai_turn == false && ai_blackjack == null && player_points <= 21"
         :is="HiddenCard"
       />
       <component
