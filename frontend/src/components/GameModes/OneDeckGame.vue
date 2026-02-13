@@ -213,7 +213,7 @@ const ai_turn = async () => {
   if (allAiCards && allAiCards.length > 2) {
     for (let index = 2; index < allAiCards.length; index++) {
       const aiCardId = computerCards.value.length + 1;
-      computerCards.value.push({ id: aiCardId, card: allAiCards[index]!, revealed: true });
+      computerCards.value.push({ id: aiCardId, card: allAiCards[index], revealed: true });
     }
   }
   ai_turn_winner.value = data.ai_cards[2];
@@ -287,10 +287,15 @@ onMounted(() => {
       <component
         id="ai-card1"
         class="ai-cards cards"
-        v-if="ai_card1 && is_ai_turn"
+        v-if="(ai_card1 && is_ai_turn) || (ai_card1 && ai_blackjack)"
         :is="getCardComponent(ai_card1)"
       />
-      <component id="ai-card1" class="ai-cards cards" v-if="is_ai_turn == false" :is="HiddenCard" />
+      <component
+        id="ai-card1"
+        class="ai-cards cards"
+        v-if="is_ai_turn == false && ai_blackjack == null"
+        :is="HiddenCard"
+      />
       <component
         id="ai-card2"
         class="ai-cards cards"
