@@ -359,7 +359,10 @@ class GameEngine:
     def ai_turn(self):
         computer_points = self.computer_points + self.computer_hidden_point
         ai_bust = computer_points > 21
-        if computer_points <= 21 and computer_points > self.user_points:
+        if computer_points >= 17 and computer_points == self.user_points:
+                    ai_bust = True
+                    return self.computer_card, computer_points, "PUSH"
+        elif computer_points <= 21 and computer_points > self.user_points:
                     ai_bust = True
                     return self.computer_card, computer_points, "DEALER WINS!"
         else:
@@ -388,9 +391,9 @@ class GameEngine:
 
                 if ai_card_value in self.points_dictionary:
                     computer_points += self.points_dictionary[ai_card_value]
-                    if computer_points == 21 == self.user_points:
+                    if computer_points >= 17 and computer_points == self.user_points:
                         ai_bust = True
-                        result = "DRAW!"
+                        result = "PUSH"
                     elif computer_points <= 21 and computer_points > self.user_points:
                         ai_bust = True
                         result = "DEALER WINS!"
