@@ -60,6 +60,7 @@ const player_card1 = ref<[string, string]>();
 const player_card2 = ref<[string, string]>();
 const blackjack = ref<string | null>(null);
 const is_player_turn = ref<boolean>(false);
+const blackjack_ai_pts = ref<number | null>(null);
 
 const ai_card1 = ref<[string, string]>();
 const ai_card2 = ref<[string, string]>();
@@ -71,6 +72,7 @@ const is_ai_turn = ref<boolean>(false);
 
 const winner = ref<string | null>(null);
 const ai_turn_winner = ref<string | null>(null);
+const double_black_jack = ref<string | null>(null);
 
 const new_user_card = ref<[string, string] | null>(null);
 type PlayerCard = { id: number; card: [string, string]; revealed: boolean };
@@ -155,11 +157,13 @@ const newGame = async () => {
   player_card2.value = data.first_deal[0][1];
   player_points.value = data.first_deal[1];
   blackjack.value = data.first_deal[2];
+  blackjack_ai_pts.value = data.first_deal[3];
 
   ai_card1.value = data.first_deal_ai[0][0];
   ai_card2.value = data.first_deal_ai[0][1];
   ai_points.value = data.first_deal_ai[1];
   ai_blackjack.value = data.first_deal_ai[2];
+  double_black_jack.value = data.first_deal_ai[3];
 };
 
 const resetGame = async () => {
@@ -171,11 +175,13 @@ const resetGame = async () => {
   player_card2.value = data.first_deal[0][1];
   player_points.value = data.first_deal[1];
   blackjack.value = data.first_deal[2];
+  blackjack_ai_pts.value = data.first_deal[3];
 
   ai_card1.value = data.first_deal_ai[0][0];
   ai_card2.value = data.first_deal_ai[0][1];
   ai_points.value = data.first_deal_ai[1];
   ai_blackjack.value = data.first_deal_ai[2];
+  double_black_jack.value = data.first_deal_ai[3];
 
   new_user_card.value = null;
   playerCards.value = [];
@@ -242,7 +248,7 @@ onMounted(() => {
         Player<span class="points-badge">{{ player_points }}</span>
       </p>
       <p v-if="ai_points && player_turn_ai_points == null" class="points-text">
-        Dealer<span class="points-badge">{{ ai_points }}</span>
+        Dealer<span class="points-badge">{{ blackjack ? blackjack_ai_pts : ai_points }}</span>
       </p>
       <p v-if="player_turn_ai_points" class="points-text">
         Dealer<span class="points-badge">{{ player_turn_ai_points }}</span>
@@ -286,6 +292,7 @@ onMounted(() => {
 
       <h1 class="winner" v-if="winner">{{ winner }}</h1>
       <h1 class="winner" v-if="ai_turn_winner">{{ ai_turn_winner }}</h1>
+      <h1 class="winner" v-if="double_black_jack">{{ double_black_jack }}</h1>
 
       <span v-if="ai_blackjack" class="blackjack ai-blackjack">{{ ai_blackjack }}</span>
 

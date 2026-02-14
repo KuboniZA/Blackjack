@@ -25,8 +25,8 @@ app.add_middleware(
 @app.get("/new-game")
 def get_cards():
     return {
-        "first_deal": game.new_game_state(),
         "first_deal_ai": game.ai_new_game(),
+        "first_deal": game.new_game_state(),
         "cards_remaining": game.check_deck(),
     }
 
@@ -35,8 +35,8 @@ def get_cards():
 def reset_game():
     return {
         "reset-cards": game.reset_game(),
-        "first_deal": game.new_game_state(),
         "first_deal_ai": game.ai_new_game(),
+        "first_deal": game.new_game_state(),
         "cards_remaining": game.check_deck(),
     }
 
