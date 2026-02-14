@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, onUnmounted } from "vue";
 import type { Component } from "vue";
 import AceOfClubs from "../Deck1/Clubs/AceOfClubs.vue";
 import AceOfDiamonds from "../Deck1/Diamonds/AceOfDiamonds.vue";
@@ -229,8 +229,26 @@ const ai_turn = async () => {
   ai_turn_winner.value = data.ai_cards[2];
 };
 
+const handleKeyDown = (event: KeyboardEvent) => {
+  if (event.code === "Space") {
+    event.preventDefault();
+    player_turn();
+  } else if (event.code === "Enter") {
+    event.preventDefault();
+    ai_turn();
+  } else if (event.code === "Escape") {
+    event.preventDefault();
+    resetGame();
+  }
+};
+
 onMounted(() => {
   newGame();
+  window.addEventListener("keydown", handleKeyDown);
+});
+
+onUnmounted(() => {
+  window.removeEventListener("keydown", handleKeyDown);
 });
 </script>
 
