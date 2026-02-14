@@ -11,6 +11,7 @@ class GameEngine:
         self.computer_hidden_point = 0
         # Tracks whether we've already adjusted an ace from 11->1 for the current user turn
         self.user_ace_adjusted = False
+        self.computer_ace_adjusted = False
         self.heart_ranks = [
             "ace",
             "two",
@@ -260,6 +261,7 @@ class GameEngine:
         self.computer_points = 0
         self.computer_hidden_point = 0
         self.user_ace_adjusted = False
+        self.computer_ace_adjusted = False
         self.heart_ranks = [
             "ace",
             "two",
@@ -350,26 +352,23 @@ class GameEngine:
         new_card = user_cards[-1]
         new_card_pts_key = user_cards[-1][1]
 
-        for user_point in self.points_dictionary:
-            if new_card_pts_key in self.points_dictionary:
-                self.user_points += self.points_dictionary[new_card_pts_key]
-                #check that the user doesn't have an ace first. Note that this does permanently alter self.user_cards.
-                user_has_ace = any(rank == "ace" for suit, rank in self.user_cards[:-1])
-                if new_card_pts_key == "ace" and not user_has_ace:
-                    if self.user_points < 21 and (self.user_points + 10) <= 21:
-                        self.user_points += 10
-                        break
-                elif self.user_points > 21 and user_has_ace and not self.user_ace_adjusted:
-                    self.user_points -= 10
-                    # Only adjust an ace from 11->1 once per user turn
+        if new_card_pts_key in self.points_dictionary:
+            self.user_points += self.points_dictionary[new_card_pts_key]
+            #check that the user doesn't have an ace first. Note that this does permanently alter self.user_cards.
+            user_has_ace = any(rank == "ace" for suit, rank in self.user_cards[:-1])
+            if new_card_pts_key == "ace" and not user_has_ace:
+                if self.user_points < 21 and (self.user_points + 10) <= 21:
+                    self.user_points += 10
+                elif self.user_points < 21 and (self.user_points +10) > 21:
                     self.user_ace_adjusted = True
-                    break
-                elif self.user_points > 21:
-                    bust = True
-                    computer_points = self.computer_points + self.computer_hidden_point
-                    return new_card, self.user_points, self.computer_card, computer_points, "DEALER WINS!"
-                else:
-                    break
+            elif self.user_points > 21 and user_has_ace and not self.user_ace_adjusted:
+                self.user_points -= 10
+                # Only adjust an ace from 11->1 once per user turn
+                self.user_ace_adjusted = True
+            elif self.user_points > 21:
+                bust = True
+                computer_points = self.computer_points + self.computer_hidden_point
+                return new_card, self.user_points, self.computer_card, computer_points, "DEALER WINS!"
 
         return new_card, self.user_points
     
@@ -401,20 +400,40 @@ class GameEngine:
                 elif card_suit == "clubs" and len(self.club_ranks) > 0:
                     rank = random.choice(self.club_ranks)
                     self.club_ranks.remove(rank)
+                else:
+                    break
                 
                 self.computer_card.append((card_suit, rank))
-                ai_card_value = self.computer_card[-1][1]
+                ai_card_value = rank
                 result = ""
-
+                ai_has_ace = any(rank == "ace" for suit, rank in self.computer_card[:-1])
+               
                 if ai_card_value in self.points_dictionary:
                     computer_points += self.points_dictionary[ai_card_value]
-                    if computer_points >= 17 and computer_points == self.user_points:
+                    
+                    if ai_card_value == "ace" and not ai_has_ace:
+                        if computer_points < 21 and (computer_points + 10) <= 21:
+                            computer_points += 10
+                            continue
+                        elif computer_points < 21 and (computer_points + 10) > 21:
+                            self.computer_ace_adjusted = True
+                            continue
+                    elif ai_card_value == "ace" and ai_has_ace:
+                        if computer_points < 21 and (computer_points + 10) > 21:
+                            self.computer_ace_adjusted = True
+                            continue
+                    elif computer_points >= 17 and computer_points == self.user_points:
                         ai_bust = True
                         result = "PUSH"
                     elif computer_points <= 21 and computer_points > self.user_points:
                         ai_bust = True
                         result = "DEALER WINS!"
-                    elif computer_points > 21:
+                    elif computer_points > 21 and (ai_has_ace and not self.computer_ace_adjusted):
+                        computer_points -= 10
+                        # Only adjust an ace from 11->1 once per user turn
+                        self.computer_ace_adjusted = True
+                        continue
+                    elif computer_points > 21 or (computer_points > 21 and self.computer_ace_adjusted):
                         ai_bust = True
                         result = "YOU WIN!"
                     else:

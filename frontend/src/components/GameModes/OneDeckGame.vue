@@ -288,17 +288,16 @@ onMounted(() => {
       <h1 class="winner" v-if="ai_turn_winner">{{ ai_turn_winner }}</h1>
 
       <span v-if="ai_blackjack" class="blackjack ai-blackjack">{{ ai_blackjack }}</span>
+
       <component
         id="ai-card1"
         class="ai-cards cards"
-        v-if="is_ai_turn || blackjack || ai_blackjack || (is_player_turn && player_points > 21)"
-        :is="getCardComponent(ai_card1)"
-      />
-      <component
-        id="ai-card1"
-        class="ai-cards cards"
-        v-if="is_ai_turn == false && ai_blackjack == null && player_points <= 21"
-        :is="HiddenCard"
+        v-if="ai_card1 || (is_ai_turn == false && ai_blackjack == null && player_points <= 21)"
+        :is="
+          is_ai_turn || blackjack || ai_blackjack || (is_player_turn && player_points > 21)
+            ? getCardComponent(ai_card1)
+            : HiddenCard
+        "
       />
       <component
         id="ai-card2"
