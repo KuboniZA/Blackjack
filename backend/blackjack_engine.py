@@ -1,8 +1,9 @@
 import random
+from typing_extensions import Literal
 
 
 class GameEngine:
-    def __init__(self):
+    def __init__(self) -> None:
         self.suits = ["hearts", "diamonds", "spades", "clubs"]
         self.user_cards = []
         self.computer_card = []
@@ -89,7 +90,7 @@ class GameEngine:
             "king": 10,
         }
 
-    def new_game_state(self):
+    def new_game_state(self) -> tuple[list, int, Literal['BLACKJACK'], int] | tuple[list, int, None, None]:
         card_suit = ""
         rank = ""
 
@@ -157,7 +158,8 @@ class GameEngine:
 
         return self.user_cards, self.user_points, None, None
 
-    def ai_new_game(self):
+
+    def ai_new_game(self) -> tuple[list, Literal[21], Literal['BLACKJACK'], Literal['PUSH']] | tuple[list, int, None, None]:
         card_suit = ""
         rank = ""
 
@@ -190,47 +192,44 @@ class GameEngine:
         ai_card_value1 = initial_ai_cards[0][1]
         ai_card_value2 = initial_ai_cards[1][1]
 
-        for computer_point1 in self.points_dictionary:
-            if ai_card_value1 in self.points_dictionary:
-                if ai_card_value1 == "ace":
-                    self.computer_hidden_point += 10
-                    self.computer_hidden_point += self.points_dictionary[ai_card_value1]
-                    break
-                else:
-                    self.computer_hidden_point += self.points_dictionary[ai_card_value1]
-                    break
+        
+        if ai_card_value1 in self.points_dictionary:
+            if ai_card_value1 == "ace":
+                self.computer_hidden_point += 10
+                self.computer_hidden_point += self.points_dictionary[ai_card_value1]
+            else:
+                self.computer_hidden_point += self.points_dictionary[ai_card_value1]
 
-        for computer_point2 in self.points_dictionary:
-            if ai_card_value2 in self.points_dictionary:
-                if ai_card_value1 == "ace" and ai_card_value2 in ("ten", "jack", "queen", "king"):
-                    self.computer_points += self.computer_hidden_point
-                    self.computer_points += self.points_dictionary[ai_card_value2]
-                    if self.computer_points == 21 and self.user_points == 21:
-                        return self.computer_card, self.computer_points, "BLACKJACK", 'PUSH'
-                    else:
-                        return self.computer_card, self.computer_points, "BLACKJACK", None
-                # This makes sure the score does not give away the hidden card by making a visible ace equal 1.
-                elif ai_card_value1 == "ace" and ai_card_value2 == "ace":
-                    self.computer_hidden_point -= 10
-                    self.computer_points += 10
-                    self.computer_points += self.computer_hidden_point
-                    self.computer_points += self.points_dictionary[ai_card_value2]
-                    return self.computer_card, self.computer_points, None, None
-                elif self.computer_hidden_point == 10 and ai_card_value2 == "ace":
-                    self.computer_points += 10
-                    self.computer_points += self.points_dictionary[ai_card_value2]
-                    return self.computer_card, self.computer_points, "BLACKJACK", None
-                elif ai_card_value2 == "ace" and ai_card_value1 !="ace":
-                    self.computer_points += 10
-                    self.computer_points += self.points_dictionary[ai_card_value2]
-                    return self.computer_card, self.computer_points, None, None
+    
+        if ai_card_value2 in self.points_dictionary:
+            if ai_card_value1 == "ace" and ai_card_value2 in ("ten", "jack", "queen", "king"):
+                self.computer_points += self.computer_hidden_point
+                self.computer_points += self.points_dictionary[ai_card_value2]
+                if self.computer_points == 21 and self.user_points == 21:
+                    return self.computer_card, self.computer_points, "BLACKJACK", 'PUSH'
                 else:
-                    self.computer_points += self.points_dictionary[ai_card_value2]
-                    break
+                    return self.computer_card, self.computer_points, "BLACKJACK", None
+            # This makes sure the score does not give away the hidden card by making a visible ace equal 1.
+            elif ai_card_value1 == "ace" and ai_card_value2 == "ace":
+                self.computer_hidden_point -= 10
+                self.computer_points += 10
+                self.computer_points += self.computer_hidden_point
+                self.computer_points += self.points_dictionary[ai_card_value2]
+                return self.computer_card, self.computer_points, None, None
+            elif self.computer_hidden_point == 10 and ai_card_value2 == "ace":
+                self.computer_points += 10
+                self.computer_points += self.points_dictionary[ai_card_value2]
+                return self.computer_card, self.computer_points, "BLACKJACK", None
+            elif ai_card_value2 == "ace" and ai_card_value1 !="ace":
+                self.computer_points += 10
+                self.computer_points += self.points_dictionary[ai_card_value2]
+                return self.computer_card, self.computer_points, None, None
+            else:
+                self.computer_points += self.points_dictionary[ai_card_value2]
 
         return self.computer_card, self.computer_points, None, None
 
-    def check_deck(self):
+    def check_deck(self) -> dict[str, int]:
         card_count = (
             len(self.heart_ranks)
             + len(self.diamond_ranks)
@@ -239,7 +238,7 @@ class GameEngine:
         )
         return {"card_count": card_count}
 
-    def reset_game(self):
+    def reset_game(self) -> None:
         self.user_cards = []
         self.computer_card = []
         self.user_points = 0
@@ -308,10 +307,10 @@ class GameEngine:
             "king",
         ]
 
-    def chip_counter(self):
+    def chip_counter(self) -> None:
         bank = self.budget
 
-    def user_turn(self):
+    def user_turn(self) -> tuple[tuple[str, str], int] | tuple[tuple[str, str], int, tuple[str, str], int, Literal['DEALER WINS!']]:
         bust = self.user_points > 21
 
         card_suit = random.choice(self.suits)
@@ -357,8 +356,8 @@ class GameEngine:
 
         return new_card, self.user_points
     
-    #TODO refactor the below to use self.computer_points rather than the local variable computer_points.
-    def ai_turn(self):
+
+    def ai_turn(self) -> tuple[list[tuple[str, str]], int, Literal['PUSH']] | tuple[list[tuple[str, str]], int, Literal['DEALER WINS!']]:
         computer_points = self.computer_points + self.computer_hidden_point
         ai_bust = computer_points > 21
         if computer_points >= 17 and computer_points == self.user_points:
@@ -392,20 +391,41 @@ class GameEngine:
                 self.computer_card.append((card_suit, rank))
                 ai_card_value = rank
                 result = ""
-                ai_has_ace = any(rank == "ace" for suit, rank in self.computer_card[:-1])
-               
+                
                 if ai_card_value in self.points_dictionary:
                     computer_points += self.points_dictionary[ai_card_value]
+                    ai_has_ace = any(rank == "ace" for suit, rank in self.computer_card[:-1])
                     
                     if ai_card_value == "ace" and not ai_has_ace:
                         if computer_points < 21 and (computer_points + 10) <= 21:
                             computer_points += 10
+                            if computer_points > self.user_points:
+                                ai_bust = True
+                                result = "DEALER WINS!"
+                            elif computer_points == self.user_points:
+                                ai_bust = True
+                                result = "PUSH"
+                            else:
+                                continue
+                        elif computer_points > 21:
+                            ai_bust = True
+                            result = "YOU WIN!"
                             continue
                         elif computer_points < 21 and (computer_points + 10) > 21:
                             self.computer_ace_adjusted = True
                             continue
                     elif ai_card_value == "ace" and ai_has_ace:
-                        if computer_points < 21 and (computer_points + 10) > 21:
+                        if computer_points > self.user_points and computer_points <= 21:
+                            ai_bust = True
+                            result = "DEALER WINS!"
+                        elif computer_points == self.user_points:
+                            ai_bust = True
+                            result = "PUSH"
+                        if computer_points < 21 and computer_points < self.user_points:
+                            continue
+                        elif computer_points > 21 and (ai_has_ace and not self.computer_ace_adjusted):
+                            computer_points -= 10
+                            # Only adjust an ace from 11->1 once per user turn
                             self.computer_ace_adjusted = True
                             continue
                     elif computer_points >= 17 and computer_points == self.user_points:
@@ -418,7 +438,14 @@ class GameEngine:
                         computer_points -= 10
                         # Only adjust an ace from 11->1 once per user turn
                         self.computer_ace_adjusted = True
-                        continue
+                        if computer_points > self.user_points:
+                            ai_bust = True
+                            result = "DEALER WINS!"
+                        elif computer_points == self.user_points:
+                            ai_bust = True
+                            result = "PUSH"
+                        else:
+                            continue
                     elif computer_points > 21 or (computer_points > 21 and self.computer_ace_adjusted):
                         ai_bust = True
                         result = "YOU WIN!"
@@ -427,9 +454,4 @@ class GameEngine:
 
             return self.computer_card, computer_points, result
 
-
-game_engine = GameEngine()
-
-state = game_engine.ai_new_game()
-
-print(state)
+ 
