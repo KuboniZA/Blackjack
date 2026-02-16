@@ -205,7 +205,7 @@ class GameEngine:
             if ai_card_value1 == "ace" and ai_card_value2 in ("ten", "jack", "queen", "king"):
                 self.computer_points += self.computer_hidden_point
                 self.computer_points += self.points_dictionary[ai_card_value2]
-                if self.computer_points == 21 and self.user_points == 21:
+                if self.computer_points == 21 == self.user_points:
                     return self.computer_card, self.computer_points, "BLACKJACK", 'PUSH'
                 else:
                     return self.computer_card, self.computer_points, "BLACKJACK", None
@@ -213,14 +213,13 @@ class GameEngine:
             elif ai_card_value1 == "ace" and ai_card_value2 == "ace":
                 self.computer_hidden_point -= 10
                 self.computer_points += 10
-                self.computer_points += self.computer_hidden_point
                 self.computer_points += self.points_dictionary[ai_card_value2]
                 return self.computer_card, self.computer_points, None, None
             elif self.computer_hidden_point == 10 and ai_card_value2 == "ace":
                 self.computer_points += 10
                 self.computer_points += self.points_dictionary[ai_card_value2]
                 return self.computer_card, self.computer_points, "BLACKJACK", None
-            elif ai_card_value2 == "ace" and ai_card_value1 !="ace":
+            elif ai_card_value2 == "ace" and ai_card_value1 != "ace":
                 self.computer_points += 10
                 self.computer_points += self.points_dictionary[ai_card_value2]
                 return self.computer_card, self.computer_points, None, None
