@@ -73,7 +73,7 @@ class GameEngine:
             "queen",
             "king",
         ]
-        self.budget = 0
+        self.budget = 1000
         self.points_dictionary = {
             "ace": 1,
             "two": 2,
@@ -243,7 +243,6 @@ class GameEngine:
         self.user_points = 0
         self.computer_points = 0
         self.computer_hidden_point = 0
-        self.budget = 0
         self.user_ace_adjusted = False
         self.computer_ace_adjusted = False
         self.heart_ranks = [
@@ -308,7 +307,14 @@ class GameEngine:
         ]
 
     def bet(self, amount: int) -> bool:
-        self.budget += amount
+        if self.budget > 0:    
+            self.budget -= amount
+            return self.budget
+        else:
+            return "Busted! Please reset the game to play again."
+    
+    def reset_bet(self) -> int:
+        self.budget = 1000
         return self.budget
             
 

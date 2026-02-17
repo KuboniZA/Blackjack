@@ -194,7 +194,8 @@ const resetGame = async () => {
   is_ai_turn.value = false;
   is_player_turn.value = false;
 
-  bet_amount.value = 0;
+  bet_amount.value = data.bet_reset;
+  console.log("Bet reset:", bet_amount.value);
 };
 
 const player_turn = async () => {
@@ -234,7 +235,7 @@ const ai_turn = async () => {
 
 // Betting logic for chips
 
-const bet_amount = ref<number>(0);
+const bet_amount = ref<number>();
 
 const placeBet = async (amount: number) => {
   const response = await fetch("http://127.0.0.1:8000/place-bet", {

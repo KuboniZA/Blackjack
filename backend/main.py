@@ -39,6 +39,7 @@ def reset_game():
         "first_deal_ai": game.ai_new_game(),
         "first_deal": game.new_game_state(),
         "cards_remaining": game.check_deck(),
+        "bet_reset": game.reset_bet(),
     }
 
 @app.post("/hit")
@@ -46,6 +47,7 @@ def get_new_card():
     return {
         "card": game.user_turn(),
         "cards_remaining": game.check_deck(),
+        # "budget": game.get_budget(),
     }
 
 @app.post("/stand")
