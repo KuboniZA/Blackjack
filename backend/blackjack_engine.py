@@ -73,7 +73,7 @@ class GameEngine:
             "queen",
             "king",
         ]
-        self.budget = 1000
+        self.budget = 0
         self.points_dictionary = {
             "ace": 1,
             "two": 2,
@@ -243,6 +243,7 @@ class GameEngine:
         self.user_points = 0
         self.computer_points = 0
         self.computer_hidden_point = 0
+        self.budget = 0
         self.user_ace_adjusted = False
         self.computer_ace_adjusted = False
         self.heart_ranks = [
@@ -306,8 +307,10 @@ class GameEngine:
             "king",
         ]
 
-    def chip_counter(self) -> None:
-        bank = self.budget
+    def bet(self, amount: int) -> bool:
+        self.budget += amount
+        return self.budget
+            
 
     def user_turn(self) -> tuple[tuple[str, str], int] | tuple[tuple[str, str], int, tuple[str, str], int, Literal['DEALER WINS!']]:
         bust = self.user_points > 21

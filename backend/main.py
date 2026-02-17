@@ -1,6 +1,7 @@
 from blackjack_engine import GameEngine
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
 
 app = FastAPI()
 
@@ -53,3 +54,48 @@ def ai_plays():
         "ai_cards": game.ai_turn(),
         "cards_remaining": game.check_deck(),
     }
+
+class bet_amount(BaseModel):
+    amount: int
+
+@app.post("/place-bet")
+def place_bet(req: bet_amount):
+    return {
+        "bet_placed": game.bet(req.amount),
+        "cards_remaining": game.check_deck(),
+    }
+
+# @app.post("/check-winner")
+# def check_winner():
+#     return {
+#         "winner": game.check_winner(),
+#         "cards_remaining": game.check_deck(),
+#     }
+
+# @app.post("/surrender")
+# def surrender():
+#     return {
+#         "surrendered": game.surrender(),
+#         "cards_remaining": game.check_deck(),
+#     }
+
+# @app.post("/split")
+# def split_hand():
+#     return {
+#         "split_hand": game.split_hand(),
+#         "cards_remaining": game.check_deck(),
+#     }
+
+# @app.post("/double-down")
+# def double_down():
+#     return {
+#         "doubled": game.double_down(),
+#         "cards_remaining": game.check_deck(),
+#     }
+
+# @app.post("/play-again")
+# def play_again():
+#     return {
+#         "reset": game.play_again(),
+#         "cards_remaining": game.check_deck(),
+#     }

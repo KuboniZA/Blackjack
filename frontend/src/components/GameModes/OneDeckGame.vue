@@ -193,6 +193,8 @@ const resetGame = async () => {
   player_turn_ai_points.value = null;
   is_ai_turn.value = false;
   is_player_turn.value = false;
+
+  bet_amount.value = 0;
 };
 
 const player_turn = async () => {
@@ -230,6 +232,25 @@ const ai_turn = async () => {
   ai_turn_winner.value = data.ai_cards[2];
 };
 
+// Betting logic for chips
+
+const bet_amount = ref<number>(0);
+
+const placeBet = async (amount: number) => {
+  const response = await fetch("http://127.0.0.1:8000/place-bet", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ amount }),
+  });
+  const data = await response.json();
+  console.log("Bet placed:", data);
+  bet_amount.value = data.bet_placed;
+};
+
+// Keyboard event handler for game controls
+
 const handleKeyDown = (event: KeyboardEvent) => {
   if (event.code === "Space") {
     event.preventDefault();
@@ -255,14 +276,14 @@ onUnmounted(() => {
 
 <template>
   <div class="chips-background">
-    <chips-view :rand1="true" id="chip1" class="game-chips" />
-    <chips-view :rand5="true" id="chip5" class="game-chips" />
-    <chips-view :rand10="true" id="chip10" class="game-chips" />
-    <chips-view :rand25="true" id="chip25" class="game-chips" />
-    <chips-view :rand50="true" id="chip50" class="game-chips" />
-    <chips-view :rand100="true" id="chip100" class="game-chips" />
-    <chips-view :rand500="true" id="chip500" class="game-chips" />
-    <chips-view :rand1k="true" id="chip1k" class="game-chips" />
+    <chips-view :rand1="true" id="chip1" class="game-chips" @click="placeBet(1)" />
+    <chips-view :rand5="true" id="chip5" class="game-chips" @click="placeBet(5)" />
+    <chips-view :rand10="true" id="chip10" class="game-chips" @click="placeBet(10)" />
+    <chips-view :rand25="true" id="chip25" class="game-chips" @click="placeBet(25)" />
+    <chips-view :rand50="true" id="chip50" class="game-chips" @click="placeBet(50)" />
+    <chips-view :rand100="true" id="chip100" class="game-chips" @click="placeBet(100)" />
+    <chips-view :rand500="true" id="chip500" class="game-chips" @click="placeBet(500)" />
+    <chips-view :rand1k="true" id="chip1k" class="game-chips" @click="placeBet(1000)" />
   </div>
 
   <div class="main-container">
@@ -353,6 +374,11 @@ onUnmounted(() => {
           transform: `scale(0.8) rotate(${-2 + index * 3}deg)`,
         }"
       />
+    </div>
+    <div class="bet-counter">
+      <p class="points-text">
+        Bet<span class="bet-container">R {{ bet_amount }}</span>
+      </p>
     </div>
   </div>
 </template>
@@ -642,5 +668,40 @@ onUnmounted(() => {
   width: 47rem;
   height: 28rem;
   z-index: 5;
+}
+.bet-counter {
+  position: absolute;
+  top: 80%;
+  left: 10%;
+  color: white;
+  width: 12rem;
+}
+.bet-container {
+  background-color: transparent;
+  background: linear-gradient(to bottom right, red, blue);
+  border-radius: 15px;
+  font-size: 1.5rem;
+  height: 2.5rem;
+  width: fit-content;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: 0.35rem;
+  left: -5%;
+  white-space: nowrap;
+}
+.bet-container::after {
+  content: "";
+  width: 100%;
+  height: 100%;
+  border-radius: 15px;
+  position: absolute;
+  background-color: transparent;
+  background: linear-gradient(to bottom right, white, grey);
+  z-index: -1;
+  grid-column: 2;
+  grid-row: 1;
+  transform: scale(1.075);
 }
 </style>
