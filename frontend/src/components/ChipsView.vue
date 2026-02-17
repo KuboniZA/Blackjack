@@ -438,8 +438,8 @@ defineProps({
   justify-content: center;
   border-radius: 50%;
   position: absolute;
-  left: 48rem;
-  top: 3rem;
+  left: 1.5rem;
+  top: 16rem;
   background-color: rgb(136, 19, 19);
   box-shadow: -4px 4px 8px rgba(0, 0, 0, 0.7);
   overflow: hidden;
@@ -452,7 +452,7 @@ defineProps({
   justify-content: center;
   border-radius: 50%;
   position: absolute;
-  left: 1.5rem;
+  left: 13rem;
   top: 16rem;
   background-color: rgb(57, 31, 189);
   box-shadow: -4px 4px 8px rgba(0, 0, 0, 0.7);
@@ -466,7 +466,7 @@ defineProps({
   justify-content: center;
   border-radius: 50%;
   position: absolute;
-  left: 13rem;
+  left: 24rem;
   top: 16rem;
   background-color: rgb(104, 7, 86);
   box-shadow: -4px 4px 8px rgba(0, 0, 0, 0.7);
@@ -480,7 +480,7 @@ defineProps({
   justify-content: center;
   border-radius: 50%;
   position: absolute;
-  left: 24rem;
+  left: 36.25rem;
   top: 16rem;
   background-color: rgb(29, 104, 102);
   box-shadow: -4px 4px 8px rgba(0, 0, 0, 0.7);

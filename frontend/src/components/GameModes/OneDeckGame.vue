@@ -54,6 +54,7 @@ import KingOfDiamonds from "../Deck1/Diamonds/KingOfDiamonds.vue";
 import KingOfHearts from "../Deck1/Hearts/KingOfHearts.vue";
 import KingOfSpades from "../Deck1/Spades/KingOfSpades.vue";
 import HiddenCard from "../Deck1/HiddenCard.vue";
+import ChipsView from "../ChipsView.vue";
 
 const cards_left = ref<number>(0);
 const player_card1 = ref<[string, string]>();
@@ -253,6 +254,17 @@ onUnmounted(() => {
 </script>
 
 <template>
+  <div class="chips-background">
+    <chips-view :rand1="true" id="chip1" class="game-chips" />
+    <chips-view :rand5="true" id="chip5" class="game-chips" />
+    <chips-view :rand10="true" id="chip10" class="game-chips" />
+    <chips-view :rand25="true" id="chip25" class="game-chips" />
+    <chips-view :rand50="true" id="chip50" class="game-chips" />
+    <chips-view :rand100="true" id="chip100" class="game-chips" />
+    <chips-view :rand500="true" id="chip500" class="game-chips" />
+    <chips-view :rand1k="true" id="chip1k" class="game-chips" />
+  </div>
+
   <div class="main-container">
     <div class="cards-remaining-container">
       <p class="cards-remaining">
@@ -304,7 +316,7 @@ onUnmounted(() => {
         :style="{
           top: '60%',
           left: `${20 + index * 4}%`,
-          transform: `scale(0.7) rotate(${-2 + index * -3}deg)`,
+          transform: `scale(0.8) rotate(${-2 + index * -3}deg)`,
         }"
       />
 
@@ -338,7 +350,7 @@ onUnmounted(() => {
         :style="{
           top: '2%',
           left: `${20 + index * 5}%`,
-          transform: `scale(0.7) rotate(${-2 + index * 3}deg)`,
+          transform: `scale(0.8) rotate(${-2 + index * 3}deg)`,
         }"
       />
     </div>
@@ -501,12 +513,12 @@ onUnmounted(() => {
 #p-card1 {
   top: 60%;
   left: 10%;
-  transform: scale(0.7) rotate(5deg);
+  transform: scale(0.8) rotate(5deg);
 }
 #p-card2 {
   top: 60%;
   left: 15%;
-  transform: scale(0.7) rotate(2.5deg);
+  transform: scale(0.8) rotate(2.5deg);
 }
 /* #p-card3 {
   top: 60%;
@@ -516,12 +528,12 @@ onUnmounted(() => {
 #ai-card1 {
   top: 2%;
   left: 10%;
-  transform: scale(0.7) rotate(-5deg);
+  transform: scale(0.8) rotate(-5deg);
 }
 #ai-card2 {
   top: 2%;
   left: 15%;
-  transform: scale(0.7) rotate(-2.5deg);
+  transform: scale(0.8) rotate(-2.5deg);
 }
 .points-container {
   color: white;
@@ -614,5 +626,21 @@ onUnmounted(() => {
   align-items: center;
   justify-content: center;
   transition: all 3s ease-in;
+}
+.game-chips {
+  position: relative;
+  width: fit-content;
+  height: fit-content;
+  z-index: 5;
+}
+.chips-background {
+  position: absolute;
+  border: 2px solid white;
+  background: linear-gradient(to bottom right, rgba(0, 0, 255, 0.53), rgba(255, 0, 0, 0.5));
+  backdrop-filter: blur(4px);
+  border-radius: 25px;
+  width: 47rem;
+  height: 28rem;
+  z-index: 5;
 }
 </style>
