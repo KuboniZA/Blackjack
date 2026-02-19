@@ -195,7 +195,7 @@ const resetGame = async () => {
   is_player_turn.value = false;
 
   bet_amount.value = data.bet_reset[0];
-  current_bet.value = data.bet_reset[1];
+  current_bet.value = data.winnings[1];
 };
 
 const player_turn = async () => {
@@ -213,6 +213,8 @@ const player_turn = async () => {
   }
   player_turn_ai_points.value = data.card[3];
   winner.value = data.card[4];
+  current_bet.value = data.winnings[1];
+  winnings.value = data.winnings[2];
 };
 
 const ai_turn = async () => {
@@ -231,6 +233,8 @@ const ai_turn = async () => {
     }
   }
   ai_turn_winner.value = data.ai_cards[2];
+  current_bet.value = data.winnings[1];
+  winnings.value = data.winnings[2];
 };
 
 // Betting logic for chips

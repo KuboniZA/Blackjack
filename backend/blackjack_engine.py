@@ -144,11 +144,17 @@ class GameEngine:
                 if user_card_value1 == "ace" and user_card_value2 in ("ten", "jack", "queen", "king"):
                     self.user_points += self.points_dictionary[user_card_value2]
                     self.computer_points += self.computer_hidden_point
+                    self.winnings += self.bet_amount
+                    self.bet_amount = 0
+                    self.winnings_tracker()
                     return self.user_cards, self.user_points, "BLACKJACK", self.computer_points
                 elif self.user_points == 10 and user_card_value2 == "ace":
                     self.user_points += 10
                     self.user_points += self.points_dictionary[user_card_value2]
                     self.computer_points += self.computer_hidden_point
+                    self.winnings += self.bet_amount
+                    self.bet_amount = 0
+                    self.winnings_tracker()
                     return self.user_cards, self.user_points, "BLACKJACK", self.computer_points
                 elif user_card_value2 == "ace" and user_card_value1 !="ace":
                     self.user_points += 10
@@ -208,8 +214,13 @@ class GameEngine:
                 self.computer_points += self.computer_hidden_point
                 self.computer_points += self.points_dictionary[ai_card_value2]
                 if self.computer_points == 21 == self.user_points:
+                    self.budget += self.bet_amount
+                    self.winnings -= self.bet_amount
+                    self.winnings_tracker()
                     return self.computer_card, self.computer_points, "BLACKJACK", 'PUSH'
                 else:
+                    self.bet_amount = 0
+                    self.winnings_tracker()
                     return self.computer_card, self.computer_points, "BLACKJACK", None
             # This makes sure the score does not give away the hidden card by making a visible ace equal 1.
             elif ai_card_value1 == "ace" and ai_card_value2 == "ace":
@@ -220,6 +231,8 @@ class GameEngine:
             elif self.computer_hidden_point == 10 and ai_card_value2 == "ace":
                 self.computer_points += 10
                 self.computer_points += self.points_dictionary[ai_card_value2]
+                self.bet_amount = 0
+                self.winnings_tracker()
                 return self.computer_card, self.computer_points, "BLACKJACK", None
             elif ai_card_value2 == "ace" and ai_card_value1 != "ace":
                 self.computer_points += 10
@@ -314,7 +327,7 @@ class GameEngine:
         if self.budget > 0:    
             self.budget -= amount
             self.bet_amount += amount
-            return self.budget, self.bet_amount
+            return self.budget, self.bet_amount, None, self.winnings
         else:
             return self.budget, self.bet_amount, "Insufficient funds!"
     
@@ -322,6 +335,9 @@ class GameEngine:
         self.budget = 1000
         self.bet_amount = 0
         return self.budget, self.bet_amount
+    
+    def winnings_tracker(self) -> tuple[int, int, int]:
+        return self.budget, self.bet_amount, self.winnings
             
 
     def user_turn(self) -> tuple[tuple[str, str], int] | tuple[tuple[str, str], int, tuple[str, str], int, Literal['DEALER WINS!']]:
@@ -366,6 +382,8 @@ class GameEngine:
             elif self.user_points > 21:
                 bust = True
                 computer_points = self.computer_points + self.computer_hidden_point
+                self.bet_amount = 0
+                self.winnings_tracker()
                 return new_card, self.user_points, self.computer_card, computer_points, "DEALER WINS!"
 
         return new_card, self.user_points
@@ -376,9 +394,14 @@ class GameEngine:
         ai_bust = computer_points > 21
         if computer_points >= 17 and computer_points == self.user_points:
                     ai_bust = True
+                    self.budget += self.bet_amount
+                    self.bet_amount = 0
+                    self.winnings_tracker()
                     return self.computer_card, computer_points, "PUSH"
         elif computer_points <= 21 and computer_points > self.user_points:
                     ai_bust = True
+                    self.bet_amount = 0
+                    self.winnings_tracker()
                     return self.computer_card, computer_points, "DEALER WINS!"
         else:
             while not ai_bust:
@@ -415,14 +438,22 @@ class GameEngine:
                             computer_points += 10
                             if computer_points > self.user_points:
                                 ai_bust = True
+                                self.bet_amount = 0
+                                self.winnings_tracker()
                                 result = "DEALER WINS!"
                             elif computer_points == self.user_points:
                                 ai_bust = True
+                                self.budget += self.bet_amount
+                                self.bet_amount = 0
+                                self.winnings_tracker()
                                 result = "PUSH"
                             else:
                                 continue
                         elif computer_points > 21:
                             ai_bust = True
+                            self.winnings += self.bet_amount
+                            self.bet_amount = 0
+                            self.winnings_tracker()
                             result = "YOU WIN!"
                             continue
                         elif computer_points < 21 and (computer_points + 10) > 21:
@@ -431,9 +462,14 @@ class GameEngine:
                     elif ai_card_value == "ace" and ai_has_ace:
                         if computer_points > self.user_points and computer_points <= 21:
                             ai_bust = True
+                            self.bet_amount = 0
+                            self.winnings_tracker()
                             result = "DEALER WINS!"
                         elif computer_points == self.user_points:
                             ai_bust = True
+                            self.budget += self.bet_amount
+                            self.bet_amount = 0
+                            self.winnings_tracker()
                             result = "PUSH"
                         if computer_points < 21 and computer_points < self.user_points:
                             continue
@@ -444,9 +480,14 @@ class GameEngine:
                             continue
                     elif computer_points >= 17 and computer_points == self.user_points:
                         ai_bust = True
+                        self.budget += self.bet_amount
+                        self.bet_amount = 0
+                        self.winnings_tracker()
                         result = "PUSH"
                     elif computer_points <= 21 and computer_points > self.user_points:
                         ai_bust = True
+                        self.bet_amount = 0
+                        self.winnings_tracker()
                         result = "DEALER WINS!"
                     elif computer_points > 21 and (ai_has_ace and not self.computer_ace_adjusted):
                         computer_points -= 10
@@ -454,14 +495,22 @@ class GameEngine:
                         self.computer_ace_adjusted = True
                         if computer_points > self.user_points:
                             ai_bust = True
+                            self.bet_amount = 0
+                            self.winnings_tracker()
                             result = "DEALER WINS!"
                         elif computer_points == self.user_points:
                             ai_bust = True
+                            self.budget += self.bet_amount
+                            self.bet_amount = 0
+                            self.winnings_tracker()
                             result = "PUSH"
                         else:
                             continue
                     elif computer_points > 21 or (computer_points > 21 and self.computer_ace_adjusted):
                         ai_bust = True
+                        self.winnings += self.bet_amount
+                        self.bet_amount = 0
+                        self.winnings_tracker()
                         result = "YOU WIN!"
                     else:
                         continue

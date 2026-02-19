@@ -29,6 +29,7 @@ def get_cards():
         "first_deal_ai": game.ai_new_game(),
         "first_deal": game.new_game_state(),
         "cards_remaining": game.check_deck(),
+        "winnings": game.winnings_tracker(),
     }
 
 
@@ -40,6 +41,7 @@ def reset_game():
         "first_deal": game.new_game_state(),
         "cards_remaining": game.check_deck(),
         "bet_reset": game.reset_bet(),
+        "winnings": game.winnings_tracker(),
     }
 
 @app.post("/hit")
@@ -47,7 +49,7 @@ def get_new_card():
     return {
         "card": game.user_turn(),
         "cards_remaining": game.check_deck(),
-        # "budget": game.get_budget(),
+        "winnings": game.winnings_tracker(),
     }
 
 @app.post("/stand")
@@ -55,6 +57,7 @@ def ai_plays():
     return {
         "ai_cards": game.ai_turn(),
         "cards_remaining": game.check_deck(),
+        "winnings": game.winnings_tracker(),
     }
 
 class bet_amount(BaseModel):
