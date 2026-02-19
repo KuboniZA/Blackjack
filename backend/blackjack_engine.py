@@ -74,6 +74,8 @@ class GameEngine:
             "king",
         ]
         self.budget = 1000
+        self.bet_amount = 0
+        self.winnings = 0
         self.points_dictionary = {
             "ace": 1,
             "two": 2,
@@ -245,6 +247,8 @@ class GameEngine:
         self.computer_hidden_point = 0
         self.user_ace_adjusted = False
         self.computer_ace_adjusted = False
+        self.winnings = 0 # Reset winnings at the start of a new game for now, but this may be used in future iterations to track winnings across multiple games
+        self.bet_amount = 0 # Reset bet amount at the start of a new game
         self.heart_ranks = [
             "ace",
             "two",
@@ -309,13 +313,15 @@ class GameEngine:
     def bet(self, amount: int) -> bool:
         if self.budget > 0:    
             self.budget -= amount
-            return self.budget
+            self.bet_amount += amount
+            return self.budget, self.bet_amount
         else:
-            return "Busted! Please reset the game to play again."
+            return self.budget, self.bet_amount, "Insufficient funds!"
     
     def reset_bet(self) -> int:
         self.budget = 1000
-        return self.budget
+        self.bet_amount = 0
+        return self.budget, self.bet_amount
             
 
     def user_turn(self) -> tuple[tuple[str, str], int] | tuple[tuple[str, str], int, tuple[str, str], int, Literal['DEALER WINS!']]:

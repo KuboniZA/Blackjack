@@ -194,8 +194,8 @@ const resetGame = async () => {
   is_ai_turn.value = false;
   is_player_turn.value = false;
 
-  bet_amount.value = data.bet_reset;
-  console.log("Bet reset:", bet_amount.value);
+  bet_amount.value = data.bet_reset[0];
+  current_bet.value = data.bet_reset[1];
 };
 
 const player_turn = async () => {
@@ -235,7 +235,10 @@ const ai_turn = async () => {
 
 // Betting logic for chips
 
-const bet_amount = ref<number>();
+const bet_amount = ref<number>(0);
+const winnings = ref<number>(0);
+const current_bet = ref<number>(0);
+const insufficient_funds = ref<string | null>(null);
 
 const placeBet = async (amount: number) => {
   const response = await fetch("http://127.0.0.1:8000/place-bet", {
@@ -247,7 +250,9 @@ const placeBet = async (amount: number) => {
   });
   const data = await response.json();
   console.log("Bet placed:", data);
-  bet_amount.value = data.bet_placed;
+  bet_amount.value = data.bet_placed[0];
+  current_bet.value = data.bet_placed[1];
+  insufficient_funds.value = data.bet_placed[2];
 };
 
 // Keyboard event handler for game controls
@@ -277,14 +282,29 @@ onUnmounted(() => {
 
 <template>
   <div class="chips-background">
-    <chips-view :rand1="true" id="chip1" class="game-chips" @click="placeBet(1)" />
-    <chips-view :rand5="true" id="chip5" class="game-chips" @click="placeBet(5)" />
-    <chips-view :rand10="true" id="chip10" class="game-chips" @click="placeBet(10)" />
-    <chips-view :rand25="true" id="chip25" class="game-chips" @click="placeBet(25)" />
-    <chips-view :rand50="true" id="chip50" class="game-chips" @click="placeBet(50)" />
-    <chips-view :rand100="true" id="chip100" class="game-chips" @click="placeBet(100)" />
-    <chips-view :rand500="true" id="chip500" class="game-chips" @click="placeBet(500)" />
-    <chips-view :rand1k="true" id="chip1k" class="game-chips" @click="placeBet(1000)" />
+    <chips-view :rand1="bet_amount >= 1" id="chip1" class="game-chips" @click="placeBet(1)" />
+    <chips-view :rand5="bet_amount >= 5" id="chip5" class="game-chips" @click="placeBet(5)" />
+    <chips-view :rand10="bet_amount >= 10" id="chip10" class="game-chips" @click="placeBet(10)" />
+    <chips-view :rand25="bet_amount >= 25" id="chip25" class="game-chips" @click="placeBet(25)" />
+    <chips-view :rand50="bet_amount >= 50" id="chip50" class="game-chips" @click="placeBet(50)" />
+    <chips-view
+      :rand100="bet_amount >= 100"
+      id="chip100"
+      class="game-chips"
+      @click="placeBet(100)"
+    />
+    <chips-view
+      :rand500="bet_amount >= 500"
+      id="chip500"
+      class="game-chips"
+      @click="placeBet(500)"
+    />
+    <chips-view
+      :rand1k="bet_amount >= 1000"
+      id="chip1k"
+      class="game-chips"
+      @click="placeBet(1000)"
+    />
   </div>
 
   <div class="main-container">
@@ -345,6 +365,7 @@ onUnmounted(() => {
       <h1 class="winner" v-if="winner">{{ winner }}</h1>
       <h1 class="winner" v-if="ai_turn_winner">{{ ai_turn_winner }}</h1>
       <h1 class="winner" v-if="double_black_jack">{{ double_black_jack }}</h1>
+      <h1 class="winner" v-if="insufficient_funds">{{ insufficient_funds }}</h1>
 
       <span v-if="ai_blackjack" class="blackjack ai-blackjack">{{ ai_blackjack }}</span>
 
@@ -376,9 +397,19 @@ onUnmounted(() => {
         }"
       />
     </div>
-    <div class="bet-counter">
-      <p class="points-text">
-        Bet<span class="bet-container">R {{ bet_amount }}</span>
+    <div class="bet-counter ammount">
+      <p class="points-text budget">
+        Budget<span class="bet-container">R {{ bet_amount }}</span>
+      </p>
+    </div>
+    <div class="bet-counter winnings">
+      <p class="points-text budget">
+        Winnings<span class="bet-container">R {{ winnings }}</span>
+      </p>
+    </div>
+    <div class="current-bet-container">
+      <p class="points-text budget">
+        Current bet:<span class="current-bet">R {{ current_bet }}</span>
       </p>
     </div>
   </div>
@@ -675,7 +706,7 @@ onUnmounted(() => {
   top: 80%;
   left: 10%;
   color: white;
-  width: 12rem;
+  min-width: 5rem;
 }
 .bet-container {
   background-color: transparent;
@@ -704,5 +735,16 @@ onUnmounted(() => {
   grid-column: 2;
   grid-row: 1;
   transform: scale(1.075);
+}
+.current-bet-container {
+  position: absolute;
+  top: 50%;
+  left: 20%;
+  width: 20rem;
+  color: white;
+}
+.winnings {
+  top: 82%;
+  left: 60%;
 }
 </style>
