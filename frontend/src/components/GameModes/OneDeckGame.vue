@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, onMounted, onUnmounted } from "vue";
+import { ref, onMounted, onUnmounted, nextTick } from "vue";
 import type { Component } from "vue";
 import AceOfClubs from "../Deck1/Clubs/AceOfClubs.vue";
 import AceOfDiamonds from "../Deck1/Diamonds/AceOfDiamonds.vue";
@@ -74,6 +74,8 @@ const is_ai_turn = ref<boolean>(false);
 const winner = ref<string | null>(null);
 const ai_turn_winner = ref<string | null>(null);
 const double_black_jack = ref<string | null>(null);
+
+const hasDealt = ref<boolean>(false);
 
 const new_user_card = ref<[string, string] | null>(null);
 type PlayerCard = { id: number; card: [string, string]; revealed: boolean };
@@ -154,21 +156,20 @@ const newGame = async () => {
   const data = await response.json();
   cards_left.value = data.cards_remaining.card_count;
 
-  player_card1.value = data.first_deal[0][0];
-  player_card2.value = data.first_deal[0][1];
-  player_points.value = data.first_deal[1];
-  blackjack.value = data.first_deal[2];
-  blackjack_ai_pts.value = data.first_deal[3];
+  const [user_points, ai_points_value] = data.get_points;
+  player_points.value = user_points;
+  ai_points.value = ai_points_value;
 
-  ai_card1.value = data.first_deal_ai[0][0];
-  ai_card2.value = data.first_deal_ai[0][1];
-  ai_points.value = data.first_deal_ai[1];
-  ai_blackjack.value = data.first_deal_ai[2];
-  double_black_jack.value = data.first_deal_ai[3];
+  bet_amount.value = data.bet_reset[0];
+  current_bet.value = data.bet_reset[1];
+
+  hasDealt.value = false;
 };
 
-const resetGame = async () => {
-  const response = await fetch("http://127.0.0.1:8000/reset-game", { method: "POST" });
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+const showCards = async () => {
+  const response = await fetch("http://127.0.0.1:8000/deal-cards");
   const data = await response.json();
   cards_left.value = data.cards_remaining.card_count;
 
@@ -184,6 +185,41 @@ const resetGame = async () => {
   ai_blackjack.value = data.first_deal_ai[2];
   double_black_jack.value = data.first_deal_ai[3];
 
+  hasDealt.value = true;
+
+  await nextTick();
+
+  const cardIds = ["p-card1", "p-card2", "ai-card1", "ai-card2"];
+  for (const id of cardIds) {
+    const cardElement = document.getElementById(id);
+    if (cardElement) {
+      cardElement.classList.add("show");
+    }
+    await sleep(200);
+  }
+
+  document.querySelectorAll(".player-cards").forEach((card) => {
+    card.classList.add("show");
+  });
+};
+
+const resetGame = async () => {
+  const response = await fetch("http://127.0.0.1:8000/reset-game", { method: "POST" });
+  const data = await response.json();
+  cards_left.value = data.cards_remaining.card_count;
+
+  // player_card1.value = data.first_deal[0][0];
+  // player_card2.value = data.first_deal[0][1];
+  player_points.value = data.first_deal[1];
+  // blackjack.value = data.first_deal[2];
+  // blackjack_ai_pts.value = data.first_deal[3];
+
+  // ai_card1.value = data.first_deal_ai[0][0];
+  // ai_card2.value = data.first_deal_ai[0][1];
+  ai_points.value = data.first_deal_ai[1];
+  // ai_blackjack.value = data.first_deal_ai[2];
+  // double_black_jack.value = data.first_deal_ai[3];
+
   new_user_card.value = null;
   playerCards.value = [];
   new_ai_cards.value = null;
@@ -197,6 +233,7 @@ const resetGame = async () => {
   bet_amount.value = data.bet_reset[0];
   current_bet.value = data.winnings[1];
   winnings.value = data.winnings[2];
+  hasDealt.value = false;
 };
 
 const player_turn = async () => {
@@ -258,12 +295,6 @@ const placeBet = async (amount: number) => {
   bet_amount.value = data.bet_placed[0];
   current_bet.value = data.bet_placed[1];
   insufficient_funds.value = data.bet_placed[2];
-};
-
-const showCards = async () => {
-  document.querySelectorAll(".player-cards").forEach((card) => {
-    card.classList.add("show");
-  });
 };
 
 // Keyboard event handler for game controls
@@ -356,13 +387,13 @@ onUnmounted(() => {
         <component
           id="p-card1"
           class="player-cards cards"
-          v-if="player_card1"
+          v-if="player_card1 && hasDealt == true"
           :is="getCardComponent(player_card1)"
         />
         <component
           id="p-card2"
           class="player-cards cards"
-          v-if="player_card2"
+          v-if="player_card2 && hasDealt == true"
           :is="getCardComponent(player_card2)"
         />
 
@@ -388,7 +419,10 @@ onUnmounted(() => {
         <component
           id="ai-card1"
           class="ai-cards cards"
-          v-if="ai_card1 || (is_ai_turn == false && ai_blackjack == null && player_points <= 21)"
+          v-if="
+            ai_card1 ||
+            (is_ai_turn == false && ai_blackjack == null && player_points <= 21 && hasDealt == true)
+          "
           :is="
             is_ai_turn || blackjack || ai_blackjack || (is_player_turn && player_points > 21)
               ? getCardComponent(ai_card1)
@@ -398,7 +432,7 @@ onUnmounted(() => {
         <component
           id="ai-card2"
           class="ai-cards cards"
-          v-if="ai_card2"
+          v-if="ai_card2 && hasDealt == true"
           :is="getCardComponent(ai_card2)"
         />
         <component
@@ -586,21 +620,38 @@ onUnmounted(() => {
 }
 .player-cards.show {
   display: flex;
+  animation: show 0.3s ease-in-out forwards;
 }
 @keyframes show {
   0% {
     opacity: 0;
-    transform: translateY(0%);
+    top: 0%;
   }
   100% {
     opacity: 1;
-    transform: translateY(60%);
+    top: 60%;
+  }
+}
+@keyframes showAiCards {
+  0% {
+    opacity: 0;
+    top: 0%;
+  }
+  100% {
+    opacity: 1;
+    top: 2%;
   }
 }
 .ai-cards {
   position: absolute;
   height: fit-content;
   width: fit-content;
+  top: -20rem;
+  display: none;
+}
+.ai-cards.show {
+  display: flex;
+  animation: showAiCards 0.6s ease-in-out forwards;
 }
 .dynamic-player-card {
   position: absolute;
@@ -619,12 +670,10 @@ onUnmounted(() => {
   transform: scale(0.7) rotate(-2deg);
 } */
 #ai-card1 {
-  top: 2%;
   left: 10%;
   transform: scale(0.8) rotate(-5deg);
 }
 #ai-card2 {
-  top: 2%;
   left: 15%;
   transform: scale(0.8) rotate(-2.5deg);
 }

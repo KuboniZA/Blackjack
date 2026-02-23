@@ -22,14 +22,22 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
 @app.get("/new-game")
+def get_cards():
+    return {
+        "cards_remaining": game.check_deck(),
+        "bet_reset": game.reset_bet(),
+        "get_points": game.get_points(),
+    }
+
+@app.get("/deal-cards")
 def get_cards():
     return {
         "first_deal_ai": game.ai_new_game(),
         "first_deal": game.new_game_state(),
         "cards_remaining": game.check_deck(),
         "winnings": game.winnings_tracker(),
+        "bet_reset": game.reset_bet(),
     }
 
 
@@ -37,11 +45,11 @@ def get_cards():
 def reset_game():
     return {
         "reset-cards": game.reset_game(),
-        "first_deal_ai": game.ai_new_game(),
-        "first_deal": game.new_game_state(),
+        # "first_deal_ai": game.ai_new_game(),
+        # "first_deal": game.new_game_state(),
         "cards_remaining": game.check_deck(),
         "bet_reset": game.reset_bet(),
-        "winnings": game.winnings_tracker(),
+        # "winnings": game.winnings_tracker(),
     }
 
 @app.post("/hit")

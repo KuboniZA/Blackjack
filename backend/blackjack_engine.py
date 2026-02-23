@@ -91,6 +91,9 @@ class GameEngine:
             "queen": 10,
             "king": 10,
         }
+    
+    def get_points(self):
+        return self.user_points, self.computer_points
 
     def new_game_state(self) -> tuple[list, int, Literal['BLACKJACK'], int] | tuple[list, int, None, None]:
         card_suit = ""
