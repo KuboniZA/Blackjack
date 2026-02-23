@@ -196,6 +196,7 @@ const resetGame = async () => {
 
   bet_amount.value = data.bet_reset[0];
   current_bet.value = data.winnings[1];
+  winnings.value = data.winnings[2];
 };
 
 const player_turn = async () => {
@@ -259,6 +260,12 @@ const placeBet = async (amount: number) => {
   insufficient_funds.value = data.bet_placed[2];
 };
 
+const showCards = async () => {
+  document.querySelectorAll(".player-cards").forEach((card) => {
+    card.classList.add("show");
+  });
+};
+
 // Keyboard event handler for game controls
 
 const handleKeyDown = (event: KeyboardEvent) => {
@@ -285,141 +292,153 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="chips-background">
-    <chips-view :rand1="bet_amount >= 1" id="chip1" class="game-chips" @click="placeBet(1)" />
-    <chips-view :rand5="bet_amount >= 5" id="chip5" class="game-chips" @click="placeBet(5)" />
-    <chips-view :rand10="bet_amount >= 10" id="chip10" class="game-chips" @click="placeBet(10)" />
-    <chips-view :rand25="bet_amount >= 25" id="chip25" class="game-chips" @click="placeBet(25)" />
-    <chips-view :rand50="bet_amount >= 50" id="chip50" class="game-chips" @click="placeBet(50)" />
-    <chips-view
-      :rand100="bet_amount >= 100"
-      id="chip100"
-      class="game-chips"
-      @click="placeBet(100)"
-    />
-    <chips-view
-      :rand500="bet_amount >= 500"
-      id="chip500"
-      class="game-chips"
-      @click="placeBet(500)"
-    />
-    <chips-view
-      :rand1k="bet_amount >= 1000"
-      id="chip1k"
-      class="game-chips"
-      @click="placeBet(1000)"
-    />
-  </div>
-
-  <div class="main-container">
-    <div class="cards-remaining-container">
-      <p class="cards-remaining">
-        <span class="remaining-text">Cards remaining: </span>
-        <span class="cards-rem-number">{{ cards_left }}</span>
-      </p>
-      <button class="reset" @click="resetGame">Reset Game</button>
-    </div>
-    <div class="points-container">
-      <p class="points-text player-pts">
-        Player<span class="points-badge">{{ player_points }}</span>
-      </p>
-      <p v-if="ai_points && player_turn_ai_points == null" class="points-text">
-        Dealer<span class="points-badge">{{ blackjack ? blackjack_ai_pts : ai_points }}</span>
-      </p>
-      <p v-if="player_turn_ai_points" class="points-text">
-        Dealer<span class="points-badge">{{ player_turn_ai_points }}</span>
-      </p>
-    </div>
-
-    <div @click="player_turn" class="hit-stand-container">
-      <span class="add-card">🃏</span>
-      <span>HIT</span>
-    </div>
-    <div @click="ai_turn" class="hit-stand-container stand">
-      <span class="add-card">✋🏾</span>
-      <span>STAND</span>
-    </div>
-    <div class="cards-container">
-      <span v-if="blackjack" class="blackjack">{{ blackjack }}</span>
-      <component
-        id="p-card1"
-        class="player-cards cards"
-        v-if="player_card1"
-        :is="getCardComponent(player_card1)"
+  <div class="game-container">
+    <div class="chips-background">
+      <chips-view :rand1="bet_amount >= 1" id="chip1" class="game-chips" @click="placeBet(1)" />
+      <chips-view :rand5="bet_amount >= 5" id="chip5" class="game-chips" @click="placeBet(5)" />
+      <chips-view :rand10="bet_amount >= 10" id="chip10" class="game-chips" @click="placeBet(10)" />
+      <chips-view :rand25="bet_amount >= 25" id="chip25" class="game-chips" @click="placeBet(25)" />
+      <chips-view :rand50="bet_amount >= 50" id="chip50" class="game-chips" @click="placeBet(50)" />
+      <chips-view
+        :rand100="bet_amount >= 100"
+        id="chip100"
+        class="game-chips"
+        @click="placeBet(100)"
       />
-      <component
-        id="p-card2"
-        class="player-cards cards"
-        v-if="player_card2"
-        :is="getCardComponent(player_card2)"
+      <chips-view
+        :rand500="bet_amount >= 500"
+        id="chip500"
+        class="game-chips"
+        @click="placeBet(500)"
       />
-
-      <component
-        v-for="(playerCard, index) in playerCards"
-        :key="playerCard.id"
-        class="player-cards cards dynamic-player-card"
-        :is="getCardComponent(playerCard.card)"
-        :style="{
-          top: '60%',
-          left: `${20 + index * 4}%`,
-          transform: `scale(0.8) rotate(${-2 + index * -3}deg)`,
-        }"
-      />
-
-      <h1 class="winner" v-if="winner">{{ winner }}</h1>
-      <h1 class="winner" v-if="ai_turn_winner">{{ ai_turn_winner }}</h1>
-      <h1 class="winner" v-if="double_black_jack">{{ double_black_jack }}</h1>
-      <h1 class="winner" v-if="insufficient_funds">{{ insufficient_funds }}</h1>
-
-      <span v-if="ai_blackjack" class="blackjack ai-blackjack">{{ ai_blackjack }}</span>
-
-      <component
-        id="ai-card1"
-        class="ai-cards cards"
-        v-if="ai_card1 || (is_ai_turn == false && ai_blackjack == null && player_points <= 21)"
-        :is="
-          is_ai_turn || blackjack || ai_blackjack || (is_player_turn && player_points > 21)
-            ? getCardComponent(ai_card1)
-            : HiddenCard
-        "
-      />
-      <component
-        id="ai-card2"
-        class="ai-cards cards"
-        v-if="ai_card2"
-        :is="getCardComponent(ai_card2)"
-      />
-      <component
-        v-for="(computerCard, index) in computerCards"
-        :key="computerCard.id"
-        class="player-cards cards dynamic-player-card"
-        :is="getCardComponent(computerCard.card)"
-        :style="{
-          top: '2%',
-          left: `${20 + index * 5}%`,
-          transform: `scale(0.8) rotate(${-2 + index * 3}deg)`,
-        }"
+      <chips-view
+        :rand1k="bet_amount >= 1000"
+        id="chip1k"
+        class="game-chips"
+        @click="placeBet(1000)"
       />
     </div>
-    <div class="bet-counter ammount">
-      <p class="points-text budget">
-        Budget<span class="bet-container">R {{ bet_amount }}</span>
-      </p>
-    </div>
-    <div class="bet-counter winnings">
-      <p class="points-text budget">
-        Winnings<span class="bet-container">R {{ winnings }}</span>
-      </p>
-    </div>
-    <div class="current-bet-container">
-      <p class="points-text budget">
-        Current bet:<span class="current-bet">R {{ current_bet }}</span>
-      </p>
+
+    <div class="main-container">
+      <div class="cards-remaining-container">
+        <p class="cards-remaining">
+          <span class="remaining-text">Cards remaining: </span>
+          <span class="cards-rem-number">{{ cards_left }}</span>
+        </p>
+        <button class="reset" @click="resetGame">Reset Game</button>
+      </div>
+      <div class="points-container">
+        <p class="points-text player-pts">
+          Player<span class="points-badge">{{ player_points }}</span>
+        </p>
+        <p v-if="ai_points && player_turn_ai_points == null" class="points-text">
+          Dealer<span class="points-badge">{{ blackjack ? blackjack_ai_pts : ai_points }}</span>
+        </p>
+        <p v-if="player_turn_ai_points" class="points-text">
+          Dealer<span class="points-badge">{{ player_turn_ai_points }}</span>
+        </p>
+      </div>
+
+      <div @click="player_turn" class="hit-stand-container">
+        <span class="add-card">🃏</span>
+        <span>HIT</span>
+      </div>
+      <div @click="ai_turn" class="hit-stand-container stand">
+        <span class="add-card">✋🏾</span>
+        <span>STAND</span>
+      </div>
+      <div @click="showCards" class="hit-stand-container">
+        <span>PLACE BET</span>
+      </div>
+
+      <div class="cards-container">
+        <span v-if="blackjack" class="blackjack">{{ blackjack }}</span>
+        <component
+          id="p-card1"
+          class="player-cards cards"
+          v-if="player_card1"
+          :is="getCardComponent(player_card1)"
+        />
+        <component
+          id="p-card2"
+          class="player-cards cards"
+          v-if="player_card2"
+          :is="getCardComponent(player_card2)"
+        />
+
+        <component
+          v-for="(playerCard, index) in playerCards"
+          :key="playerCard.id"
+          class="player-cards cards dynamic-player-card"
+          :is="getCardComponent(playerCard.card)"
+          :style="{
+            top: '60%',
+            left: `${20 + index * 4}%`,
+            transform: `scale(0.8) rotate(${-2 + index * -3}deg)`,
+          }"
+        />
+
+        <h1 class="winner" v-if="winner">{{ winner }}</h1>
+        <h1 class="winner" v-if="ai_turn_winner">{{ ai_turn_winner }}</h1>
+        <h1 class="winner" v-if="double_black_jack">{{ double_black_jack }}</h1>
+        <h1 class="winner" v-if="insufficient_funds">{{ insufficient_funds }}</h1>
+
+        <span v-if="ai_blackjack" class="blackjack ai-blackjack">{{ ai_blackjack }}</span>
+
+        <component
+          id="ai-card1"
+          class="ai-cards cards"
+          v-if="ai_card1 || (is_ai_turn == false && ai_blackjack == null && player_points <= 21)"
+          :is="
+            is_ai_turn || blackjack || ai_blackjack || (is_player_turn && player_points > 21)
+              ? getCardComponent(ai_card1)
+              : HiddenCard
+          "
+        />
+        <component
+          id="ai-card2"
+          class="ai-cards cards"
+          v-if="ai_card2"
+          :is="getCardComponent(ai_card2)"
+        />
+        <component
+          v-for="(computerCard, index) in computerCards"
+          :key="computerCard.id"
+          class="player-cards cards dynamic-player-card"
+          :is="getCardComponent(computerCard.card)"
+          :style="{
+            top: '2%',
+            left: `${20 + index * 5}%`,
+            transform: `scale(0.8) rotate(${-2 + index * 3}deg)`,
+          }"
+        />
+      </div>
+      <div class="bet-counter ammount">
+        <p class="points-text budget">
+          Bank<span class="bet-container">R {{ bet_amount }}</span>
+        </p>
+      </div>
+      <div class="bet-counter winnings">
+        <p class="points-text budget">
+          Total Winnings<span class="bet-container">R {{ winnings }}</span>
+        </p>
+      </div>
+      <div class="current-bet-container">
+        <p class="points-text budget">
+          Current bet:<span class="current-bet">R {{ current_bet }}</span>
+        </p>
+      </div>
     </div>
   </div>
 </template>
 
 <style scoped>
+.game-container {
+  position: relative;
+  width: 100dvw;
+  height: 100dvh;
+  overflow: hidden;
+}
 .cards-remaining {
   background: linear-gradient(to right, blue, red);
   font-size: 2rem;
@@ -560,9 +579,23 @@ onUnmounted(() => {
 }
 .player-cards {
   position: absolute;
-  top: 6rem;
+  top: -16rem;
   height: fit-content;
   width: fit-content;
+  display: none;
+}
+.player-cards.show {
+  display: flex;
+}
+@keyframes show {
+  0% {
+    opacity: 0;
+    transform: translateY(0%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(60%);
+  }
 }
 .ai-cards {
   position: absolute;
@@ -573,12 +606,10 @@ onUnmounted(() => {
   position: absolute;
 }
 #p-card1 {
-  top: 60%;
   left: 10%;
   transform: scale(0.8) rotate(5deg);
 }
 #p-card2 {
-  top: 60%;
   left: 15%;
   transform: scale(0.8) rotate(2.5deg);
 }
