@@ -390,12 +390,14 @@ onUnmounted(() => {
           class="player-cards cards"
           v-if="player_card1 && hasDealt == true"
           :is="getCardComponent(player_card1)"
+          style="--index: 0"
         />
         <component
           id="p-card2"
           class="player-cards cards"
           v-if="player_card2 && hasDealt == true"
           :is="getCardComponent(player_card2)"
+          style="--index: 1"
         />
 
         <component
@@ -429,12 +431,14 @@ onUnmounted(() => {
               ? getCardComponent(ai_card1)
               : HiddenCard
           "
+          style="--index: 0"
         />
         <component
           id="ai-card2"
           class="ai-cards cards"
           v-if="ai_card2 && hasDealt == true"
           :is="getCardComponent(ai_card2)"
+          style="--index: 1"
         />
         <component
           v-for="(computerCard, index) in computerCards"
@@ -632,7 +636,8 @@ onUnmounted(() => {
   100% {
     opacity: 1;
     top: 60%;
-    transform: rotate(0deg) scale(0.8);
+    transform: rotate(calc(-2deg + var(--index) * 3deg)) scale(0.8);
+    left: calc(5% + var(--index) * 4%);
   }
 }
 @keyframes showAiCards {
@@ -644,7 +649,8 @@ onUnmounted(() => {
   100% {
     opacity: 1;
     top: 2%;
-    transform: rotate(0deg) scale(0.8);
+    transform: rotate(calc(-2deg + var(--index) * -3deg)) scale(0.8);
+    left: calc(5% + var(--index) * 4%);
   }
 }
 .ai-cards {
@@ -661,27 +667,12 @@ onUnmounted(() => {
 .dynamic-player-card {
   position: absolute;
 }
-#p-card1 {
-  left: 10%;
-  transform: scale(0.8) rotate(5deg);
-}
-#p-card2 {
-  left: 15%;
-  transform: scale(0.8) rotate(2.5deg);
-}
+
 /* #p-card3 {
   top: 60%;
   left: 20%;
   transform: scale(0.7) rotate(-2deg);
 } */
-#ai-card1 {
-  left: 10%;
-  transform: scale(0.8) rotate(-5deg);
-}
-#ai-card2 {
-  left: 15%;
-  transform: scale(0.8) rotate(-2.5deg);
-}
 .points-container {
   color: white;
   position: absolute;
