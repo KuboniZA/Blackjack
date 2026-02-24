@@ -384,6 +384,7 @@ onUnmounted(() => {
 
       <div class="cards-container">
         <span v-if="blackjack" class="blackjack">{{ blackjack }}</span>
+
         <component
           id="p-card1"
           class="player-cards cards"
@@ -626,27 +627,31 @@ onUnmounted(() => {
   0% {
     opacity: 0;
     top: 0%;
+    transform: rotate(-180deg) scale(0.8);
   }
   100% {
     opacity: 1;
     top: 60%;
+    transform: rotate(0deg) scale(0.8);
   }
 }
 @keyframes showAiCards {
   0% {
     opacity: 0;
     top: 0%;
+    transform: rotate(-180deg) scale(0.8);
   }
   100% {
     opacity: 1;
     top: 2%;
+    transform: rotate(0deg) scale(0.8);
   }
 }
 .ai-cards {
   position: absolute;
   height: fit-content;
   width: fit-content;
-  top: -20rem;
+  top: -40rem;
   display: none;
 }
 .ai-cards.show {
