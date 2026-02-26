@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, onMounted, onUnmounted, nextTick } from "vue";
+import { ref, onMounted, onUnmounted, nextTick, h } from "vue";
 import type { Component } from "vue";
 import AceOfClubs from "../Deck1/Clubs/AceOfClubs.vue";
 import AceOfDiamonds from "../Deck1/Diamonds/AceOfDiamonds.vue";
@@ -413,9 +413,9 @@ onUnmounted(() => {
 
         <component
           id="ai-card1"
-          class="ai-cards cards"
+          class="ai-cards cards showAiCards"
           v-if="
-            ai_card1 ||
+            (ai_card1 && hasDealt == true) ||
             (is_ai_turn == false && ai_blackjack == null && player_points <= 21 && hasDealt == true)
           "
           :is="
@@ -427,8 +427,8 @@ onUnmounted(() => {
         />
         <component
           id="ai-card2"
-          class="ai-cards cards"
-          v-if="ai_card2 && hasDealt == true"
+          class="ai-cards cards showAiCards"
+          v-if="ai_card2"
           :is="getCardComponent(ai_card2)"
           style="--index: 1"
         />
@@ -645,7 +645,7 @@ onUnmounted(() => {
   100% {
     opacity: 1;
     top: 2%;
-    transform: rotate(calc(-2deg + var(--index) * -3deg)) scale(0.8);
+    transform: rotate(calc(-2deg + var(--index) * 3deg)) scale(0.8);
     left: calc(5% + var(--index) * 4%);
   }
 }
@@ -654,16 +654,17 @@ onUnmounted(() => {
   height: fit-content;
   width: fit-content;
   top: -40rem;
-  display: none;
+  /* display: none; */
 }
 .dynamic-ai-card {
   position: absolute;
   top: -16rem;
   height: fit-content;
   width: fit-content;
-  display: none;
+  /* display: none; */
 }
-.ai-cards.show {
+.ai-cards.showAiCards,
+.dynamic-ai-card.showAiCards {
   display: flex;
   animation: showAiCards 0.6s ease-in-out forwards;
 }
