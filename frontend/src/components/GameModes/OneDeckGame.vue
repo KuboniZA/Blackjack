@@ -197,10 +197,6 @@ const showCards = async () => {
     }
     await sleep(200);
   }
-
-  document.querySelectorAll(".player-cards").forEach((card) => {
-    card.classList.add("show");
-  });
 };
 
 const resetGame = async () => {
@@ -401,15 +397,11 @@ onUnmounted(() => {
         />
 
         <component
-          v-for="(playerCard, index) in playerCards"
+          v-for="playerCard in playerCards"
           :key="playerCard.id"
-          class="player-cards cards dynamic-player-card"
+          class="cards dynamic-player-card show"
           :is="getCardComponent(playerCard.card)"
-          :style="{
-            top: '60%',
-            left: `${20 + index * 4}%`,
-            transform: `scale(0.8) rotate(${-2 + index * -3}deg)`,
-          }"
+          :style="{ '--index': playerCard.id + 1 }"
         />
 
         <h1 class="winner" v-if="winner">{{ winner }}</h1>
@@ -441,15 +433,11 @@ onUnmounted(() => {
           style="--index: 1"
         />
         <component
-          v-for="(computerCard, index) in computerCards"
+          v-for="computerCard in computerCards"
           :key="computerCard.id"
-          class="player-cards cards dynamic-player-card"
+          class="cards dynamic-ai-card showAiCards"
           :is="getCardComponent(computerCard.card)"
-          :style="{
-            top: '2%',
-            left: `${20 + index * 5}%`,
-            transform: `scale(0.8) rotate(${-2 + index * 3}deg)`,
-          }"
+          :style="{ '--index': computerCard.id + 1 }"
         />
       </div>
       <div class="bet-counter ammount">
@@ -623,9 +611,17 @@ onUnmounted(() => {
   width: fit-content;
   display: none;
 }
-.player-cards.show {
+.player-cards.show,
+.dynamic-player-card.show {
   display: flex;
   animation: show 0.3s ease-in-out forwards;
+}
+.dynamic-player-card {
+  position: absolute;
+  top: -16rem;
+  height: fit-content;
+  width: fit-content;
+  display: none;
 }
 @keyframes show {
   0% {
@@ -660,12 +656,16 @@ onUnmounted(() => {
   top: -40rem;
   display: none;
 }
+.dynamic-ai-card {
+  position: absolute;
+  top: -16rem;
+  height: fit-content;
+  width: fit-content;
+  display: none;
+}
 .ai-cards.show {
   display: flex;
   animation: showAiCards 0.6s ease-in-out forwards;
-}
-.dynamic-player-card {
-  position: absolute;
 }
 
 /* #p-card3 {
