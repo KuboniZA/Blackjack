@@ -278,7 +278,7 @@ const winnings = ref<number>(0);
 const current_bet = ref<number>(0);
 const insufficient_funds = ref<string | null>(null);
 
-const placeBet = async (amount: number) => {
+const placeBet = async (amount: number, chipId: string) => {
   const response = await fetch("http://127.0.0.1:8000/place-bet", {
     method: "POST",
     headers: {
@@ -291,6 +291,33 @@ const placeBet = async (amount: number) => {
   bet_amount.value = data.bet_placed[0];
   current_bet.value = data.bet_placed[1];
   insufficient_funds.value = data.bet_placed[2];
+  addChips(chipId);
+};
+
+const addChips = (chipId: string) => {
+  const chipElement = document.getElementById(chipId)?.querySelector(".chips");
+  if (!chipElement) return;
+  console.log(chipElement);
+
+  const chip = chipElement.getBoundingClientRect();
+  console.log(chip.top, chip.left);
+
+  const clone = chipElement.cloneNode(true) as HTMLElement;
+  document.body.appendChild(clone);
+  // clone.style.all = "unset";
+  clone.style.position = "fixed";
+  clone.style.left = `${chip.left}px`;
+  clone.style.top = `${chip.top}px`;
+  clone.style.transition = "all 0.2s ease-in-out";
+  clone.style.margin = "0";
+
+  clone.getBoundingClientRect();
+
+  const centerX = window.innerWidth / 2 - chip.width / 2;
+  const centerY = window.innerHeight / 2 - chip.height / 2;
+
+  clone.style.left = `${centerX}px`;
+  clone.style.top = `${centerY}px`;
 };
 
 // Keyboard event handler for game controls
@@ -321,40 +348,65 @@ onUnmounted(() => {
 <template>
   <div class="game-container">
     <div class="chips-background">
-      <chips-view :rand1="bet_amount >= 1" id="chip1" class="game-chips" @click="placeBet(1)" />
-      <chips-view :rand5="bet_amount >= 5" id="chip5" class="game-chips" @click="placeBet(5)" />
-      <chips-view :rand10="bet_amount >= 10" id="chip10" class="game-chips" @click="placeBet(10)" />
-      <chips-view :rand25="bet_amount >= 25" id="chip25" class="game-chips" @click="placeBet(25)" />
-      <chips-view :rand50="bet_amount >= 50" id="chip50" class="game-chips" @click="placeBet(50)" />
+      <chips-view
+        :rand1="bet_amount >= 1"
+        id="chip1"
+        class="game-chips"
+        @click="placeBet(1, 'chip1')"
+      />
+      <chips-view
+        :rand5="bet_amount >= 5"
+        id="chip5"
+        class="game-chips"
+        @click="placeBet(5, 'chip5')"
+      />
+      <chips-view
+        :rand10="bet_amount >= 10"
+        id="chip10"
+        class="game-chips"
+        @click="placeBet(10, 'chip10')"
+      />
+      <chips-view
+        :rand25="bet_amount >= 25"
+        id="chip25"
+        class="game-chips"
+        @click="placeBet(25, 'chip25')"
+      />
+      <chips-view
+        :rand50="bet_amount >= 50"
+        id="chip50"
+        class="game-chips"
+        @click="placeBet(50, 'chip50')"
+      />
       <chips-view
         :rand100="bet_amount >= 100"
         id="chip100"
         class="game-chips"
-        @click="placeBet(100)"
+        @click="placeBet(100, 'chip100')"
       />
       <chips-view
         :rand500="bet_amount >= 500"
         id="chip500"
         class="game-chips"
-        @click="placeBet(500)"
+        @click="placeBet(500, 'chip500')"
       />
       <chips-view
         :rand1k="bet_amount >= 1000"
         id="chip1k"
         class="game-chips"
-        @click="placeBet(1000)"
+        @click="placeBet(1000, 'chip1k')"
       />
     </div>
 
     <div class="main-container">
-      <div class="cards-remaining-container">
+      <div v-if="hasDealt == true" class="cards-remaining-container">
         <p class="cards-remaining">
           <span class="remaining-text">Cards remaining: </span>
           <span class="cards-rem-number">{{ cards_left }}</span>
         </p>
         <button class="reset" @click="resetGame">Reset Game</button>
       </div>
-      <div class="points-container">
+      <div v-if="hasDealt == true" class="points-container">
         <p class="points-text player-pts">
           Player<span class="points-badge">{{ player_points }}</span>
         </p>
@@ -366,15 +418,15 @@ onUnmounted(() => {
         </p>
       </div>
 
-      <div @click="player_turn" class="hit-stand-container">
+      <div v-if="hasDealt == true" @click="player_turn" class="hit-stand-container">
         <span class="add-card">🃏</span>
         <span>HIT</span>
       </div>
-      <div @click="ai_turn" class="hit-stand-container stand">
+      <div v-if="hasDealt == true" @click="ai_turn" class="hit-stand-container stand">
         <span class="add-card">✋🏾</span>
         <span>STAND</span>
       </div>
-      <div @click="showCards" class="hit-stand-container">
+      <div @click="showCards" class="hit-stand-container place-bet-container">
         <span>PLACE BET</span>
       </div>
 
@@ -445,7 +497,7 @@ onUnmounted(() => {
           Bank<span class="bet-container">R {{ bet_amount }}</span>
         </p>
       </div>
-      <div class="bet-counter winnings">
+      <div v-if="hasDealt == true" class="bet-counter winnings">
         <p class="points-text budget">
           Total Winnings<span class="bet-container">R {{ winnings }}</span>
         </p>
@@ -780,6 +832,8 @@ onUnmounted(() => {
   border-radius: 25px;
   width: 47rem;
   height: 28rem;
+  top: 50%;
+  transform: translateY(-50%);
   z-index: 5;
 }
 .bet-counter {
@@ -819,13 +873,25 @@ onUnmounted(() => {
 }
 .current-bet-container {
   position: absolute;
-  top: 50%;
-  left: 20%;
+  top: 30%;
+  left: 50%;
+  transform: translateX(-50%);
   width: 20rem;
   color: white;
 }
 .winnings {
   top: 82%;
   left: 60%;
+}
+.place-bet-container {
+  top: 65%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+}
+.place-bet-container:hover {
+  cursor: pointer;
+  transform: translateX(-50%) scale(1.02);
+  background-color: rgba(128, 128, 128, 0.492);
 }
 </style>
