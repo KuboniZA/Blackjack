@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, onMounted, onUnmounted, nextTick, h } from "vue";
+import { ref, onMounted, onUnmounted, nextTick } from "vue";
 import type { Component } from "vue";
 import AceOfClubs from "../Deck1/Clubs/AceOfClubs.vue";
 import AceOfDiamonds from "../Deck1/Diamonds/AceOfDiamonds.vue";
@@ -164,6 +164,7 @@ const newGame = async () => {
   current_bet.value = data.bet_reset[1];
 
   hasDealt.value = false;
+  betPlaced.value = false;
 };
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -192,8 +193,10 @@ const showCards = async () => {
   const cardIds = ["p-card1", "p-card2", "ai-card1", "ai-card2"];
   for (const id of cardIds) {
     const cardElement = document.getElementById(id);
+    const chipsElement = document.querySelector(".chips-background, .game-chips");
     if (cardElement) {
       cardElement.classList.add("show");
+      chipsElement?.classList.add("hide");
     }
     await sleep(200);
   }
@@ -277,6 +280,7 @@ const bet_amount = ref<number>(0);
 const winnings = ref<number>(0);
 const current_bet = ref<number>(0);
 const insufficient_funds = ref<string | null>(null);
+const betPlaced = ref<boolean>(false);
 
 const placeBet = async (amount: number, chipId: string) => {
   const response = await fetch("http://127.0.0.1:8000/place-bet", {
@@ -287,7 +291,7 @@ const placeBet = async (amount: number, chipId: string) => {
     body: JSON.stringify({ amount }),
   });
   const data = await response.json();
-  console.log("Bet placed:", data);
+  betPlaced.value = true;
   bet_amount.value = data.bet_placed[0];
   current_bet.value = data.bet_placed[1];
   insufficient_funds.value = data.bet_placed[2];
@@ -426,7 +430,11 @@ onUnmounted(() => {
         <span class="add-card">✋🏾</span>
         <span>STAND</span>
       </div>
-      <div @click="showCards" class="hit-stand-container place-bet-container">
+      <div
+        v-if="betPlaced == true"
+        @click="showCards"
+        class="hit-stand-container place-bet-container"
+      >
         <span>PLACE BET</span>
       </div>
 
@@ -823,6 +831,19 @@ onUnmounted(() => {
   width: fit-content;
   height: fit-content;
   z-index: 5;
+}
+.hide {
+  animation: hideChips 0.25s ease-in-out forwards;
+}
+@keyframes hideChips {
+  0% {
+    opacity: 1;
+    top: 50%;
+  }
+  100% {
+    opacity: 0;
+    top: 5%;
+  }
 }
 .chips-background {
   position: absolute;
