@@ -194,11 +194,14 @@ const showCards = async () => {
   for (const id of cardIds) {
     const cardElement = document.getElementById(id);
     const chipsElement = document.querySelector(".chips-background, .game-chips");
+    const placeBetElement = document.querySelector(".place-bet-container");
     if (cardElement) {
       cardElement.classList.add("show");
+      // cardElement.classList.add("showAiCards");
       chipsElement?.classList.add("hide");
+      placeBetElement?.classList.add("hidePBC");
     }
-    await sleep(200);
+    await sleep(300);
   }
 };
 
@@ -430,11 +433,7 @@ onUnmounted(() => {
         <span class="add-card">✋🏾</span>
         <span>STAND</span>
       </div>
-      <div
-        v-if="betPlaced == true"
-        @click="showCards"
-        class="hit-stand-container place-bet-container"
-      >
+      <div v-if="betPlaced == true" @click="showCards" class="place-bet-container">
         <span>PLACE BET</span>
       </div>
 
@@ -674,7 +673,7 @@ onUnmounted(() => {
 .player-cards.show,
 .dynamic-player-card.show {
   display: flex;
-  animation: show 0.3s ease-in-out forwards;
+  animation: show 0.2s linear forwards;
 }
 .dynamic-player-card {
   position: absolute;
@@ -726,7 +725,7 @@ onUnmounted(() => {
 .ai-cards.showAiCards,
 .dynamic-ai-card.showAiCards {
   display: flex;
-  animation: showAiCards 0.6s ease-in-out forwards;
+  animation: showAiCards 1.3s ease-in-out forwards;
 }
 
 /* #p-card3 {
@@ -905,6 +904,15 @@ onUnmounted(() => {
   left: 60%;
 }
 .place-bet-container {
+  color: white;
+  background-color: rgba(255, 255, 255, 0.542);
+  font-size: 2rem;
+  border: 2px solid white;
+  width: fit-content;
+  padding: 1rem 2rem 1rem 2rem;
+  border-radius: 25px;
+  position: absolute;
+  backdrop-filter: blur(5px);
   top: 65%;
   left: 50%;
   transform: translateX(-50%);
@@ -914,5 +922,16 @@ onUnmounted(() => {
   cursor: pointer;
   transform: translateX(-50%) scale(1.02);
   background-color: rgba(128, 128, 128, 0.492);
+}
+.hidePBC {
+  animation: hidePlaceBet 0.5s ease-in-out forwards;
+}
+@keyframes hidePlaceBet {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
 }
 </style>
