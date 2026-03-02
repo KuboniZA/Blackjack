@@ -190,16 +190,22 @@ const showCards = async () => {
 
   await nextTick();
 
-  const cardIds = ["p-card1", "p-card2", "ai-card1", "ai-card2"];
-  for (const id of cardIds) {
+  for (const id of ["p-card1", "p-card2"]) {
     const cardElement = document.getElementById(id);
     const chipsElement = document.querySelector(".chips-background, .game-chips");
     const placeBetElement = document.querySelector(".place-bet-container");
     if (cardElement) {
       cardElement.classList.add("show");
-      // cardElement.classList.add("showAiCards");
       chipsElement?.classList.add("hide");
       placeBetElement?.classList.add("hidePBC");
+    }
+    await sleep(300);
+  }
+
+  for (const id of ["ai-card1", "ai-card2"]) {
+    const aiCardElement = document.getElementById(id);
+    if (aiCardElement) {
+      aiCardElement.classList.add("showAiCards");
     }
     await sleep(300);
   }
@@ -472,7 +478,7 @@ onUnmounted(() => {
 
         <component
           id="ai-card1"
-          class="ai-cards cards showAiCards"
+          class="ai-cards cards"
           v-if="
             (ai_card1 && hasDealt == true) ||
             (is_ai_turn == false && ai_blackjack == null && player_points <= 21 && hasDealt == true)
@@ -486,7 +492,7 @@ onUnmounted(() => {
         />
         <component
           id="ai-card2"
-          class="ai-cards cards showAiCards"
+          class="ai-cards cards"
           v-if="ai_card2"
           :is="getCardComponent(ai_card2)"
           style="--index: 1"
@@ -713,19 +719,19 @@ onUnmounted(() => {
   height: fit-content;
   width: fit-content;
   top: -40rem;
-  /* display: none; */
+  display: none;
 }
 .dynamic-ai-card {
   position: absolute;
   top: -16rem;
   height: fit-content;
   width: fit-content;
-  /* display: none; */
+  display: none;
 }
 .ai-cards.showAiCards,
 .dynamic-ai-card.showAiCards {
   display: flex;
-  animation: showAiCards 1.3s ease-in-out forwards;
+  animation: showAiCards 0.2s linear forwards;
 }
 
 /* #p-card3 {
