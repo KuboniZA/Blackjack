@@ -168,6 +168,7 @@ const newGame = async () => {
 };
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+const showHiddenCard = ref<boolean>(false);
 
 const showCards = async () => {
   const response = await fetch("http://127.0.0.1:8000/deal-cards");
@@ -186,6 +187,7 @@ const showCards = async () => {
   ai_blackjack.value = data.first_deal_ai[2];
   double_black_jack.value = data.first_deal_ai[3];
 
+  showHiddenCard.value = true;
   hasDealt.value = true;
 
   await nextTick();
@@ -202,7 +204,7 @@ const showCards = async () => {
     await sleep(300);
   }
 
-  for (const id of ["ai-card1", "ai-card2"]) {
+  for (const id of ["ai-hiddenCard", "ai-card2"]) {
     const aiCardElement = document.getElementById(id);
     if (aiCardElement) {
       aiCardElement.classList.add("showAiCards");
@@ -271,6 +273,17 @@ const ai_turn = async () => {
   new_ai_cards.value = data.ai_cards[0];
   const allAiCards = new_ai_cards.value;
   ai_points.value = data.ai_cards[1];
+  showHiddenCard.value = false;
+
+  await nextTick();
+
+  for (const id of ["ai-card1"]) {
+    const aiCardElement = document.getElementById(id);
+    if (aiCardElement) {
+      aiCardElement.classList.add("showAiCards");
+    }
+    await sleep(300);
+  }
 
   if (allAiCards && allAiCards.length > 2) {
     for (let index = 2; index < allAiCards.length; index++) {
@@ -331,6 +344,7 @@ const addChips = (chipId: string) => {
 
   clone.style.left = `${centerX}px`;
   clone.style.top = `${centerY}px`;
+  clone.style.zIndex = "-1";
 };
 
 // Keyboard event handler for game controls
@@ -468,26 +482,35 @@ onUnmounted(() => {
           :is="getCardComponent(playerCard.card)"
           :style="{ '--index': playerCard.id + 1 }"
         />
-
-        <h1 class="winner" v-if="winner">{{ winner }}</h1>
-        <h1 class="winner" v-if="ai_turn_winner">{{ ai_turn_winner }}</h1>
-        <h1 class="winner" v-if="double_black_jack">{{ double_black_jack }}</h1>
-        <h1 class="winner" v-if="insufficient_funds">{{ insufficient_funds }}</h1>
+        <div class="winner-container">
+          <h1 class="winner" v-if="winner">{{ winner }}</h1>
+          <h1 class="winner" v-if="ai_turn_winner">{{ ai_turn_winner }}</h1>
+          <h1 class="winner" v-if="double_black_jack">{{ double_black_jack }}</h1>
+          <h1 class="winner" v-if="insufficient_funds">{{ insufficient_funds }}</h1>
+        </div>
 
         <span v-if="ai_blackjack" class="blackjack ai-blackjack">{{ ai_blackjack }}</span>
 
         <component
+          id="ai-hiddenCard"
+          class="ai-cards cards"
+          v-if="
+            (hasDealt == true && showHiddenCard == true) ||
+            (is_ai_turn == false && ai_blackjack == null && player_points <= 21)
+          "
+          :is="HiddenCard"
+          style="--index: 0"
+        />
+        <component
           id="ai-card1"
           class="ai-cards cards"
           v-if="
-            (ai_card1 && hasDealt == true) ||
-            (is_ai_turn == false && ai_blackjack == null && player_points <= 21 && hasDealt == true)
+            (is_ai_turn && showHiddenCard == false) ||
+            blackjack ||
+            ai_blackjack ||
+            (is_player_turn && player_points > 21)
           "
-          :is="
-            is_ai_turn || blackjack || ai_blackjack || (is_player_turn && player_points > 21)
-              ? getCardComponent(ai_card1)
-              : HiddenCard
-          "
+          :is="getCardComponent(ai_card1)"
           style="--index: 0"
         />
         <component
@@ -813,6 +836,13 @@ onUnmounted(() => {
 .ai-blackjack {
   top: 15%;
 }
+.winner-container {
+  height: 100dvh;
+  width: 100dvw;
+  position: fixed;
+  left: 0;
+  top: 0;
+}
 .winner {
   font-size: 3rem;
   position: absolute;
@@ -824,12 +854,11 @@ onUnmounted(() => {
   padding: 1rem;
   border: 2px solid white;
   border-radius: 15px;
-  background: linear-gradient(to bottom right, blue, red);
+  background: linear-gradient(to bottom right, rgba(0, 0, 255, 0.789), rgba(255, 0, 0, 0.728));
   color: white;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 3s ease-in;
 }
 .game-chips {
   position: relative;
@@ -899,15 +928,15 @@ onUnmounted(() => {
 }
 .current-bet-container {
   position: absolute;
-  top: 30%;
-  left: 50%;
+  top: 80%;
+  left: 68.25%;
   transform: translateX(-50%);
   width: 20rem;
   color: white;
 }
 .winnings {
-  top: 82%;
-  left: 60%;
+  top: 10%;
+  left: 10%;
 }
 .place-bet-container {
   color: white;
