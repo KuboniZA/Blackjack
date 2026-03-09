@@ -13,31 +13,65 @@ const hideWelcomeShowMenu = () => {
   // showMenu.value = true;
 };
 
+const muteToggled = ref<boolean>(true);
+
+const ToggleMute = () => {
+  muteToggled.value = !muteToggled.value;
+};
+
 const emit = defineEmits(["play"]);
 </script>
 
 <template>
   <!-- <GameModes :isVisible="showMenu" /> -->
-  <div class="card-scale z-index">
-    <AceOfSpades :spade1="showWelcome" id="ace" />
-  </div>
-  <div class="card-scale">
-    <QueenOfHearts :heartQ="showWelcome" id="queen" />
-  </div>
-  <div class="chips">
-    <ChipsView :rand500="showWelcome" id="chip500" class="welcome-chips" />
-    <ChipsView :rand25="showWelcome" id="chip25" class="welcome-chips" />
-    <ChipsView :rand1m="showWelcome" id="chip1m" class="welcome-chips" />
-    <ChipsView :rand5="showWelcome" id="chip5" class="welcome-chips" />
-  </div>
+  <div class="main-container">
+    <div class="card-scale z-index">
+      <AceOfSpades :spade1="showWelcome" id="ace" />
+    </div>
+    <div class="card-scale">
+      <QueenOfHearts :heartQ="showWelcome" id="queen" />
+    </div>
+    <div class="chips">
+      <ChipsView :rand500="showWelcome" id="chip500" class="welcome-chips" />
+      <ChipsView :rand25="showWelcome" id="chip25" class="welcome-chips" />
+      <ChipsView :rand1m="showWelcome" id="chip1m" class="welcome-chips" />
+      <ChipsView :rand5="showWelcome" id="chip5" class="welcome-chips" />
+    </div>
 
-  <div class="welcome-container">
-    <h1>Welcome to</h1>
-    <button id="play-btn" @click="(emit('play'), hideWelcomeShowMenu)">Play</button>
+    <button class="speaker" @click="ToggleMute">
+      <span v-if="muteToggled">🔊</span>
+      <span v-else>🔇</span>
+    </button>
+
+    <div class="welcome-container">
+      <h1>Welcome to</h1>
+      <button id="play-btn" @click="(emit('play'), hideWelcomeShowMenu)">Play</button>
+    </div>
   </div>
 </template>
 
 <style scoped>
+.main-container {
+  position: fixed;
+  width: 100dvw;
+  height: 100dvh;
+}
+.speaker {
+  position: absolute;
+  font-size: 2.5rem;
+  right: 4%;
+  top: 5%;
+  width: 5rem;
+  height: 5rem;
+  background: rgba(255, 255, 255, 0.606);
+  border-radius: 50%;
+  border: 2px solid white;
+}
+.speaker:hover {
+  transform: scale(1.02);
+  background: grey;
+  cursor: pointer;
+}
 .welcome-container {
   width: 80dvw;
   height: 80dvh;
