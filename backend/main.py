@@ -48,8 +48,15 @@ def reset_game():
         # "first_deal_ai": game.ai_new_game(),
         # "first_deal": game.new_game_state(),
         "cards_remaining": game.check_deck(),
-        "bet_reset": game.reset_bet(),
+        "new_round": game.reset_round(),
         # "winnings": game.winnings_tracker(),
+    }
+
+@app.post("/reset-round")
+def round_reset():
+    return {
+        "new_round": game.reset_round(),
+        "cards_remaining": game.check_deck(),
     }
 
 @app.post("/hit")

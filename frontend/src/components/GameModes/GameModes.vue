@@ -1,21 +1,26 @@
 <script lang="ts" setup>
-defineProps({
-  isVisible: Boolean,
-});
+// import { ref } from "vue";
+// import OneDeckGame from "./OneDeckGame.vue";
+
+const emit = defineEmits(["oneDeck", "back"]);
+
+// defineProps({
+//   isVisible: Boolean,
+// });
 </script>
 
 <template>
-  <div id="game-mode-modal" v-if="isVisible">
+  <div id="game-mode-modal">
     <div id="game-mode-container">
-      <button class="game-mode-btn GM">1 Deck</button>
+      <button class="game-mode-btn GM" @click="emit('oneDeck')">1 Deck</button>
       <button class="game-mode-btn GM">2 Decks</button>
-      <button class="game-mode-btn GM">3 Decks</button>
+      <!--<button class="game-mode-btn GM">3 Decks</button>
       <button class="game-mode-btn GM">4 Decks</button>
       <button class="game-mode-btn GM">5 Decks</button>
       <button class="game-mode-btn GM">6 Decks</button>
       <button class="game-mode-btn GM">7 Decks</button>
-      <button class="game-mode-btn GM">8 Decks</button>
-      <button id="back-btn">Back</button>
+      <button class="game-mode-btn GM">8 Decks</button> -->
+      <button id="back-btn" @click="emit('back')">Back</button>
     </div>
   </div>
 </template>
@@ -57,7 +62,7 @@ defineProps({
   z-index: 20;
   left: 50%;
   top: 50%;
-  transform: translateX(-50%) translateY(-50%);
+  transform: translateX(-50%);
 }
 #back-btn {
   position: relative;

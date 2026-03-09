@@ -147,7 +147,8 @@ class GameEngine:
                 if user_card_value1 == "ace" and user_card_value2 in ("ten", "jack", "queen", "king"):
                     self.user_points += self.points_dictionary[user_card_value2]
                     self.computer_points += self.computer_hidden_point
-                    self.winnings += self.bet_amount
+                    # self.winnings += self.bet_amount
+                    self.budget += (self.bet_amount * 2)
                     self.bet_amount = 0
                     self.winnings_tracker()
                     return self.user_cards, self.user_points, "BLACKJACK", self.computer_points
@@ -155,7 +156,8 @@ class GameEngine:
                     self.user_points += 10
                     self.user_points += self.points_dictionary[user_card_value2]
                     self.computer_points += self.computer_hidden_point
-                    self.winnings += self.bet_amount
+                    # self.winnings += self.bet_amount
+                    self.budget += (self.bet_amount * 2)
                     self.bet_amount = 0
                     self.winnings_tracker()
                     return self.user_cards, self.user_points, "BLACKJACK", self.computer_points
@@ -217,8 +219,8 @@ class GameEngine:
                 self.computer_points += self.computer_hidden_point
                 self.computer_points += self.points_dictionary[ai_card_value2]
                 if self.computer_points == 21 == self.user_points:
-                    self.budget += self.bet_amount
-                    self.winnings -= self.bet_amount
+                    self.budget -= self.bet_amount
+                    # self.winnings -= self.bet_amount
                     self.winnings_tracker()
                     return self.computer_card, self.computer_points, "BLACKJACK", 'PUSH'
                 else:
@@ -325,6 +327,16 @@ class GameEngine:
             "queen",
             "king",
         ]
+    
+    def reset_round(self):
+        self.user_points = 0
+        self.computer_points = 0
+        self.computer_hidden_point = 0
+        self.bet_amount = 0
+        self.user_cards = []
+        self.computer_card = []
+        
+        return self.budget, self.bet_amount, self.user_points, self.computer_points
 
     def bet(self, amount: int) -> bool:
         if self.budget > 0:    
@@ -340,7 +352,7 @@ class GameEngine:
         return self.budget, self.bet_amount
     
     def winnings_tracker(self) -> tuple[int, int, int]:
-        return self.budget, self.bet_amount, self.winnings
+        return self.budget, self.bet_amount
             
 
     def user_turn(self) -> tuple[tuple[str, str], int] | tuple[tuple[str, str], int, tuple[str, str], int, Literal['DEALER WINS!']]:
@@ -454,7 +466,7 @@ class GameEngine:
                                 continue
                         elif computer_points > 21:
                             ai_bust = True
-                            self.winnings += self.bet_amount
+                            self.budget += (self.bet_amount * 2)
                             self.bet_amount = 0
                             self.winnings_tracker()
                             result = "YOU WIN!"
@@ -511,7 +523,7 @@ class GameEngine:
                             continue
                     elif computer_points > 21 or (computer_points > 21 and self.computer_ace_adjusted):
                         ai_bust = True
-                        self.winnings += self.bet_amount
+                        self.budget += (self.bet_amount * 2) 
                         self.bet_amount = 0
                         self.winnings_tracker()
                         result = "YOU WIN!"

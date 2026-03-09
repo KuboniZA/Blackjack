@@ -76,6 +76,7 @@ const ai_turn_winner = ref<string | null>(null);
 const double_black_jack = ref<string | null>(null);
 
 const hasDealt = ref<boolean>(false);
+const roundOver = ref<boolean>(false);
 
 const new_user_card = ref<[string, string] | null>(null);
 type PlayerCard = { id: number; card: [string, string]; revealed: boolean };
@@ -160,7 +161,7 @@ const newGame = async () => {
   player_points.value = user_points;
   ai_points.value = ai_points_value;
 
-  bet_amount.value = data.bet_reset[0];
+  bank_balance.value = data.bet_reset[0];
   current_bet.value = data.bet_reset[1];
 
   hasDealt.value = false;
@@ -174,6 +175,7 @@ const showCards = async () => {
   const response = await fetch("http://127.0.0.1:8000/deal-cards");
   const data = await response.json();
   cards_left.value = data.cards_remaining.card_count;
+  emit("betPlaced");
 
   player_card1.value = data.first_deal[0][0];
   player_card2.value = data.first_deal[0][1];
@@ -194,11 +196,11 @@ const showCards = async () => {
 
   for (const id of ["p-card1", "p-card2"]) {
     const cardElement = document.getElementById(id);
-    const chipsElement = document.querySelector(".chips-background, .game-chips");
+    const chipsElement = document.querySelectorAll(".chips-background, .game-chips");
     const placeBetElement = document.querySelector(".place-bet-container");
     if (cardElement) {
       cardElement.classList.add("show");
-      chipsElement?.classList.add("hide");
+      chipsElement.forEach((el) => el.classList.add("hide"));
       placeBetElement?.classList.add("hidePBC");
     }
     await sleep(300);
@@ -211,24 +213,28 @@ const showCards = async () => {
     }
     await sleep(300);
   }
+
+  if (blackjack.value || ai_blackjack.value || double_black_jack.value) {
+    await endRound();
+  }
 };
 
 const resetGame = async () => {
   const response = await fetch("http://127.0.0.1:8000/reset-game", { method: "POST" });
   const data = await response.json();
   cards_left.value = data.cards_remaining.card_count;
+  await nextTick();
+  resetRound();
+  emit("reset");
+};
 
-  // player_card1.value = data.first_deal[0][0];
-  // player_card2.value = data.first_deal[0][1];
-  player_points.value = data.first_deal[1];
-  // blackjack.value = data.first_deal[2];
-  // blackjack_ai_pts.value = data.first_deal[3];
+const resetRound = async () => {
+  const response = await fetch("http://127.0.0.1:8000/reset-round", { method: "POST" });
+  const data = await response.json();
+  cards_left.value = data.cards_remaining.card_count;
 
-  // ai_card1.value = data.first_deal_ai[0][0];
-  // ai_card2.value = data.first_deal_ai[0][1];
-  ai_points.value = data.first_deal_ai[1];
-  // ai_blackjack.value = data.first_deal_ai[2];
-  // double_black_jack.value = data.first_deal_ai[3];
+  player_points.value = data.new_round[2];
+  ai_points.value = data.new_round[3];
 
   new_user_card.value = null;
   playerCards.value = [];
@@ -240,10 +246,32 @@ const resetGame = async () => {
   is_ai_turn.value = false;
   is_player_turn.value = false;
 
-  bet_amount.value = data.bet_reset[0];
-  current_bet.value = data.winnings[1];
-  winnings.value = data.winnings[2];
+  player_card1.value = undefined;
+  player_card2.value = undefined;
+  ai_card1.value = undefined;
+  ai_card2.value = undefined;
+
+  blackjack.value = null;
+  ai_blackjack.value = null;
+  double_black_jack.value = null;
+  insufficient_funds.value = null;
+
+  betPlaced.value = false;
+  bank_balance.value = data.new_round[0];
+  current_bet.value = data.new_round[1];
+  console.log(current_bet);
+
   hasDealt.value = false;
+  roundOver.value = false;
+  showHiddenCard.value = false;
+
+  document.querySelectorAll(".placed-chip").forEach((el) => el.remove());
+  document.querySelectorAll(".chips-background, .game-chips").forEach((el) => {
+    el.classList.remove("hide");
+  });
+  document.querySelectorAll(".place-bet-container").forEach((el) => {
+    el.classList.remove("hidePBC");
+  });
 };
 
 const player_turn = async () => {
@@ -263,6 +291,10 @@ const player_turn = async () => {
   winner.value = data.card[4];
   current_bet.value = data.winnings[1];
   winnings.value = data.winnings[2];
+
+  if (player_points.value > 21) {
+    await endRound();
+  }
 };
 
 const ai_turn = async () => {
@@ -294,11 +326,13 @@ const ai_turn = async () => {
   ai_turn_winner.value = data.ai_cards[2];
   current_bet.value = data.winnings[1];
   winnings.value = data.winnings[2];
+
+  await endRound();
 };
 
 // Betting logic for chips
 
-const bet_amount = ref<number>(0);
+const bank_balance = ref<number>(0);
 const winnings = ref<number>(0);
 const current_bet = ref<number>(0);
 const insufficient_funds = ref<string | null>(null);
@@ -314,7 +348,7 @@ const placeBet = async (amount: number, chipId: string) => {
   });
   const data = await response.json();
   betPlaced.value = true;
-  bet_amount.value = data.bet_placed[0];
+  bank_balance.value = data.bet_placed[0];
   current_bet.value = data.bet_placed[1];
   insufficient_funds.value = data.bet_placed[2];
   addChips(chipId);
@@ -323,14 +357,12 @@ const placeBet = async (amount: number, chipId: string) => {
 const addChips = (chipId: string) => {
   const chipElement = document.getElementById(chipId)?.querySelector(".chips");
   if (!chipElement) return;
-  console.log(chipElement);
-
   const chip = chipElement.getBoundingClientRect();
-  console.log(chip.top, chip.left);
-
   const clone = chipElement.cloneNode(true) as HTMLElement;
   document.body.appendChild(clone);
-  // clone.style.all = "unset";
+
+  clone.classList.add("placed-chip");
+
   clone.style.position = "fixed";
   clone.style.left = `${chip.left}px`;
   clone.style.top = `${chip.top}px`;
@@ -347,6 +379,18 @@ const addChips = (chipId: string) => {
   clone.style.zIndex = "-1";
 };
 
+const endRound = async () => {
+  roundOver.value = true;
+  showHiddenCard.value = false;
+
+  await nextTick();
+  await sleep(1500);
+
+  emit("roundOver");
+
+  await resetRound();
+};
+
 // Keyboard event handler for game controls
 
 const handleKeyDown = (event: KeyboardEvent) => {
@@ -358,7 +402,7 @@ const handleKeyDown = (event: KeyboardEvent) => {
     ai_turn();
   } else if (event.code === "Escape") {
     event.preventDefault();
-    resetGame();
+    resetRound();
   }
 };
 
@@ -370,55 +414,61 @@ onMounted(() => {
 onUnmounted(() => {
   window.removeEventListener("keydown", handleKeyDown);
 });
+
+defineProps({
+  playing: Boolean,
+});
+
+const emit = defineEmits(["betPlaced", "roundOver", "reset"]);
 </script>
 
-<template>
-  <div class="game-container">
+<template class="game-container">
+  <div>
     <div class="chips-background">
       <chips-view
-        :rand1="bet_amount >= 1"
+        :rand1="bank_balance >= 1"
         id="chip1"
         class="game-chips"
         @click="placeBet(1, 'chip1')"
       />
       <chips-view
-        :rand5="bet_amount >= 5"
+        :rand5="bank_balance >= 5"
         id="chip5"
         class="game-chips"
         @click="placeBet(5, 'chip5')"
       />
       <chips-view
-        :rand10="bet_amount >= 10"
+        :rand10="bank_balance >= 10"
         id="chip10"
         class="game-chips"
         @click="placeBet(10, 'chip10')"
       />
       <chips-view
-        :rand25="bet_amount >= 25"
+        :rand25="bank_balance >= 25"
         id="chip25"
         class="game-chips"
         @click="placeBet(25, 'chip25')"
       />
       <chips-view
-        :rand50="bet_amount >= 50"
+        :rand50="bank_balance >= 50"
         id="chip50"
         class="game-chips"
         @click="placeBet(50, 'chip50')"
       />
       <chips-view
-        :rand100="bet_amount >= 100"
+        :rand100="bank_balance >= 100"
         id="chip100"
         class="game-chips"
         @click="placeBet(100, 'chip100')"
       />
       <chips-view
-        :rand500="bet_amount >= 500"
+        :rand500="bank_balance >= 500"
         id="chip500"
         class="game-chips"
         @click="placeBet(500, 'chip500')"
       />
       <chips-view
-        :rand1k="bet_amount >= 1000"
+        :rand1k="bank_balance >= 1000"
         id="chip1k"
         class="game-chips"
         @click="placeBet(1000, 'chip1k')"
@@ -530,14 +580,14 @@ onUnmounted(() => {
       </div>
       <div class="bet-counter ammount">
         <p class="points-text budget">
-          Bank<span class="bet-container">R {{ bet_amount }}</span>
+          Bank<span class="bet-container">R {{ bank_balance }}</span>
         </p>
       </div>
-      <div v-if="hasDealt == true" class="bet-counter winnings">
+      <!-- <div v-if="hasDealt == true" class="bet-counter winnings">
         <p class="points-text budget">
           Total Winnings<span class="bet-container">R {{ winnings }}</span>
         </p>
-      </div>
+      </div> -->
       <div class="current-bet-container">
         <p class="points-text budget">
           Current bet:<span class="current-bet">R {{ current_bet }}</span>
@@ -650,6 +700,7 @@ onUnmounted(() => {
   top: 30rem;
   left: 10%;
   backdrop-filter: blur(5px);
+  z-index: 1;
 }
 .add-card {
   border: 1px solid white;
@@ -658,8 +709,6 @@ onUnmounted(() => {
   background-color: rgba(255, 255, 255, 0.455);
   margin-right: 1rem;
   position: relative;
-  /* justify-items: center;
-  align-items: center; */
 }
 .stand {
   top: 25rem;
@@ -854,7 +903,7 @@ onUnmounted(() => {
   padding: 1rem;
   border: 2px solid white;
   border-radius: 15px;
-  background: linear-gradient(to bottom right, rgba(0, 0, 255, 0.789), rgba(255, 0, 0, 0.728));
+  background: linear-gradient(to bottom right, rgba(0, 0, 255, 0.671), rgba(255, 0, 0, 0.677));
   color: white;
   display: flex;
   align-items: center;
@@ -928,8 +977,8 @@ onUnmounted(() => {
 }
 .current-bet-container {
   position: absolute;
-  top: 80%;
-  left: 68.25%;
+  top: 10%;
+  left: 18.4%;
   transform: translateX(-50%);
   width: 20rem;
   color: white;

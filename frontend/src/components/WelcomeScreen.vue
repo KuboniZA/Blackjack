@@ -1,21 +1,23 @@
 <script lang="ts" setup>
 import { ref } from "vue";
-import GameModes from "./GameModes/GameModes.vue";
+// import GameModes from "./GameModes/GameModes.vue";
 import AceOfSpades from "./Deck1/Spades/AceOfSpades.vue";
 import QueenOfHearts from "./Deck1/Hearts/QueenOfHearts.vue";
 import ChipsView from "./ChipsView.vue";
 
 const showWelcome = ref(true);
-const showMenu = ref(false);
+// const showMenu = ref(false);
 
 const hideWelcomeShowMenu = () => {
   showWelcome.value = false;
-  showMenu.value = true;
+  // showMenu.value = true;
 };
+
+const emit = defineEmits(["play"]);
 </script>
 
 <template>
-  <GameModes :isVisible="showMenu" />
+  <!-- <GameModes :isVisible="showMenu" /> -->
   <div class="card-scale z-index">
     <AceOfSpades :spade1="showWelcome" id="ace" />
   </div>
@@ -29,9 +31,9 @@ const hideWelcomeShowMenu = () => {
     <ChipsView :rand5="showWelcome" id="chip5" class="welcome-chips" />
   </div>
 
-  <div class="welcome-container" v-if="showWelcome">
+  <div class="welcome-container">
     <h1>Welcome to</h1>
-    <button id="play-btn" @click="hideWelcomeShowMenu">Play</button>
+    <button id="play-btn" @click="(emit('play'), hideWelcomeShowMenu)">Play</button>
   </div>
 </template>
 
@@ -44,6 +46,7 @@ const hideWelcomeShowMenu = () => {
   left: 10dvw;
   top: 10dvh;
   align-items: center;
+  z-index: 100;
 }
 h1 {
   position: absolute;
