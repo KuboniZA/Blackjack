@@ -180,19 +180,20 @@ const showCards = async () => {
   player_card1.value = data.first_deal[0][0];
   player_card2.value = data.first_deal[0][1];
   player_points.value = data.first_deal[1];
-  blackjack.value = data.first_deal[2];
-  blackjack_ai_pts.value = data.first_deal[3];
 
   ai_card1.value = data.first_deal_ai[0][0];
   ai_card2.value = data.first_deal_ai[0][1];
   ai_points.value = data.first_deal_ai[1];
-  ai_blackjack.value = data.first_deal_ai[2];
-  double_black_jack.value = data.first_deal_ai[3];
 
   showHiddenCard.value = true;
   hasDealt.value = true;
 
   await nextTick();
+
+  const chipsContainer = document.querySelector(".chips-background");
+  if (chipsContainer) {
+    chipsContainer.classList.add("hideChipsContainer");
+  }
 
   for (const id of ["p-card1", "p-card2"]) {
     const cardElement = document.getElementById(id);
@@ -214,7 +215,16 @@ const showCards = async () => {
     await sleep(300);
   }
 
-  if (blackjack.value || ai_blackjack.value || double_black_jack.value) {
+  if (data.first_deal[2] || data.first_deal_ai[2] || data.first_deal_ai[3]) {
+    await sleep(500);
+    blackjack.value = data.first_deal[2];
+    blackjack_ai_pts.value = data.first_deal[3];
+    ai_blackjack.value = data.first_deal_ai[2];
+    double_black_jack.value = data.first_deal_ai[3];
+    await sleep(500);
+
+    await revealDealerCard();
+    await sleep(500);
     await endRound();
   }
 };
@@ -272,6 +282,22 @@ const resetRound = async () => {
   document.querySelectorAll(".place-bet-container").forEach((el) => {
     el.classList.remove("hidePBC");
   });
+  document.querySelectorAll(".chips-background").forEach((el) => {
+    el.classList.remove("hideChipsContainer");
+  });
+
+  await nextTick();
+
+  const animatedElements = document.querySelectorAll(
+    ".chips-background, .bet-counter, .current-bet-container",
+  );
+
+  animatedElements.forEach((el) => {
+    const element = el as HTMLElement;
+    element.style.animation = "none";
+    void element.offsetHeight;
+    element.style.animation = "";
+  });
 };
 
 const player_turn = async () => {
@@ -281,19 +307,40 @@ const player_turn = async () => {
   is_player_turn.value = true;
 
   new_user_card.value = data.card[0];
-  player_points.value = data.card[1];
 
   if (new_user_card.value != null) {
     const newId = playerCards.value.length + 1;
     playerCards.value.push({ id: newId, card: new_user_card.value, revealed: true });
   }
+  await sleep(500);
+  player_points.value = data.card[1];
   player_turn_ai_points.value = data.card[3];
-  winner.value = data.card[4];
   current_bet.value = data.winnings[1];
   winnings.value = data.winnings[2];
+  if (data.card[4]) {
+    await sleep(750);
+    winner.value = data.card[4];
+  }
 
   if (player_points.value > 21) {
+    showHiddenCard.value = false;
+    await sleep(500);
+    await revealDealerCard();
+    await sleep(500);
     await endRound();
+  }
+};
+
+const revealDealerCard = async () => {
+  showHiddenCard.value = false;
+  is_ai_turn.value = true;
+
+  await nextTick();
+  await sleep(200);
+
+  const aiCardElement = document.getElementById("ai-card1");
+  if (aiCardElement) {
+    aiCardElement.classList.add("showAiCards");
   }
 };
 
@@ -304,8 +351,10 @@ const ai_turn = async () => {
   cards_left.value = data.cards_remaining.card_count;
   new_ai_cards.value = data.ai_cards[0];
   const allAiCards = new_ai_cards.value;
-  ai_points.value = data.ai_cards[1];
   showHiddenCard.value = false;
+
+  await sleep(300);
+  ai_points.value = data.ai_cards[1];
 
   await nextTick();
 
@@ -323,10 +372,14 @@ const ai_turn = async () => {
       computerCards.value.push({ id: aiCardId, card: allAiCards[index], revealed: true });
     }
   }
-  ai_turn_winner.value = data.ai_cards[2];
   current_bet.value = data.winnings[1];
   winnings.value = data.winnings[2];
+  if (data.ai_cards[2]) {
+    await sleep(750);
+    ai_turn_winner.value = data.ai_cards[2];
+  }
 
+  await sleep(500);
   await endRound();
 };
 
@@ -348,10 +401,12 @@ const placeBet = async (amount: number, chipId: string) => {
   });
   const data = await response.json();
   betPlaced.value = true;
+  addChips(chipId);
+
+  await sleep(300);
   bank_balance.value = data.bet_placed[0];
   current_bet.value = data.bet_placed[1];
   insufficient_funds.value = data.bet_placed[2];
-  addChips(chipId);
 };
 
 const addChips = (chipId: string) => {
@@ -384,7 +439,7 @@ const endRound = async () => {
   showHiddenCard.value = false;
 
   await nextTick();
-  await sleep(1500);
+  await sleep(2500);
 
   emit("roundOver");
 
@@ -939,6 +994,31 @@ const emit = defineEmits(["betPlaced", "roundOver", "reset"]);
   top: 50%;
   transform: translateY(-50%);
   z-index: 5;
+  animation: chipsFromLeft 0.6s ease forwards;
+}
+@keyframes chipsFromLeft {
+  0% {
+    transform: translateX(-120%) translateY(-50%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0) translateY(-50%);
+    opacity: 1;
+  }
+}
+.hideChipsContainer {
+  animation: chipsToLeft 0.4s ease forwards;
+}
+
+@keyframes chipsToLeft {
+  0% {
+    transform: translateX(0) translateY(-50%);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(-120%) translateY(-50%);
+    opacity: 0;
+  }
 }
 .bet-counter {
   position: absolute;
@@ -946,6 +1026,17 @@ const emit = defineEmits(["betPlaced", "roundOver", "reset"]);
   left: 10%;
   color: white;
   min-width: 5rem;
+  animation: betCounterFromLeft 0.6s ease forwards;
+}
+@keyframes betCounterFromLeft {
+  0% {
+    transform: translateX(-120%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }
 .bet-container {
   background-color: transparent;
@@ -982,6 +1073,18 @@ const emit = defineEmits(["betPlaced", "roundOver", "reset"]);
   transform: translateX(-50%);
   width: 20rem;
   color: white;
+  animation: slideFromLeft 0.6s ease forwards;
+}
+
+@keyframes slideFromLeft {
+  0% {
+    transform: translateX(-120%) translateX(-50%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0) translateX(-50%);
+    opacity: 1;
+  }
 }
 .winnings {
   top: 10%;

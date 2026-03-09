@@ -335,6 +335,66 @@ class GameEngine:
         self.bet_amount = 0
         self.user_cards = []
         self.computer_card = []
+        self.heart_ranks = [
+            "ace",
+            "two",
+            "three",
+            "four",
+            "five",
+            "six",
+            "seven",
+            "eight",
+            "nine",
+            "ten",
+            "jack",
+            "queen",
+            "king",
+        ]
+        self.diamond_ranks = [
+            "ace",
+            "two",
+            "three",
+            "four",
+            "five",
+            "six",
+            "seven",
+            "eight",
+            "nine",
+            "ten",
+            "jack",
+            "queen",
+            "king",
+        ]
+        self.spade_ranks = [
+            "ace",
+            "two",
+            "three",
+            "four",
+            "five",
+            "six",
+            "seven",
+            "eight",
+            "nine",
+            "ten",
+            "jack",
+            "queen",
+            "king",
+        ]
+        self.club_ranks = [
+            "ace",
+            "two",
+            "three",
+            "four",
+            "five",
+            "six",
+            "seven",
+            "eight",
+            "nine",
+            "ten",
+            "jack",
+            "queen",
+            "king",
+        ]
         
         return self.budget, self.bet_amount, self.user_points, self.computer_points
 
