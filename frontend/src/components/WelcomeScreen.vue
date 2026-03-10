@@ -13,12 +13,6 @@ const hideWelcomeShowMenu = () => {
   // showMenu.value = true;
 };
 
-const muteToggled = ref<boolean>(true);
-
-const ToggleMute = () => {
-  muteToggled.value = !muteToggled.value;
-};
-
 const emit = defineEmits(["play"]);
 </script>
 
@@ -31,17 +25,12 @@ const emit = defineEmits(["play"]);
     <div class="card-scale">
       <QueenOfHearts :heartQ="showWelcome" id="queen" />
     </div>
-    <div class="chips">
+    <div class="chips-bg">
       <ChipsView :rand500="showWelcome" id="chip500" class="welcome-chips" />
       <ChipsView :rand25="showWelcome" id="chip25" class="welcome-chips" />
       <ChipsView :rand1m="showWelcome" id="chip1m" class="welcome-chips" />
       <ChipsView :rand5="showWelcome" id="chip5" class="welcome-chips" />
     </div>
-
-    <button class="speaker" @click="ToggleMute">
-      <span v-if="muteToggled">🔊</span>
-      <span v-else>🔇</span>
-    </button>
 
     <div class="welcome-container">
       <h1>Welcome to</h1>
@@ -55,22 +44,6 @@ const emit = defineEmits(["play"]);
   position: fixed;
   width: 100dvw;
   height: 100dvh;
-}
-.speaker {
-  position: absolute;
-  font-size: 2.5rem;
-  right: 4%;
-  top: 5%;
-  width: 5rem;
-  height: 5rem;
-  background: rgba(255, 255, 255, 0.606);
-  border-radius: 50%;
-  border: 2px solid white;
-}
-.speaker:hover {
-  transform: scale(1.02);
-  background: grey;
-  cursor: pointer;
 }
 .welcome-container {
   width: 80dvw;
@@ -161,7 +134,7 @@ h1 {
 .z-index {
   z-index: -1001;
 }
-.chips {
+.chips-bg {
   width: 100dvw;
   height: 100dvh;
   position: absolute;
