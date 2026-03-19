@@ -142,7 +142,7 @@ const emit = defineEmits(["oneDeck", "back"]);
   }
 }
 
-@media (max-width: 1024px) {
+@media (min-width: 710px) and (max-width: 1024px) {
   #game-mode-container {
     column-gap: 2rem;
     row-gap: 1rem;
@@ -152,6 +152,7 @@ const emit = defineEmits(["oneDeck", "back"]);
     width: 22rem;
     height: 6rem;
     font-size: 1.3rem;
+    transform: scale(0.9);
   }
 
   #back-btn {
@@ -160,11 +161,11 @@ const emit = defineEmits(["oneDeck", "back"]);
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 709px) {
   #game-mode-container {
     grid-template-columns: 1fr;
     row-gap: 1rem;
-    transform: translate(-50%, -30%) scale(0.6);
+    transform: translate(-50%, -30%) scale(0.5);
   }
 
   .game-mode-btn {
