@@ -418,9 +418,6 @@ const addChips = (chipId: string) => {
 
   clone.classList.add("placed-chip");
 
-  clone.style.position = "fixed";
-  clone.style.left = `${chip.left}px`;
-  clone.style.top = `${chip.top}px`;
   clone.style.transition = "all 0.2s ease-in-out";
   clone.style.margin = "0";
 
@@ -429,6 +426,7 @@ const addChips = (chipId: string) => {
   const centerX = window.innerWidth / 2 - chip.width / 2;
   const centerY = window.innerHeight / 2 - chip.height / 2;
 
+  clone.style.position = "fixed";
   clone.style.left = `${centerX}px`;
   clone.style.top = `${centerY}px`;
   clone.style.zIndex = "-1";
@@ -777,8 +775,8 @@ const emit = defineEmits(["betPlaced", "roundOver", "reset"]);
 }
 .main-container {
   position: relative;
-  width: 100dvw;
-  height: 100dvh;
+  width: 100%;
+  height: 100%;
 }
 .card-components {
   position: absolute;
@@ -1119,6 +1117,202 @@ const emit = defineEmits(["betPlaced", "roundOver", "reset"]);
   }
   100% {
     opacity: 0;
+  }
+}
+.placed-chip {
+  transform-origin: center;
+  pointer-events: none;
+}
+
+/* ****************** MEDIA QUERIES BELOW **********************/
+
+@media (max-width: 1024px) {
+  .cards-container {
+    width: 38rem;
+    left: 30%;
+  }
+
+  .chips-background {
+    width: 32rem;
+    height: 24rem;
+  }
+
+  .points-container {
+    left: 55%;
+  }
+
+  .player-pts {
+    top: 32rem;
+  }
+
+  .hit-stand-container {
+    font-size: 1.6rem;
+    top: 26rem;
+  }
+
+  .stand {
+    left: 70%;
+    top: 22rem;
+  }
+
+  .place-bet-container {
+    font-size: 1.6rem;
+    top: 60%;
+  }
+
+  .cards-remaining-container {
+    left: 65%;
+  }
+
+  .bet-counter {
+    top: 75%;
+  }
+
+  .current-bet-container {
+    left: 20%;
+  }
+
+  .winner {
+    font-size: 2.3rem;
+    width: 26rem;
+  }
+
+  .blackjack {
+    font-size: 1.5rem;
+  }
+}
+
+/* ****************** PHONE **********************/
+
+@media (max-width: 600px) {
+  .cards-container {
+    width: 95vw;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .player-cards,
+  .dynamic-player-card {
+    transform: scale(0.6);
+  }
+
+  .ai-cards,
+  .dynamic-ai-card {
+    transform: scale(0.6);
+  }
+
+  .chips-background {
+    width: 90vw;
+    height: 12rem;
+    left: 10%;
+    transform: translateY(50%) !important;
+  }
+  .game-chips {
+    transform: scale(0.875);
+  }
+  .placed-chip {
+    transform: translate(-50%, -50%) scale(0.55) !important;
+    transform-origin: center;
+  }
+
+  #chip1 {
+    left: -10%;
+    top: -25%;
+  }
+  #chip5 {
+    left: -33%;
+    top: -25%;
+  }
+  #chip10 {
+    left: -55%;
+    top: -25%;
+  }
+  #chip25 {
+    left: -82%;
+    top: -25%;
+  }
+  #chip50 {
+    left: -10%;
+    top: -75%;
+  }
+  #chip100 {
+    left: -33%;
+    top: -75%;
+  }
+  #chip500 {
+    left: -55%;
+    top: -75%;
+  }
+  #chip1k {
+    left: -82%;
+    top: -75%;
+  }
+
+  .hit-stand-container {
+    font-size: 1.3rem;
+    top: 22rem;
+    left: 5%;
+  }
+
+  .stand {
+    left: 65%;
+    top: 18rem;
+  }
+
+  .place-bet-container {
+    font-size: 1.4rem;
+    padding: 0.7rem 1.5rem;
+    top: 30%;
+    transform: translateX(-50%) scale(0.9);
+  }
+
+  .cards-remaining-container {
+    left: 50%;
+    transform: translateX(-50%);
+    top: 3rem;
+  }
+
+  .cards-remaining {
+    width: 16rem;
+    font-size: 1.4rem;
+  }
+
+  .points-container {
+    left: 50%;
+    transform: translateX(-50%);
+    top: 7rem;
+  }
+
+  .points-text {
+    font-size: 1.3rem;
+  }
+
+  .points-badge {
+    height: 2rem;
+    width: 2rem;
+    font-size: 1.2rem;
+  }
+
+  .bet-counter {
+    top: 90%;
+    left: 50%;
+    transform: translate(-50%, 35%) scale(0.8) !important;
+  }
+
+  .current-bet-container {
+    top: 15%;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .winner {
+    font-size: 1.7rem;
+    width: 20rem;
+  }
+
+  .blackjack {
+    font-size: 1.2rem;
+    width: 18rem;
   }
 }
 </style>

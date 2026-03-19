@@ -8,8 +8,9 @@
 
 <style scoped>
 .text-container {
+  position: fixed;
   width: 100%;
-  height: 100dvh;
+  height: 100%;
   display: grid;
   grid-template-columns: 2 (1fr);
   justify-content: center;
@@ -23,14 +24,14 @@
   color: transparent;
 }
 .text {
-  font-size: clamp(5rem, 11vw + 1rem, 18rem);
+  font-size: clamp(3rem, 11vw + 1rem, 18rem);
   padding: 1.75rem;
   /* text-shadow: 0 4px 8px rgba(0, 0, 0, 0.6); */
 }
 
 @media screen and (width <= 900px) {
   .text-container {
-    width: 100dvw;
+    width: 100%;
     grid-template-rows: 2 (1fr);
     z-index: -500;
   }

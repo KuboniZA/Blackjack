@@ -27,8 +27,10 @@ const emit = defineEmits(["oneDeck", "back"]);
 
 <style scoped>
 #game-mode-modal {
-  width: 100dvw;
-  height: 100dvh;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
   position: fixed;
   background-color: rgba(255, 255, 255, 0.258);
   backdrop-filter: blur(4px);
@@ -131,10 +133,49 @@ const emit = defineEmits(["oneDeck", "back"]);
   }
 }
 
+/* ****************** MEDIA QUERIES BELOW **********************/
+
 /* Accessibility */
 @media (prefers-reduced-motion: reduce) {
   .game-mode-btn:hover.shimmerGM::before {
     animation: none;
+  }
+}
+
+@media (max-width: 1024px) {
+  #game-mode-container {
+    column-gap: 2rem;
+    row-gap: 1rem;
+  }
+
+  .game-mode-btn {
+    width: 22rem;
+    height: 6rem;
+    font-size: 1.3rem;
+  }
+
+  #back-btn {
+    width: 10rem;
+    height: 3.5rem;
+  }
+}
+
+@media (max-width: 600px) {
+  #game-mode-container {
+    grid-template-columns: 1fr;
+    row-gap: 1rem;
+    transform: translate(-50%, -30%) scale(0.6);
+  }
+
+  .game-mode-btn {
+    width: 80vw;
+    height: 5rem;
+    font-size: 1.1rem;
+  }
+
+  #back-btn {
+    width: 8rem;
+    height: 3rem;
   }
 }
 </style>

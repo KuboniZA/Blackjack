@@ -681,10 +681,60 @@ defineProps({
   }
 }
 
+/* ****************** MEDIA QUERIES BELOW **********************/
+
 /* Accessibility */
 @media (prefers-reduced-motion: reduce) {
   .chips:hover.shimmer::before {
     animation: none;
+  }
+}
+
+@media (max-width: 1024px) {
+  .chips {
+    transform: scale(0.75);
+  }
+
+  #rand1,
+  #rand5,
+  #rand10,
+  #rand25,
+  #rand50,
+  #rand100,
+  #rand500,
+  #rand1000,
+  #rand10000,
+  #rand50000,
+  #rand100000,
+  #rand500000,
+  #rand1000000,
+  #rand10M,
+  #rand100M {
+    transform: scale(0.75);
+  }
+}
+
+@media (max-width: 600px) {
+  #rand1,
+  #rand5,
+  #rand10,
+  #rand25,
+  #rand50,
+  #rand100,
+  #rand500,
+  #rand1000,
+  #rand10000,
+  #rand50000,
+  #rand100000,
+  #rand500000,
+  #rand1000000,
+  #rand10M,
+  #rand100M {
+    transform: scale(0.55);
+  }
+
+  .chip {
+    font-size: 1.3rem;
   }
 }
 </style>

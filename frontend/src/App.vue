@@ -59,15 +59,13 @@ const nextTrack = () => {
   }
 };
 
-const updateVolume = () => {
-  if (audioPlayer.value) {
-    audioPlayer.value.volume = volume.value;
-    if (isMuted.value && volume.value > 0) {
-      isMuted.value = false;
-      audioPlayer.value.muted = false;
-    }
+if (audioPlayer.value) {
+  audioPlayer.value.volume = volume.value;
+  if (isMuted.value && volume.value > 0) {
+    isMuted.value = false;
+    audioPlayer.value.muted = false;
   }
-};
+}
 
 const ToggleMute = () => {
   if (audioPlayer.value) {
@@ -125,5 +123,27 @@ const revealSpeaker = () => {
 }
 .hide-speaker {
   display: none;
+}
+
+/* ****************** MEDIA QUERIES BELOW **********************/
+
+@media (max-width: 1024px) {
+  .speaker {
+    width: 2.5rem;
+    height: 2.5rem;
+    font-size: 1.3rem;
+    left: 3%;
+    top: 3%;
+  }
+}
+
+@media (max-width: 600px) {
+  .speaker {
+    width: 2.2rem;
+    height: 2.2rem;
+    font-size: 1.1rem;
+    left: 7.5%;
+    top: 3.5%;
+  }
 }
 </style>
