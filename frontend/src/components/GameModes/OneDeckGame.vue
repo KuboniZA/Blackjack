@@ -888,7 +888,7 @@ const emit = defineEmits(["betPlaced", "roundOver", "reset"]);
   position: absolute;
   height: fit-content;
   width: fit-content;
-  left: 60%;
+  left: 64%;
   top: 10%;
   display: grid;
   grid-template-rows: 1fr 1fr;
@@ -933,7 +933,7 @@ const emit = defineEmits(["betPlaced", "roundOver", "reset"]);
   grid-row: 1;
 }
 .player-pts {
-  top: 38rem;
+  top: 39rem;
 }
 .blackjack {
   color: white;
