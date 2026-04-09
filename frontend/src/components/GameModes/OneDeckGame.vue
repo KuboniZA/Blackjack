@@ -588,14 +588,14 @@ const emit = defineEmits(["betPlaced", "roundOver", "reset"]);
 
         <component
           id="p-card1"
-          class="player-cards cards"
+          class="player-cards cards p-cards"
           v-if="player_card1 && hasDealt == true"
           :is="getCardComponent(player_card1)"
           style="--index: 0"
         />
         <component
           id="p-card2"
-          class="player-cards cards"
+          class="player-cards cards p-cards"
           v-if="player_card2 && hasDealt == true"
           :is="getCardComponent(player_card2)"
           style="--index: 1"
@@ -604,7 +604,7 @@ const emit = defineEmits(["betPlaced", "roundOver", "reset"]);
         <component
           v-for="playerCard in playerCards"
           :key="playerCard.id"
-          class="cards dynamic-player-card show"
+          class="cards dynamic-player-card show p-cards"
           :is="getCardComponent(playerCard.card)"
           :style="{ '--index': playerCard.id + 1 }"
         />
@@ -767,13 +767,13 @@ const emit = defineEmits(["betPlaced", "roundOver", "reset"]);
 .hit-stand-container {
   color: white;
   background-color: rgba(255, 255, 255, 0.542);
-  font-size: 2rem;
+  font-size: 1.75rem;
   border: 2px solid white;
   width: fit-content;
   padding: 1rem 2rem 1rem 2rem;
   border-radius: 25px;
   position: relative;
-  top: 30rem;
+  top: 24rem;
   left: 10%;
   backdrop-filter: blur(5px);
   z-index: 1;
@@ -787,7 +787,7 @@ const emit = defineEmits(["betPlaced", "roundOver", "reset"]);
   position: relative;
 }
 .stand {
-  top: 25rem;
+  top: 19.4rem;
   left: 75%;
   z-index: 25;
 }
@@ -817,25 +817,21 @@ const emit = defineEmits(["betPlaced", "roundOver", "reset"]);
   left: 35%;
   top: 0;
 }
-.player-cards {
+
+.player-cards,
+.dynamic-player-card {
   position: absolute;
-  top: -16rem;
   height: fit-content;
   width: fit-content;
   display: none;
+  top: 28rem !important;
 }
 .player-cards.show,
 .dynamic-player-card.show {
   display: flex;
   animation: show 0.2s linear forwards;
 }
-.dynamic-player-card {
-  position: absolute;
-  top: -16rem;
-  height: fit-content;
-  width: fit-content;
-  display: none;
-}
+
 @keyframes show {
   0% {
     opacity: 0;
@@ -1130,7 +1126,7 @@ const emit = defineEmits(["betPlaced", "roundOver", "reset"]);
 .place-bet-container {
   color: white;
   background-color: rgba(255, 255, 255, 0.542);
-  font-size: 2rem;
+  font-size: 1.75rem;
   border: 2px solid white;
   width: fit-content;
   padding: 1rem 2rem 1rem 2rem;
