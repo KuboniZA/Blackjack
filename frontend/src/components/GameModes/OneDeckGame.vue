@@ -989,6 +989,7 @@ const emit = defineEmits(["betPlaced", "roundOver", "reset"]);
   position: relative;
   width: fit-content;
   height: fit-content;
+  transform: scale(0.9);
   z-index: 5;
 }
 .hide {
@@ -1010,8 +1011,8 @@ const emit = defineEmits(["betPlaced", "roundOver", "reset"]);
   background: linear-gradient(to bottom right, rgba(0, 0, 255, 0.53), rgba(255, 0, 0, 0.5));
   backdrop-filter: blur(4px);
   border-radius: 25px;
-  width: 47rem;
-  height: 28rem;
+  width: 42rem;
+  height: 25rem;
   top: 50% !important;
   transform: translateY(-50%);
   z-index: 5;
@@ -1087,6 +1088,7 @@ const emit = defineEmits(["betPlaced", "roundOver", "reset"]);
   grid-column: 2;
   grid-row: 1;
   transform: scale(1.075);
+  -webkit-transform: scale(1.05);
 }
 .current-bet-container {
   position: absolute;
@@ -1245,6 +1247,7 @@ const emit = defineEmits(["betPlaced", "roundOver", "reset"]);
   }
   .game-chips {
     transform: scale(0.75);
+    -webkit-transform: scale(0.75) !important;
   }
   .placed-chip {
     transform: translate(-50%, -50%) scale(0.55) !important;
