@@ -409,10 +409,33 @@ const placeBet = async (amount: number, chipId: string) => {
   insufficient_funds.value = data.bet_placed[2];
 };
 
+// const addChips = (chipId: string) => {
+//   const chipElement = document.getElementById(chipId)?.querySelector(".chips");
+//   if (!chipElement) return;
+//   const chip = chipElement.getBoundingClientRect();
+//   const clone = chipElement.cloneNode(true) as HTMLElement;
+//   document.body.appendChild(clone);
+
+//   clone.classList.add("placed-chip");
+
+//   clone.style.transition = "all 0.2s ease-in-out";
+//   clone.style.margin = "0";
+
+//   clone.getBoundingClientRect();
+
+//   const centerX = window.innerWidth / 2 - chip.width / 2;
+//   const centerY = window.innerHeight / 2 - chip.height / 2;
+
+//   clone.style.position = "fixed";
+//   clone.style.left = `${centerX}px`;
+//   clone.style.top = `${centerY}px`;
+//   clone.style.zIndex = "-1";
+// };
+
 const addChips = (chipId: string) => {
   const chipElement = document.getElementById(chipId)?.querySelector(".chips");
   if (!chipElement) return;
-  const chip = chipElement.getBoundingClientRect();
+
   const clone = chipElement.cloneNode(true) as HTMLElement;
   document.body.appendChild(clone);
 
@@ -423,13 +446,13 @@ const addChips = (chipId: string) => {
 
   clone.getBoundingClientRect();
 
-  const centerX = window.innerWidth / 2 - chip.width / 2;
-  const centerY = window.innerHeight / 2 - chip.height / 2;
-
   clone.style.position = "fixed";
-  clone.style.left = `${centerX}px`;
-  clone.style.top = `${centerY}px`;
-  clone.style.zIndex = "-1";
+  clone.style.left = "50%";
+  clone.style.top = "50%";
+  clone.style.transform = "translate(-50%, -50%)";
+  clone.style.transition = "all 0.2s ease-in-out";
+  clone.style.margin = "0";
+  clone.style.zIndex = "10";
 };
 
 const endRound = async () => {
@@ -653,7 +676,7 @@ const emit = defineEmits(["betPlaced", "roundOver", "reset"]);
 <style scoped>
 .game-container {
   position: relative;
-  width: 100dvw;
+  width: 100dvh;
   height: 100dvh;
   overflow: hidden;
 }
@@ -790,7 +813,7 @@ const emit = defineEmits(["betPlaced", "roundOver", "reset"]);
   position: absolute;
   color: white;
   width: 54rem;
-  height: 60rem;
+  height: fit-content;
   left: 35%;
   top: 0;
 }
@@ -989,7 +1012,7 @@ const emit = defineEmits(["betPlaced", "roundOver", "reset"]);
   border-radius: 25px;
   width: 47rem;
   height: 28rem;
-  top: 50%;
+  top: 50% !important;
   transform: translateY(-50%);
   z-index: 5;
   animation: chipsFromLeft 0.6s ease forwards;
@@ -1020,7 +1043,7 @@ const emit = defineEmits(["betPlaced", "roundOver", "reset"]);
 }
 .bet-counter {
   position: absolute;
-  top: 80%;
+  top: 4rem;
   left: 10%;
   color: white;
   min-width: 5rem;
@@ -1036,7 +1059,8 @@ const emit = defineEmits(["betPlaced", "roundOver", "reset"]);
     opacity: 1;
   }
 }
-.bet-container {
+.bet-container,
+.current-bet {
   background-color: transparent;
   background: linear-gradient(to bottom right, red, blue);
   border-radius: 15px;
@@ -1066,12 +1090,25 @@ const emit = defineEmits(["betPlaced", "roundOver", "reset"]);
 }
 .current-bet-container {
   position: absolute;
-  top: 10%;
   left: 18.4%;
   transform: translateX(-50%);
   width: 20rem;
   color: white;
+  top: 41rem;
   animation: slideFromLeft 0.6s ease forwards;
+}
+.current-bet::after {
+  content: "";
+  width: 100%;
+  height: 100%;
+  border-radius: 15px;
+  position: absolute;
+  background-color: transparent;
+  background: linear-gradient(to bottom right, white, grey);
+  z-index: -1;
+  grid-column: 2;
+  grid-row: 1;
+  transform: scale(1.075);
 }
 
 @keyframes slideFromLeft {
@@ -1098,7 +1135,7 @@ const emit = defineEmits(["betPlaced", "roundOver", "reset"]);
   border-radius: 25px;
   position: absolute;
   backdrop-filter: blur(5px);
-  top: 65%;
+  top: 32rem;
   left: 50%;
   transform: translateX(-50%);
   z-index: 10;
@@ -1120,8 +1157,7 @@ const emit = defineEmits(["betPlaced", "roundOver", "reset"]);
   }
 }
 .placed-chip {
-  transform-origin: center;
-  pointer-events: none;
+  transform: translate(-50%, -50%) !important;
 }
 
 /* ****************** MEDIA QUERIES BELOW **********************/
@@ -1202,13 +1238,13 @@ const emit = defineEmits(["betPlaced", "roundOver", "reset"]);
   }
 
   .chips-background {
-    width: 90vw;
+    width: 80svw;
     height: 12rem;
-    left: 10%;
-    transform: translateY(50%) !important;
+    left: 50%;
+    transform: translate(-50%, 40%) !important;
   }
   .game-chips {
-    transform: scale(0.875);
+    transform: scale(0.75);
   }
   .placed-chip {
     transform: translate(-50%, -50%) scale(0.55) !important;
@@ -1217,35 +1253,35 @@ const emit = defineEmits(["betPlaced", "roundOver", "reset"]);
 
   #chip1 {
     left: -10%;
-    top: -25%;
+    top: -15%;
   }
   #chip5 {
-    left: -33%;
-    top: -25%;
+    left: -30%;
+    top: -15%;
   }
   #chip10 {
-    left: -55%;
-    top: -25%;
+    left: -50%;
+    top: -15%;
   }
   #chip25 {
-    left: -82%;
-    top: -25%;
+    left: -75%;
+    top: -15%;
   }
   #chip50 {
     left: -10%;
-    top: -75%;
+    top: -55%;
   }
   #chip100 {
-    left: -33%;
-    top: -75%;
+    left: -30%;
+    top: -55%;
   }
   #chip500 {
-    left: -55%;
-    top: -75%;
+    left: -50%;
+    top: -55%;
   }
   #chip1k {
-    left: -82%;
-    top: -75%;
+    left: -75%;
+    top: -55%;
   }
 
   .hit-stand-container {
@@ -1262,8 +1298,8 @@ const emit = defineEmits(["betPlaced", "roundOver", "reset"]);
   .place-bet-container {
     font-size: 1.4rem;
     padding: 0.7rem 1.5rem;
-    top: 30%;
-    transform: translateX(-50%) scale(0.9);
+    top: 12.5rem;
+    transform: translateX(-50%) scale(0.7) !important;
   }
 
   .cards-remaining-container {
@@ -1294,15 +1330,15 @@ const emit = defineEmits(["betPlaced", "roundOver", "reset"]);
   }
 
   .bet-counter {
-    top: 90%;
+    top: 90svh;
     left: 50%;
-    transform: translate(-50%, 35%) scale(0.8) !important;
+    transform: translate(-50%) scale(0.5) !important;
   }
 
   .current-bet-container {
-    top: 15%;
+    top: 7svh;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translateX(-50%) scale(0.55) !important;
   }
 
   .winner {

@@ -17,6 +17,7 @@
   place-items: center;
   z-index: -1000;
   position: absolute;
+  overflow: hidden;
 }
 .shimmer {
   background: linear-gradient(to right, rgb(247, 210, 2), rgb(1, 202, 182));
@@ -32,6 +33,7 @@
 @media screen and (width <= 900px) {
   .text-container {
     width: 100%;
+    height: 100%;
     grid-template-rows: 2 (1fr);
     z-index: -500;
   }
